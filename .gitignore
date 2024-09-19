@@ -1,2 +1,4 @@
 bm/*
 py_packages/*
+.ml-venv/*
+0_Data/MODIS_data/*
