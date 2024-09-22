@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: LSTM",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/1_Modelling/Lstm.py",
+            "args": ["-k", "${workspaceFolder}/1_Modelling/keyfile.key"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {"PYTHONPATH": "${workspaceFolder}"},
+            "cwd": "${workspaceFolder}/1_Modelling"
+        }
+    ]
+}

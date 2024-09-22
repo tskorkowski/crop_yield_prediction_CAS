@@ -1,15 +1,16 @@
 # To execute: python3 make_datasets.py -k keyfile.key
 
-from constants import NUM_IMGS_PER_YEAR, GBUCKET, LOCAL_DATA_DIR
-import sys
-import numpy as np
-import random
+import argparse
 import os
-from os.path import isfile, join, basename, normpath
+import random
+import sys
+from datetime import datetime
+from os.path import basename, isfile, join, normpath
+
+import numpy as np
 import pandas as pd
 import sklearn
-import argparse
-from datetime import datetime
+from constants import GBUCKET, LOCAL_DATA_DIR, NUM_IMGS_PER_YEAR
 
 DEFAULT_TEST_POOL_FRACTION = 0.2
 DEFAULT_DEV_FRAC_OF_TRAIN = 0.2  # NOT IMPLEMENTED 0.2
@@ -133,44 +134,6 @@ def remove_months_outside_harvest(
     beginning_year = harv_begin - dataset_year_begin
     total_number_of_years = min(harv_end, dataset_year_end) - harv_begin + 1
     # print(np.shape(trimmed_to_season_end))
-    return trimmed_to_season_end[
-        beginning_year : beginning_year + total_number_of_years
-    ]
-
-
-def remove_months_outside_harvest_old(
-    f_data,
-    beginning_offset,
-    season_len,
-    harv_begin,
-    harv_end,
-    indexes_harvest,
-    dataset_year_begin,
-    dataset_year_end,
-    ndvi=False,
-):
-    f_data_by_year = []
-    # have to set offset at the beginning of the year to remove data when not in season
-    if not ndvi:
-        f_data = f_data[:, beginning_offset:, :]
-    else:
-        f_data = f_data[beginning_offset:]
-    for idx in range(0, f_data.shape[1 if not ndvi else 0], NUM_IMGS_PER_YEAR):
-        if not ndvi:
-            f_data_by_year.append(f_data[:, idx : idx + NUM_IMGS_PER_YEAR, :])
-        else:
-            f_data_by_year.append(f_data[idx : idx + NUM_IMGS_PER_YEAR])
-    if (
-        f_data_by_year[-1].shape[1 if not ndvi else 0] != NUM_IMGS_PER_YEAR
-    ):  # trim off excess
-        f_data_by_year = f_data_by_year[:-1]
-    # our histograms in total comprise the harvest in 2003 to harvest to 2016
-    if not ndvi:
-        trimmed_to_season_end = [x[:, :season_len, :] for x in f_data_by_year]
-    else:
-        trimmed_to_season_end = [x[:season_len] for x in f_data_by_year]
-    beginning_year = harv_begin - dataset_year_begin
-    total_number_of_years = min(harv_end, dataset_year_end) - harv_begin + 1
     return trimmed_to_season_end[
         beginning_year : beginning_year + total_number_of_years
     ]

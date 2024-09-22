@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/tskor/Documents/GitHub/inovation_project/1_Modelling/mlruns/0/d0035d13ecf6465b8bb7aa81f2bec432/artifacts
+end_time: 1727036530607
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d0035d13ecf6465b8bb7aa81f2bec432
+run_name: traveling-calf-604
+run_uuid: d0035d13ecf6465b8bb7aa81f2bec432
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727036489284
+status: 3
+tags: []
+user_id: tskor

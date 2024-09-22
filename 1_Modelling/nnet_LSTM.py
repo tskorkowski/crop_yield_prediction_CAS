@@ -1,12 +1,14 @@
 """ Code modified from https://github.com/JiaxuanYou/crop_yield_prediction"""
 
-import numpy as np
-import tensorflow as tf
-from tensorflow import keras
-import matplotlib.pyplot as plt
+import math
 import time
 from datetime import datetime
-import math
+
+import keras
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+
 
 class LSTM_Config():
     B, W, C = 32,32,9
