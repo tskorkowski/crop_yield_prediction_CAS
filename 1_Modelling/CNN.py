@@ -10,68 +10,72 @@ import mlflow
 import mlflow.tensorflow
 import numpy as np
 import tensorflow as tf
-from keras.layers import LSTM, Dense, Dropout, Input
+from keras.layers import Conv2D, Dense, Dropout, Flatten, Input, MaxPooling2D
 
 logging.debug("Imports completed")
 
 
 def set_seeds(seed=42):
-    # Set seeds for Python's random module
     random.seed(seed)
-
-    # Set seed for NumPy
     np.random.seed(seed)
-
-    # Set seed for TensorFlow
     tf.random.set_seed(seed)
 
 
-# Define the LSTM model
-class LstmModel(keras.Model):
+# Define the CNN model
+class CnnModel(keras.Model):
     def __init__(
-        self, input_shape, lstm_layers=3, no_units=2, output_units=1, dropout_rate=0.2
+        self,
+        input_shape,
+        conv_layers=3,
+        filters=32,
+        kernel_size=(3, 3),
+        pool_size=(2, 2),
+        dense_units=64,
+        output_units=1,
+        dropout_rate=0.4,
     ):
-        super(LstmModel, self).__init__()
-        self.lstm_layers = []
+        super(CnnModel, self).__init__()
+        self.conv_layers = []
 
         self.input_layer = Input(shape=input_shape)
-        for i in range(lstm_layers):
-            if i == 0:
-                self.lstm_layers.append(
-                    LSTM(no_units, return_sequences=(lstm_layers > 1))
-                )
-            else:
-                self.lstm_layers.append(
-                    LSTM(no_units, return_sequences=(i < lstm_layers - 1))
-                )
-            self.lstm_layers.append(Dropout(dropout_rate))
 
+        for i in range(conv_layers):
+            self.conv_layers.append(
+                Conv2D(filters * (2**i), kernel_size, activation="relu", padding="same")
+            )
+            self.conv_layers.append(MaxPooling2D(pool_size=pool_size))
+            self.conv_layers.append(Dropout(dropout_rate))
+
+        self.flatten = Flatten()
+        self.dense = Dense(dense_units, activation="relu")
+        self.dropout = Dropout(dropout_rate)
         self.output_layer = Dense(output_units)
 
     def call(self, inputs, training=False):
         x = inputs
-        # Apply LSTM and Dropout layers sequentially
-        for layer in self.lstm_layers:
-            x = layer(x, training=training) if isinstance(layer, Dropout) else layer(x)
-
-        # Final output layer
+        for layer in self.conv_layers:
+            if isinstance(layer, Dropout):
+                x = layer(x, training=training)
+            else:
+                x = layer(x)
+        x = self.flatten(x)
+        x = self.dense(x)
+        x = self.dropout(x, training=training)
         return self.output_layer(x)
 
 
 # Create TensorFlow dataset
 def create_dataset(X, y, batch_size=32, shuffle=True):
     """
-    X original shape (n,bin,t,band) where:
-    n - numebr of samples
-    bin - number of bins in each histogram
-    t - number of timesteps
-    band - spectral bands in the sattelitte photo
+    X original shape (n, height, time, channels) where:
+    n - number of samples
+    height, time - dimensions for 2D convolutions
+    channels - number of channels (e.g., spectral bands)
     """
-    X = X.reshape(X.shape[0], X.shape[2], X.shape[1] * X.shape[3])
     dataset = tf.data.Dataset.from_tensor_slices((X, y))
     if shuffle:
         dataset = dataset.shuffle(buffer_size=len(X))
-    return dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE), X.shape[1:]
+    return dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
 # Main training loop
@@ -89,7 +93,6 @@ def train_and_evaluate(
         verbose=1,
     )
 
-    # Create MLflow callback to log metrics during training
     class MLflowCallback(keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs=None):
             mlflow.log_metrics(logs, step=epoch)
@@ -141,11 +144,10 @@ def plot_loss(history):
 
 # Main execution
 if __name__ == "__main__":
-
     logging.debug("Entering main block")
     set_seeds()
 
-    parser = argparse.ArgumentParser(description="Trains neural network architectures.")
+    parser = argparse.ArgumentParser(description="Trains CNN architecture.")
     parser.add_argument(
         "-k", "--key_file", type=str, help="Path to the key file with input parameters."
     )
@@ -153,20 +155,8 @@ if __name__ == "__main__":
 
     if args.key_file:
         params = read_key_file(args.key_file)
-        # TODO: Trim down to the parameters needed for LSTM
         dataset_source_dir = params.get("DATASET_FOLDER")
-        nnet_architecture = params.get("NNET_ARCHITECTURE")
-        season_frac = float(params.get("SEASON_FRAC"))
-        permuted_band = float(params.get("PERMUTED_BAND"))
-        num_iters = int(params.get("NUM_ITERS"))
-        load_weights = params.get("LOAD_WEIGHTS") == "1"
-        weights_path_training = (
-            params.get("WEIGHTS_PATH_TRAINING") + "/weights/model.weights"
-        )
-        data_augmentation = params.get("DATA_AUGMENTATION") == "1"
-        yield_threshold = float(params.get("YIELD_THRESHOLD"))
-        noise_level = float(params.get("NOISE_LEVEL"))
-        replication_factor = float(params.get("REPLICATION_FACTOR"))
+        # Add other necessary parameters here
     else:
         print("Key file is required.")
         sys.exit(1)
@@ -178,12 +168,6 @@ if __name__ == "__main__":
     train_labels = load_data(
         os.path.join(dataset_source_dir, "train_yields.npz"), dtype=np.float32
     )
-    dev_data = load_data(
-        os.path.join(dataset_source_dir, "dev_hists.npz"), dtype=np.float32
-    )
-    dev_labels = load_data(
-        os.path.join(dataset_source_dir, "dev_yields.npz"), dtype=np.float32
-    )
     test_data = load_data(
         os.path.join(dataset_source_dir, "test_hists.npz"), dtype=np.float32
     )
@@ -191,14 +175,15 @@ if __name__ == "__main__":
         os.path.join(dataset_source_dir, "test_yields.npz"), dtype=np.float32
     )
 
-    train_dataset, input_shape = create_dataset(train_data, train_labels)
-    val_dataset, _ = create_dataset(test_data, test_labels)
+    train_dataset = create_dataset(train_data, train_labels)
+    val_dataset = create_dataset(test_data, test_labels)
 
     # Initialize and train the model
-    model = LstmModel(input_shape)
+    input_shape = train_data.shape[1:]  # (t, bin, band)
+    model = CnnModel(input_shape)
     trained_model, history = train_and_evaluate(model, train_dataset, val_dataset)
 
     # Save the model
-    trained_model.save("lstm_model.keras")
+    trained_model.save("cnn_model.keras")
 
     plot_loss(history)

@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: LSTM",
+            "name": "Python: CNN",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/1_Modelling/Lstm.py",
+            "program": "${workspaceFolder}/1_Modelling/Cnn.py",
             "args": ["-k", "${workspaceFolder}/1_Modelling/keyfile.key"],
             "console": "integratedTerminal",
             "justMyCode": false,
