@@ -141,9 +141,17 @@ def plot_loss(history):
     plt.grid()
     plt.show()
 
+    plt.savefig("loss_plot.png")
+    plt.close()
+
 
 # Main execution
 if __name__ == "__main__":
+
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+
+    mlflow.set_experiment("CNN")
+
     logging.debug("Entering main block")
     set_seeds()
 
@@ -179,11 +187,40 @@ if __name__ == "__main__":
     val_dataset = create_dataset(test_data, test_labels)
 
     # Initialize and train the model
-    input_shape = train_data.shape[1:]  # (t, bin, band)
-    model = CnnModel(input_shape)
-    trained_model, history = train_and_evaluate(model, train_dataset, val_dataset)
+    model_params = {
+        "input_shape": train_data.shape[1:],  # (t, bin, band)
+    }
+
+    training_params = {
+        "epochs": 10000,
+        "learning_rate": 0.001,
+        "patience": 10,
+    }
+
+    with mlflow.start_run():
+        # Log the hyperparameters
+        mlflow.log_params(model_params | training_params)
+
+        model = CnnModel(**model_params)
+        trained_model, history = train_and_evaluate(model, train_dataset, val_dataset)
+
+        # Set a tag that we can use to remind ourselves what this run was for
+        mlflow.set_tag("Training Info", "CNN on histogram data")
+
+        # Log the model
+        mlflow.tensorflow.log_model(
+            model=trained_model,
+            artifact_path="cnn_model",
+            registered_model_name="cnn-yield-prediction",
+        )
+
+        # Log metrics
+        test_loss = trained_model.evaluate(val_dataset)
+        mlflow.log_metric("test_loss", test_loss)
+
+        # Log artifacts
+        plot_loss(history)
+        mlflow.log_artifact("loss_plot.png")
 
     # Save the model
     trained_model.save("cnn_model.keras")
-
-    plot_loss(history)
