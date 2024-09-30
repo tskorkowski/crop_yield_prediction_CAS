@@ -432,7 +432,7 @@ if __name__ == "__main__":
             histograms = np.concatenate((sat_histograms, temp_histograms), axis=2)
             # print(histograms.shape[1],len(dates))
             assert len(dates) == histograms.shape[1]
-            reshaped_dates = np.array(dates).reshape(1, len(dates), 1)
+            reshaped_dates = np.array(dates).reshape(1, len(dates))
             reshaped_dates = np.repeat(reshaped_dates, histograms.shape[0], axis=0)
             histograms_dates = np.concatenate((histograms, reshaped_dates), axis=2)
             np.save(hist_save_path, histograms_dates)
