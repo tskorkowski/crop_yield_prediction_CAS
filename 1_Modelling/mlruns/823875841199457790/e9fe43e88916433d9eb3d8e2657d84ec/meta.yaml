@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/823875841199457790/e9fe43e88916433d9eb3d8e2657d84ec/artifacts
+end_time: 1727383714883
+entry_point_name: ''
+experiment_id: '823875841199457790'
+lifecycle_stage: active
+run_id: e9fe43e88916433d9eb3d8e2657d84ec
+run_name: carefree-wasp-747
+run_uuid: e9fe43e88916433d9eb3d8e2657d84ec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727383701787
+status: 3
+tags: []
+user_id: tskor

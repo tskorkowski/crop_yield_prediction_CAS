@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/823875841199457790/a1551431e7194c0c9442249efaade78b/artifacts
+deleted_time: 1727383734300
+end_time: 1727383618817
+entry_point_name: ''
+experiment_id: '823875841199457790'
+lifecycle_stage: deleted
+run_id: a1551431e7194c0c9442249efaade78b
+run_name: abrasive-stag-629
+run_uuid: a1551431e7194c0c9442249efaade78b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727383618704
+status: 4
+tags: []
+user_id: tskor

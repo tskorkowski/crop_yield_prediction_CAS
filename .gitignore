@@ -2,3 +2,5 @@ bm/*
 py_packages/*
 .ml-venv/*
 0_Data/MODIS_data/*
+bm_docs/*
+ee_tutorial.ipynb
