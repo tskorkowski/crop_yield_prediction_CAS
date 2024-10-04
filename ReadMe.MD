@@ -8,9 +8,19 @@ For the rest of the scripts you can use pip environment as defined in the requir
 
 #### 0_Data
 
-1. Pull MODIS images using pull_modis.py script.
-2. Generate histograms for the training data using histograms.py script.
-3. Generate datasets using make_datasets.py script.
+Does not require conda - see how to run scripts section
+
+1. data_preprocess_sentinel - work in progress - collect information from the google earth engine and return image/or histograms to the google cloud bucket
+1. data_preprocess_counties - no started yet - scrip to collect and potentially transform the data
+1. USDA folder - groud trouth of the data per county
+
+##### Code based on the previous work
+
+May require conda envinronemt - see how to run scripts
+
+2. Pull MODIS images using pull_modis.py script.
+3. Generate histograms for the training data using histograms.py script.
+4. Generate datasets using make_datasets.py script.
 
 #### 1_Model
 Please use pip envinronment to install the packages according to the requirements_pip.txt
