@@ -5,6 +5,7 @@ The script is designed to work with Google Earth Engine (GEE) and Google Cloud S
 
 import json
 import os
+from datetime import datetime
 
 import ee
 import numpy as np
@@ -12,6 +13,7 @@ from google.cloud import storage
 
 GCS_BUCKET = "vgnn"
 PROJECT_ID = "supple-nature-370421"
+BANDS_TO_PROCESS = 2
 
 
 # Initialize GEE
@@ -59,13 +61,22 @@ def get_county_cropland_mask(county, crop_type):
 
 
 def aggregate_s2_yearly_monthly(
-    s2_collection, start_year, end_year, seanson_start, seanson_end
+    s2_collection, cropland_mask, start_year, end_year, seanson_start, seanson_end
 ):
     def process_year(year):
         # Filter the collection for the specific year
+
+        year_crop_mask = cropland_mask.filter(
+            ee.Filter.calendarRange(year, year, "year")
+        ).first()
+
+        # Ensure the crop mask has only one band
+        year_crop_mask = year_crop_mask.select(0)
+
+        # mask anything outside specific crop type
         year_collection = s2_collection.filter(
             ee.Filter.calendarRange(year, year, "year")
-        )
+        ).map(lambda img: img.updateMask(year_crop_mask))
 
         # Function to aggregate images monthly
         def aggregate_monthly(month):
@@ -73,7 +84,7 @@ def aggregate_s2_yearly_monthly(
                 year_collection.filter(ee.Filter.calendarRange(month, month, "month"))
                 .limit(30)
                 .map(mask_s2_clouds)
-                .mean()
+                .median()
                 .set("year", year)
                 .set("month", month)
                 .set("system:time_start", ee.Date.fromYMD(year, month, 1).millis())
@@ -86,12 +97,12 @@ def aggregate_s2_yearly_monthly(
 
     # Create a list of years and map over them
     years = ee.List.sequence(start_year, end_year)
-    s2_monthly = ee.ImageCollection(years.map(process_year).flatten())
+    s2_monthly = years.map(process_year).flatten()
     return s2_monthly
 
 
-def get_county_sentinel_data(
-    county_geom, start_year, end_year, seanson_start, seanson_end
+def get_county_cropped_sentinel_data(
+    county_geom, cropland_mask, start_year, end_year, seanson_start, seanson_end
 ):
 
     s2 = (
@@ -101,7 +112,7 @@ def get_county_sentinel_data(
     )
 
     s2_filtered = aggregate_s2_yearly_monthly(
-        s2, start_year, end_year, seanson_start, seanson_end
+        s2, cropland_mask, start_year, end_year, seanson_start, seanson_end
     )
 
     return s2_filtered
@@ -112,66 +123,59 @@ def get_cropland_data(
 ):
 
     county_crop_mask, county_geom = get_county_cropland_mask(county, crop_type)
-    sentinel_data = get_county_sentinel_data(
-        county_geom, start_year, end_year, seanson_start, seanson_end
-    )
+    sentinel_data = get_county_cropped_sentinel_data(
+        county_geom, county_crop_mask, start_year, end_year, seanson_start, seanson_end
+    ).flatten()
 
     # Create histograms for each image
-    def create_histograms(img):
-        bands = img.bandNames()
-        histograms = bands.map(
-            lambda b: img.select([b])
-            .reduceRegion(
-                reducer=ee.Reducer.histogram(33, 1, 4999),
-                geometry=county_geom,
-                scale=30,
-            )
-            .get(b)
+    def create_histograms(obj):
+        img = ee.Image(obj)
+        histogram = img.reduceRegion(
+            reducer=ee.Reducer.histogram(33, 50, 4999),
+            geometry=county_geom,
+            scale=30,
+            maxPixels=10e8,
         )
-        return ee.Feature(county_geom, {"image": img, "histograms": histograms})
+        return ee.Feature(county_geom, {"image": img, "histogram": histogram})
 
     s2_histograms = sentinel_data.map(create_histograms)
 
     # Save images and histograms to GCS
-    def save_to_gcs(feat):
+
+    n_of_exports = sentinel_data.size().getInfo()
+    for idx in range(n_of_exports):
+        feat = ee.Feature(s2_histograms.get(idx))
         img = ee.Image(feat.get("image"))
-        histograms = ee.List(feat.get("histograms"))
+
+        hist = ee.Dictionary(feat.get("histogram"))
+        hist_data = hist.getInfo()
+        hist_json = json.dumps(hist_data, indent=2)
+
+        date = img.date().format("YYYY-MM-dd").getInfo()
+        img_name = "_".join([county, str(crop_type), date])
+
+        blob_name = img_name + "_hist"
+        bucket = storage_client.get_bucket(GCS_BUCKET)
+        blob = bucket.blob(blob_name)
+        blob.upload_from_string(hist_json, content_type="application/json")
 
         # Save image
-        img_name = (
-            ee.String(county)
-            .cat("_")
-            .cat(crop_type)
-            .cat("_")
-            .cat(img.date().format("YYYY-MM"))
-            .cat(".tif")
-        )
-        img_task = ee.batch.Export.image.toCloudStorage(
-            image=img,
-            description=img_name,
-            bucket=GCS_BUCKET,
-            fileNamePrefix=img_name,
-            scale=30,
-            region=county_geom,
-        )
-        img_task.start()
 
-        # Save histograms
-        hist_name = (
-            ee.String(county)
-            .cat("_")
-            .cat(crop_type)
-            .cat("_")
-            .cat(img.date().format("YYYY-MM"))
-            .cat("_")
-            .cat("histograms.json")
-        )
-        hist_data = histograms.map(lambda h: ee.Dictionary(h).getInfo()).getInfo()
-        bucket = storage_client.get_bucket(GCS_BUCKET)
-        blob = bucket.blob(hist_name)
-        blob.upload_from_string(json.dumps(hist_data))
+        # try:
+        #     img_task = ee.batch.Export.image.toCloudStorage(
+        #         image=img,
+        #         description=img_name,
+        #         bucket=GCS_BUCKET,
+        #         fileNamePrefix=img_name,
+        #         scale=30,
+        #         region=county_geom,
+        #     )
+        #     img_task.start()
+        # except ee.EEException as e:
+        #     print(f"Export task failed: {e}")
 
-    s2_histograms.map(save_to_gcs)
+        # Convert histogram to a feature collection
+        # Convert histogram to a feature collection
 
 
 if __name__ == "__main__":
@@ -180,7 +184,7 @@ if __name__ == "__main__":
         county="Fresno",
         crop_type=1,  # Corn
         start_year=2020,
-        end_year=2020,
+        end_year=2021,
         seanson_start={"month": 5, "day": 1},
         seanson_end={"month": 9, "day": 30},
     )
