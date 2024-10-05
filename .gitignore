@@ -4,3 +4,4 @@ py_packages/*
 0_Data/MODIS_data/*
 bm_docs/*
 ee_tutorial.ipynb
+0_Data/gee_map.py

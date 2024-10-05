@@ -12,18 +12,40 @@ from datetime import datetime
 import ee
 import numpy as np
 from google.cloud import storage
+from google.cloud.exceptions import NotFound
 from retry import retry
 
 GCS_BUCKET = "vgnn"
 PROJECT_ID = "supple-nature-370421"
-BANDS_TO_PROCESS = 2
-
+CLOUD_COVER_THRESHOLD = 25
 
 # Initialize GEE
-ee.Initialize(project=PROJECT_ID)
+ee.Initialize(
+    project=PROJECT_ID, opt_url="https://earthengine-highvolume.googleapis.com"
+)
 
 # Set up GCS client
 storage_client = storage.Client(project=PROJECT_ID)
+
+
+# TODO: Iterating through counties
+# TODO: Logging
+# TODO: multiprocessing
+# TODO: Error handling
+# TODO: Documentation
+
+
+def file_exists_in_gcs(blob_name, folder, bucket_name=GCS_BUCKET):
+    """Check if a file exists in the specified GCS bucket and folder."""
+
+    bucket = storage_client.bucket(bucket_name)
+    full_path = f"{folder}/{blob_name}" if folder else blob_name
+    blob = bucket.blob(full_path)
+    try:
+        blob.reload()
+        return True
+    except NotFound:
+        return False
 
 
 def mask_s2_clouds(image):
@@ -41,19 +63,22 @@ def mask_s2_clouds(image):
     return image.updateMask(mask)
 
 
-def get_county_cropland_mask(county, crop_type):
-
-    # Load counties information
-    counties = ee.FeatureCollection("TIGER/2018/Counties")
+def get_county_cropland_mask(county, crop_type, start_year, end_year):
 
     # Filter county
-    county_geom = counties.filter(ee.Filter.eq("NAME", county)).first().geometry()
+    county_geom = (
+        ee.FeatureCollection("TIGER/2018/Counties")
+        .filter(ee.Filter.eq("NAME", county))
+        .first()
+        .geometry()
+    )
 
     # Cropland data
     cdl = (
         ee.ImageCollection("USDA/NASS/CDL")
         .filterBounds(county_geom)
-        .map(lambda img: img.clip(county_geom))
+        .filter(ee.Filter.calendarRange(start_year, end_year, "year"))
+        .select(0)
     )
 
     cdl_county_masked = cdl.map(
@@ -73,9 +98,6 @@ def aggregate_s2_yearly_monthly(
             ee.Filter.calendarRange(year, year, "year")
         ).first()
 
-        # Ensure the crop mask has only one band
-        year_crop_mask = year_crop_mask.select(0)
-
         # mask anything outside specific crop type
         year_collection = s2_collection.filter(
             ee.Filter.calendarRange(year, year, "year")
@@ -86,7 +108,6 @@ def aggregate_s2_yearly_monthly(
             return (
                 year_collection.filter(ee.Filter.calendarRange(month, month, "month"))
                 .limit(30)
-                .map(mask_s2_clouds)
                 .median()
                 .set("year", year)
                 .set("month", month)
@@ -108,10 +129,26 @@ def get_county_cropped_sentinel_data(
     county_geom, cropland_mask, start_year, end_year, seanson_start, seanson_end
 ):
 
+    start_date = ee.Date.fromYMD(
+        start_year, seanson_start["month"], seanson_start["day"]
+    )
+    end_date = ee.Date.fromYMD(end_year, seanson_end["month"], seanson_end["day"])
+
+    # Get all band names
+    all_bands = ee.Image(
+        ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").first()
+    ).bandNames()
+
+    # Filter bands
+    bands_of_interest = all_bands.filter(ee.Filter.stringStartsWith("item", "B"))
+
     s2 = (
         ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+        .filter(ee.Filter.date(start_date, end_date))
         .filterBounds(county_geom)
-        .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 20))
+        .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", CLOUD_COVER_THRESHOLD))
+        .map(mask_s2_clouds)
+        .select(bands_of_interest)
     )
 
     s2_filtered = aggregate_s2_yearly_monthly(
@@ -122,10 +159,19 @@ def get_county_cropped_sentinel_data(
 
 
 def get_cropland_data(
-    county, crop_type, start_year, end_year, seanson_start, seanson_end
+    county,
+    crop_type,
+    start_year,
+    end_year,
+    seanson_start,
+    seanson_end,
+    image_export=False,
+    histogram_export=True,
 ):
 
-    county_crop_mask, county_geom = get_county_cropland_mask(county, crop_type)
+    county_crop_mask, county_geom = get_county_cropland_mask(
+        county, crop_type, start_year, end_year
+    )
     sentinel_data = get_county_cropped_sentinel_data(
         county_geom, county_crop_mask, start_year, end_year, seanson_start, seanson_end
     ).flatten()
@@ -137,9 +183,9 @@ def get_cropland_data(
             reducer=ee.Reducer.histogram(33, 50, 4999),
             geometry=county_geom,
             scale=30,
-            maxPixels=10e8,
+            maxPixels=10e9,
         )
-        return ee.Feature(county_geom, {"image": img, "histogram": histogram})
+        return ee.Feature(None, {"image": img, "histogram": histogram})
 
     s2_histograms = sentinel_data.map(create_histograms)
 
@@ -150,35 +196,35 @@ def get_cropland_data(
         feat = ee.Feature(s2_histograms.get(idx))
         img = ee.Image(feat.get("image"))
 
-        hist = ee.Dictionary(feat.get("histogram"))
-        hist_data = hist.getInfo()
-        hist_json = json.dumps(hist_data, indent=2)
-
         date = img.date().format("YYYY-MM-dd").getInfo()
         img_name = "_".join([county, str(crop_type), date])
+        hist_name = img_name + "_hist"
 
-        blob_name = img_name + "_hist"
-        bucket = storage_client.get_bucket(GCS_BUCKET)
-        blob = bucket.blob(blob_name)
-        blob.upload_from_string(hist_json, content_type="application/json")
+        if histogram_export and not file_exists_in_gcs(hist_name, "histograms"):
+            # Save histogram
+            hist = ee.Dictionary(feat.get("histogram"))
+            hist_data = hist.getInfo()
+            hist_json = json.dumps(hist_data, indent=2)
+
+            blob_name = blob_name = f"histograms/{hist_name}"
+            bucket = storage_client.get_bucket(GCS_BUCKET)
+            blob = bucket.blob(blob_name)
+            blob.upload_from_string(hist_json, content_type="application/json")
 
         # Save image
-
-        # try:
-        #     img_task = ee.batch.Export.image.toCloudStorage(
-        #         image=img,
-        #         description=img_name,
-        #         bucket=GCS_BUCKET,
-        #         fileNamePrefix=img_name,
-        #         scale=30,
-        #         region=county_geom,
-        #     )
-        #     img_task.start()
-        # except ee.EEException as e:
-        #     print(f"Export task failed: {e}")
-
-        # Convert histogram to a feature collection
-        # Convert histogram to a feature collection
+        if image_export and not file_exists_in_gcs(img_name, "images"):
+            try:
+                img_task = ee.batch.Export.image.toCloudStorage(
+                    image=img,
+                    description=img_name,
+                    bucket=GCS_BUCKET,
+                    fileNamePrefix=f"images/{img_name}",
+                    scale=30,
+                    region=county_geom,
+                )
+                img_task.start()
+            except ee.EEException as e:
+                print(f"Export task failed: {e}")
 
 
 if __name__ == "__main__":
@@ -186,8 +232,10 @@ if __name__ == "__main__":
     get_cropland_data(
         county="Fresno",
         crop_type=1,  # Corn
-        start_year=2020,
-        end_year=2021,
+        start_year=2022,
+        end_year=2022,
         seanson_start={"month": 5, "day": 1},
-        seanson_end={"month": 9, "day": 30},
+        seanson_end={"month": 7, "day": 30},
+        image_export=False,
+        histogram_export=True,
     )
