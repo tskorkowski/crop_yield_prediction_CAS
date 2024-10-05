@@ -187,22 +187,22 @@ def get_cropland_data(
         )
         return ee.Feature(None, {"image": img, "histogram": histogram})
 
-    s2_histograms = sentinel_data.map(create_histograms)
+    # s2_histograms = sentinel_data.map(create_histograms)
 
     # Save images and histograms to GCS
 
     n_of_exports = sentinel_data.size().getInfo()
     for idx in range(n_of_exports):
-        feat = ee.Feature(s2_histograms.get(idx))
-        img = ee.Image(feat.get("image"))
+
+        img = ee.Image(sentinel_data.get(idx))
 
         date = img.date().format("YYYY-MM-dd").getInfo()
         img_name = "_".join([county, str(crop_type), date])
         hist_name = img_name + "_hist"
 
         if histogram_export and not file_exists_in_gcs(hist_name, "histograms"):
-            # Save histogram
-            hist = ee.Dictionary(feat.get("histogram"))
+            s2_histogram = create_histograms(img)
+            hist = ee.Dictionary(s2_histogram.get("histogram"))
             hist_data = hist.getInfo()
             hist_json = json.dumps(hist_data, indent=2)
 
@@ -232,10 +232,10 @@ if __name__ == "__main__":
     get_cropland_data(
         county="Fresno",
         crop_type=1,  # Corn
-        start_year=2022,
-        end_year=2022,
-        seanson_start={"month": 5, "day": 1},
-        seanson_end={"month": 7, "day": 30},
+        start_year=2017,
+        end_year=2023,
+        seanson_start={"month": 4, "day": 1},
+        seanson_end={"month": 10, "day": 30},
         image_export=False,
         histogram_export=True,
     )
