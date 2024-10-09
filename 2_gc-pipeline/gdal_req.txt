@@ -1,0 +1,3 @@
+# requirements for processes raleted to gdal package and geospacial calculations
+rasterio
+geopandas
