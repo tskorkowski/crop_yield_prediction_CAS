@@ -1,3 +1,9 @@
+# Terminal conda installation steps 
+# conda create -n gdal_conda -y
+# conda activate gdal_conda
+# DL_ANACONDA_ENV_HOME="${DL_ANACONDA_HOME}/envs/gdal_conda"
+# python -m ipykernel install --prefix "${DL_ANACONDA_ENV_HOME}" --name gdal_conda --display-name GDAL_kernel
+
 # requirements for processes raleted to gdal package and geospacial calculations
 rasterio
 geopandas
