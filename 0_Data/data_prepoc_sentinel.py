@@ -69,7 +69,6 @@ def get_county_cropland_mask(county, crop_type, start_year, end_year):
     county_geom = (
         ee.FeatureCollection("TIGER/2018/Counties")
         .filter(ee.Filter.eq("NAME", county))
-        .first()
         .geometry()
     )
 
