@@ -4,3 +4,8 @@ py_packages/*
 0_Data/MODIS_data/*
 bm_docs/*
 ee_tutorial.ipynb
+0_Data/gee_map.py
+0_Data/test.ipynb
+0_Data/test_site/*
+0_Data/tl_2024_us_county
+0_Data/tl_2024_us_county.zip
