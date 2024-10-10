@@ -28,6 +28,7 @@ import google.auth
 import numpy as np
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
+from typing import Dict
 
 
 SCALE = 10  # meters per pixel
@@ -70,7 +71,7 @@ def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
     """ 
     assert month >= 1 and month <= 11, "Function provides median s2 image over two month within the same year, hence month has to be between 1 and 11"
     
-    def mask_sentinel2_clouds(image: ee.Image) -> ee.Image:
+    def mask_sentinel2_clouds(image: ee.Image) -> Dict:
         CLOUD_BIT = 10
         CIRRUS_CLOUD_BIT = 11
         bit_mask = (1 << CLOUD_BIT) | (1 << CIRRUS_CLOUD_BIT)
@@ -111,7 +112,7 @@ def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
         'palette': ['green']
     }
 
-    s2_img = (
+    s2_img_unbounded = (
             ee.ImageCollection("COPERNICUS/S2_HARMONIZED")
             .filter(ee.Filter.calendarRange(year,year,"year"))
             .filter(ee.Filter.calendarRange(month,month+1,"month"))
@@ -124,8 +125,13 @@ def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
             .updateMask(cdl_image.eq(1))
             .float() 
         )
-
-    return s2_img
+    s2_img = s2_img_unbounded.clip(county_geom)
+    img_name = f"{county}_{year}_{month}-{month+1}"
+    
+    return {
+            "image": s2_img,
+            "image_name": img_name
+    }
 
 def get_label_image() -> ee.Image:
     """Get the European Space Agency WorldCover image.
