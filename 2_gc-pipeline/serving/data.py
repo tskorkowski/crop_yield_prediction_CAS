@@ -1,16 +1,5 @@
-# Copyright 2022 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Based on:
+# https://github.com/GoogleCloudPlatform/python-docs-samples/tree/main/people-and-planet-ai/land-cover-classification
 
 """Data utilities to grab data from Earth Engine.
 
@@ -31,8 +20,7 @@ import requests
 from typing import Dict
 
 
-SCALE = 10  # meters per pixel
-
+SCALE = 100  # meters per pixel
 
 def ee_init() -> None:
     """Authenticate and initialize Earth Engine with the default credentials."""
@@ -51,7 +39,7 @@ def ee_init() -> None:
     )
 
 
-def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
+def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Image:
     """Get a Sentinel-2 Earth Engine image.
 
     This filters clouds and returns the median for the selected time range and mask.
@@ -132,31 +120,6 @@ def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
             "image": s2_img,
             "image_name": img_name
     }
-
-def get_label_image() -> ee.Image:
-    """Get the European Space Agency WorldCover image.
-
-    This remaps the ESA classifications with the Dynamic World classifications.
-    Any missing value is filled with 0 (water).
-
-    For more information, see:
-        https://developers.google.com/earth-engine/datasets/catalog/ESA_WorldCover_v100
-        https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1
-
-    Returns: An Earth Engine image with land cover classification as indices.
-    """
-    # Remap the ESA classifications into the Dynamic World classifications
-    fromValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100]
-    toValues = [1, 5, 2, 4, 6, 7, 8, 0, 3, 3, 7]
-    return (
-        ee.Image("ESA/WorldCover/v100/2020")
-        .select("Map")
-        .remap(fromValues, toValues)
-        .rename("landcover")
-        .unmask(0)
-        .byte()  # as unsinged 8-bit integer
-    )
-
 
 def get_input_patch(
     year: int, lonlat: tuple[float, float], patch_size: int
