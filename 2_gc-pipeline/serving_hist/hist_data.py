@@ -5,7 +5,7 @@ trained on exactly the same data that will be used for predictions.
 """
 
 from __future__ import annotations
-
+from osgeo import gdal
 import io
 
 from google.api_core import exceptions, retry
@@ -85,3 +85,16 @@ def download_and_process_tiff(bucket_name, blob_name):
             array = src.read()
     
     return array
+
+# Function using GDAL library directly to read image data
+def read_tiff_gdal(bucket_name, blob_name):
+   gdal.UseExceptions()  # Enable exceptions
+   file_path = f'/vsigs/{bucket_name}/{blob_name}'
+   ds = gdal.Open(file_path)
+   if ds is None:
+       print("Failed to open the file")
+       return None
+   band = ds.GetRasterBand(1)
+   data = band.ReadAsArray()
+   return data
+
