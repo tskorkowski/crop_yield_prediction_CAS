@@ -18,9 +18,8 @@ import numpy as np
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
+from serving.constants import SCALE # meters per pixel
 
-
-SCALE = 100  # meters per pixel
 
 def ee_init() -> None:
     """Authenticate and initialize Earth Engine with the default credentials."""
