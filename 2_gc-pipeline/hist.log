@@ -1,0 +1,1708 @@
+2024-10-13 21:57:33,184 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 21:59:11,173 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 21:59:29,279 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:02:40,620 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:02:41,753 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:05:26,161 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:05:26,178 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:06:53,070 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:06:53,072 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:10:52,354 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:10:52,356 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:25:25,206 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:25:25,216 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:25:31,863 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:25:31,873 - WARNING - No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+2024-10-13 22:46:55,226 - ERROR - Band 2 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:55,273 - ERROR - Band 3 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:55,273 - ERROR - Band 4 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:55,273 - ERROR - Band 1 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:57,492 - ERROR - Band 8 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:57,492 - ERROR - Band 6 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:57,492 - ERROR - Band 5 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:57,506 - ERROR - Band 7 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:59,773 - ERROR - Band 10 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:59,773 - ERROR - Band 11 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:59,773 - ERROR - Band 12 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:46:59,773 - ERROR - Band 9 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:47:01,590 - ERROR - Band 13 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 187, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 145, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:47:01,590 - INFO - Image images/Canyon_2017_5-6_100 has been processed in 0.1942 minuntes
+2024-10-13 22:58:27,525 - ERROR - Band 2 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:27,525 - ERROR - Band 3 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:27,541 - ERROR - Band 4 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:27,542 - ERROR - Band 1 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:29,825 - ERROR - Band 6 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:29,825 - ERROR - Band 5 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:29,825 - ERROR - Band 8 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:29,841 - ERROR - Band 7 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:32,125 - ERROR - Band 10 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:32,141 - ERROR - Band 11 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:32,141 - ERROR - Band 9 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:32,141 - ERROR - Band 12 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:33,959 - ERROR - Band 13 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1538, in info
+    if self.isEnabledFor(INFO):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1798, in isEnabledFor
+    return self._cache[level]
+           ~~~~~~~~~~~^^^^^^^
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\tskor\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+         ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\__init__.py", line 255, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+           ^^^^^^^^^^^^^^^^
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\.ml-venv\Lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an exception set
+2024-10-13 22:58:33,959 - INFO - Image images/Canyon_2017_5-6_100 has been processed in 0.1947 minuntes
+2024-10-13 23:02:08,942 - ERROR - Band 4 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:08,942 - ERROR - Band 3 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:08,942 - ERROR - Band 1 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:08,957 - ERROR - Band 2 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:11,211 - ERROR - Band 5 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:11,212 - ERROR - Band 7 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:11,224 - ERROR - Band 8 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:11,225 - ERROR - Band 6 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:13,457 - ERROR - Band 12 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:13,459 - ERROR - Band 9 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:13,461 - ERROR - Band 10 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:13,462 - ERROR - Band 11 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:15,259 - ERROR - Band 13 generated an exception: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+Traceback (most recent call last):
+  File "rasterio\\_env.pyx", line 99, in rasterio._env.logging_error_handler
+  File "rasterio\\_env.pyx", line 84, in rasterio._env.log_error
+  File "rasterio\\_filepath.pyx", line 143, in rasterio._filepath.filepath_open
+  File "rasterio\\_filepath.pyx", line 116, in rasterio._filepath.clone_file_obj
+AttributeError: 'BlobReader' object has no attribute 'name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 180, in process_tiff
+    result = future.result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 439, in result
+    return self.__get_result()
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\_base.py", line 391, in __get_result
+    raise self._exception
+  File "c:\Users\tskor\anaconda3\lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "c:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\serving_hist\hist_data.py", line 138, in process_band
+    with rasterio.open(f) as src:
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 451, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\__init__.py", line 242, in open
+    return FilePath(fp).open(driver=driver, sharing=sharing, **kwargs)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\env.py", line 398, in wrapper
+    return f(*args, **kwds)
+  File "c:\Users\tskor\anaconda3\lib\site-packages\rasterio\io.py", line 236, in open
+    return DatasetReader(mempath, driver=driver, sharing=sharing, **kwargs)
+  File "rasterio\\_base.pyx", line 310, in rasterio._base.DatasetBase.__init__
+  File "rasterio\\_base.pyx", line 221, in rasterio._base.open_dataset
+  File "rasterio\\_err.pyx", line 219, in rasterio._err.exc_wrap_pointer
+  File "rasterio\\_err.pyx", line 166, in rasterio._err.exc_check
+SystemError: <class 'rasterio._err.CPLE_OpenFailedError'> returned a result with an error set
+2024-10-13 23:02:15,259 - INFO - Image images/Canyon_2017_5-6_100 has been processed in 0.1933 minuntes
