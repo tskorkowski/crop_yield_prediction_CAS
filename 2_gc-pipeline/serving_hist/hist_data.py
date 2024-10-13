@@ -20,6 +20,13 @@ import re
 import tempfile
 import rasterio
 from rasterio.io import MemoryFile
+import os
+import matplotlib.pyplot as plt
+from utils.constants import  BUCKET, IMG_SOURCE_PREFIX, HIST_DEST_PREFIX, NUM_BANDS, HIST_BINS_LIST
+import io
+from osgeo import gdal
+import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def hist_init():
     """Authenticate and initialize Earth Engine with the default credentials."""
@@ -98,3 +105,77 @@ def read_tiff_gdal(bucket_name, blob_name):
    data = band.ReadAsArray()
    return data
 
+def create_histogram_skip_nan(image, bins=256):
+    # Flatten the image and remove NaN values
+    flat_image = image.flatten()
+    
+    non_nan_values = flat_image[~np.isnan(flat_image)].astype(np.uint16)
+    
+    # Create histogram
+    hist, bin_edges = np.histogram(non_nan_values, bins=bins, density=False)
+    
+    return hist, bin_edges
+
+def process_band(blob_name, band, bins):
+
+    storage_client = storage.Client()
+    blob = storage_client.bucket(BUCKET).blob(blob_name)
+    
+    with blob.open("rb") as f:
+        with rasterio.open(f) as src:    
+    
+            data = src.read(band)
+            valid_data = data[~np.isnan(data)].astype(np.uint16)
+            valid_max = np.max(valid_data)
+            valid_mean = np.min(valid_data)
+            
+            if valid_max > bins[-1]:
+                logging.warning(f"image: {image_name}, band: {band}, {valid_max} value is larger than assumed possible values for this band")
+            elif valid_min < bins[0]:
+                logging.warning(f"image: {image_name}, band: {band}, {valid_max} value is smaller than assumed possible values for this band")
+            if valid_data.size > 0:
+                total_sum = np.sum(valid_data)
+                total_count = valid_data.size
+                mean = total_sum / total_count
+                hist, _ = create_histogram_skip_nan(valid_data, bins)
+            else:
+                mean = np.nan
+                hist = np.zeros_like(bins[:-1])  # histogram will have one less element than bins
+
+    return hist
+
+def process_tiff(bucket_name, blob_name, max_workers=4):
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_band = {executor.submit(process_band, blob_name, band, HIST_BINS_LIST[band-1]): band 
+                          for band in range(1, NUM_BANDS + 1)}
+        results = []
+        
+        for future in as_completed(future_to_band):
+            band = future_to_band[future]
+            try:
+                result = future.result()
+                results.append(result)
+                logging.info(f"Processed band {band} successfully")
+            except Exception as exc:
+                logging.exception(f'Band {band} generated an exception: {exc}')
+    
+    sorted_results = sorted(results, key=lambda x: x[0])
+    return  np.array(sorted_results).flatten() # one long array instead of bands
+
+def recombine_image(blob_name):
+    start_time = time.time()
+    
+    hist_per_blob = []
+    blobs = list_blobs_with_prefix(BUCKET, blob_name)
+    
+    for blob in blobs:
+        results = process_tiff(BUCKET, blob.name)
+        hist_per_blob.append(results)
+    
+    combined_hist = np.sum(np.array(hist_per_blob), axis=0)
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
+    logging.info(f"Image {blob_name} has been processed in {execution_time/60:.4f} minuntes")
+    
+    return combined_hist
