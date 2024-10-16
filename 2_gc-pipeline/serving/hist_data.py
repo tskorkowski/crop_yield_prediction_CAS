@@ -33,6 +33,7 @@ from google.cloud import storage
 from numpy.lib.recfunctions import structured_to_unstructured
 from osgeo import gdal
 from rasterio.io import MemoryFile
+from serving.common import list_blobs_with_prefix
 
 logging.basicConfig(
     filename="hist.log",
@@ -46,13 +47,6 @@ def hist_init():
     # Use the Earth Engine High Volume endpoint.
     #   https://developers.google.com/earth-engine/cloud/highvolume
     credentials, project = google.auth.default()
-
-
-def list_blobs_with_prefix(bucket_name, prefix):
-    """Lists all the blobs in the bucket that begin with the prefix."""
-    storage_client = storage.Client()
-    return storage_client.list_blobs(bucket_name, prefix=prefix)
-
 
 def create_histogram_skip_nan(image, bins=256):
     # Flatten the image and remove NaN values
@@ -128,7 +122,7 @@ def recombine_image(bucket, core_image_name, bin_list, num_bands):
     start_time = time.time()
 
     hist_per_blob = []
-    blobs = list_blobs_with_prefix(bucket, core_image_name)
+    blobs = list_blobs_with_prefix(core_image_name)
 
     for blob in blobs:
         results = process_tiff(bucket, blob.name, bin_list, num_bands)
@@ -183,7 +177,7 @@ def write_histogram_to_gcs(histogram, bucket_name, blob_name):
 if __name__ == "__main__":
     image_name = r"images/Canyon_2017_5-6_100"
     # image_name = r"images/Story_2018_9-10_100_.tif"
-    blobs = list_blobs_with_prefix(BUCKET, image_name)
+    blobs = list_blobs_with_prefix(image_name)
 
     # Usage
     start_time = time.time()

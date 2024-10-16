@@ -38,3 +38,1367 @@
 2024-10-13 23:20:30,139 - INFO - Processed band 7 successfully
 2024-10-13 23:20:30,317 - INFO - Processed band 6 successfully
 2024-10-13 23:20:34,985 - INFO - Processed band 8 successfully
+2024-10-13 23:20:41,284 - WARNING - image: images/Lancaster_2017_7-8_100_0000000000-0000000000.tif, band: 9, 6294 value is larger than assumed possible values for this band
+2024-10-13 23:20:41,290 - INFO - Processed band 9 successfully
+2024-10-13 23:20:43,659 - INFO - Processed band 11 successfully
+2024-10-13 23:20:43,720 - INFO - Processed band 10 successfully
+2024-10-13 23:20:48,996 - INFO - Processed band 12 successfully
+2024-10-13 23:20:51,669 - INFO - Processed band 13 successfully
+2024-10-13 23:21:03,778 - INFO - Processed band 2 successfully
+2024-10-13 23:21:04,249 - INFO - Processed band 1 successfully
+2024-10-13 23:21:06,615 - INFO - Processed band 4 successfully
+2024-10-13 23:21:06,652 - INFO - Processed band 3 successfully
+2024-10-13 23:21:17,177 - INFO - Processed band 5 successfully
+2024-10-13 23:21:17,612 - INFO - Processed band 6 successfully
+2024-10-13 23:21:17,978 - WARNING - image: images/Lancaster_2017_7-8_100_0000000000-0000016384.tif, band: 7, 6015 value is larger than assumed possible values for this band
+2024-10-13 23:21:17,985 - INFO - Processed band 7 successfully
+2024-10-13 23:21:18,109 - INFO - Processed band 8 successfully
+2024-10-13 23:21:29,198 - INFO - Processed band 11 successfully
+2024-10-13 23:21:29,414 - WARNING - image: images/Lancaster_2017_7-8_100_0000000000-0000016384.tif, band: 12, 6460 value is larger than assumed possible values for this band
+2024-10-13 23:21:29,421 - INFO - Processed band 12 successfully
+2024-10-13 23:21:30,375 - WARNING - image: images/Lancaster_2017_7-8_100_0000000000-0000016384.tif, band: 9, 6582 value is larger than assumed possible values for this band
+2024-10-13 23:21:30,382 - INFO - Processed band 9 successfully
+2024-10-13 23:21:30,631 - INFO - Processed band 10 successfully
+2024-10-13 23:21:39,569 - WARNING - image: images/Lancaster_2017_7-8_100_0000000000-0000016384.tif, band: 13, 6083 value is larger than assumed possible values for this band
+2024-10-13 23:21:39,581 - INFO - Processed band 13 successfully
+2024-10-13 23:21:39,581 - INFO - Image images/Lancaster_2017_7-8 has been processed in 1.6028 minuntes
+2024-10-13 23:21:39,851 - INFO - Histogram uploaded to gs://vgnn/histograms/Lancaster/2017/7-8/100/hist.npy
+2024-10-13 23:21:53,103 - INFO - Processed band 3 successfully
+2024-10-13 23:21:53,482 - INFO - Processed band 2 successfully
+2024-10-13 23:21:53,680 - INFO - Processed band 4 successfully
+2024-10-13 23:21:53,696 - INFO - Processed band 1 successfully
+2024-10-13 23:22:06,429 - INFO - Processed band 5 successfully
+2024-10-13 23:22:07,453 - INFO - Processed band 7 successfully
+2024-10-13 23:22:07,822 - INFO - Processed band 8 successfully
+2024-10-13 23:22:09,543 - INFO - Processed band 6 successfully
+2024-10-13 23:22:18,571 - INFO - Processed band 9 successfully
+2024-10-13 23:22:22,358 - INFO - Processed band 12 successfully
+2024-10-13 23:22:22,733 - INFO - Processed band 10 successfully
+2024-10-13 23:22:23,057 - INFO - Processed band 11 successfully
+2024-10-13 23:22:29,086 - INFO - Processed band 13 successfully
+2024-10-13 23:22:40,096 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 1, 8179 value is larger than assumed possible values for this band
+2024-10-13 23:22:40,102 - INFO - Processed band 1 successfully
+2024-10-13 23:22:40,645 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 3, 9130 value is larger than assumed possible values for this band
+2024-10-13 23:22:40,652 - INFO - Processed band 3 successfully
+2024-10-13 23:22:40,697 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 4, 10128 value is larger than assumed possible values for this band
+2024-10-13 23:22:40,704 - INFO - Processed band 4 successfully
+2024-10-13 23:22:40,713 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 2, 8645 value is larger than assumed possible values for this band
+2024-10-13 23:22:40,719 - INFO - Processed band 2 successfully
+2024-10-13 23:22:50,589 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 5, 11181 value is larger than assumed possible values for this band
+2024-10-13 23:22:50,596 - INFO - Processed band 5 successfully
+2024-10-13 23:22:51,655 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 6, 12155 value is larger than assumed possible values for this band
+2024-10-13 23:22:51,663 - INFO - Processed band 6 successfully
+2024-10-13 23:22:51,838 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 8, 10609 value is larger than assumed possible values for this band
+2024-10-13 23:22:51,846 - INFO - Processed band 8 successfully
+2024-10-13 23:22:51,887 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 7, 12626 value is larger than assumed possible values for this band
+2024-10-13 23:22:51,894 - INFO - Processed band 7 successfully
+2024-10-13 23:23:01,704 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 9, 12265 value is larger than assumed possible values for this band
+2024-10-13 23:23:01,712 - INFO - Processed band 9 successfully
+2024-10-13 23:23:03,026 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 10, 2910 value is larger than assumed possible values for this band
+2024-10-13 23:23:03,033 - INFO - Processed band 10 successfully
+2024-10-13 23:23:03,252 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 12, 13273 value is larger than assumed possible values for this band
+2024-10-13 23:23:03,260 - INFO - Processed band 12 successfully
+2024-10-13 23:23:03,878 - INFO - Processed band 11 successfully
+2024-10-13 23:23:10,719 - WARNING - image: images/Lancaster_2017_9-10_100_0000000000-0000016384.tif, band: 13, 12508 value is larger than assumed possible values for this band
+2024-10-13 23:23:10,731 - INFO - Processed band 13 successfully
+2024-10-13 23:23:10,732 - INFO - Image images/Lancaster_2017_9-10 has been processed in 1.5147 minuntes
+2024-10-13 23:23:11,009 - INFO - Histogram uploaded to gs://vgnn/histograms/Lancaster/2017/9-10/100/hist.npy
+2024-10-13 23:23:26,959 - INFO - Processed band 3 successfully
+2024-10-13 23:23:26,977 - INFO - Processed band 2 successfully
+2024-10-13 23:23:27,019 - INFO - Processed band 4 successfully
+2024-10-13 23:23:27,026 - INFO - Processed band 1 successfully
+2024-10-13 23:23:39,434 - INFO - Processed band 8 successfully
+2024-10-13 23:23:39,945 - INFO - Processed band 5 successfully
+2024-10-13 23:23:42,350 - INFO - Processed band 6 successfully
+2024-10-13 23:23:42,504 - INFO - Processed band 7 successfully
+2024-10-13 23:23:51,616 - INFO - Processed band 9 successfully
+2024-10-13 23:23:54,665 - INFO - Processed band 12 successfully
+2024-10-13 23:23:54,973 - INFO - Processed band 10 successfully
+2024-10-13 23:23:56,982 - INFO - Processed band 11 successfully
+2024-10-13 23:24:02,627 - INFO - Processed band 13 successfully
+2024-10-13 23:24:14,252 - INFO - Processed band 1 successfully
+2024-10-13 23:24:14,349 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 2, 5761 value is larger than assumed possible values for this band
+2024-10-13 23:24:14,358 - INFO - Processed band 2 successfully
+2024-10-13 23:24:14,369 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 4, 6777 value is larger than assumed possible values for this band
+2024-10-13 23:24:14,378 - INFO - Processed band 4 successfully
+2024-10-13 23:24:16,141 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 3, 5986 value is larger than assumed possible values for this band
+2024-10-13 23:24:16,148 - INFO - Processed band 3 successfully
+2024-10-13 23:24:25,793 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 7, 7407 value is larger than assumed possible values for this band
+2024-10-13 23:24:25,801 - INFO - Processed band 7 successfully
+2024-10-13 23:24:27,472 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 5, 6751 value is larger than assumed possible values for this band
+2024-10-13 23:24:27,479 - INFO - Processed band 5 successfully
+2024-10-13 23:24:27,829 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 6, 7129 value is larger than assumed possible values for this band
+2024-10-13 23:24:27,836 - INFO - Processed band 6 successfully
+2024-10-13 23:24:29,578 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 8, 7040 value is larger than assumed possible values for this band
+2024-10-13 23:24:29,584 - INFO - Processed band 8 successfully
+2024-10-13 23:24:37,108 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 9, 7609 value is larger than assumed possible values for this band
+2024-10-13 23:24:37,116 - INFO - Processed band 9 successfully
+2024-10-13 23:24:40,564 - INFO - Processed band 10 successfully
+2024-10-13 23:24:41,048 - INFO - Processed band 11 successfully
+2024-10-13 23:24:42,404 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 12, 6681 value is larger than assumed possible values for this band
+2024-10-13 23:24:42,410 - INFO - Processed band 12 successfully
+2024-10-13 23:24:46,831 - WARNING - image: images/Lancaster_2018_5-6_100_0000000000-0000016384.tif, band: 13, 6504 value is larger than assumed possible values for this band
+2024-10-13 23:24:46,840 - INFO - Processed band 13 successfully
+2024-10-13 23:24:46,841 - INFO - Image images/Lancaster_2018_5-6 has been processed in 1.5972 minuntes
+2024-10-13 23:24:47,108 - INFO - Histogram uploaded to gs://vgnn/histograms/Lancaster/2018/5-6/100/hist.npy
+2024-10-13 23:25:01,027 - INFO - Processed band 4 successfully
+2024-10-13 23:25:01,043 - INFO - Processed band 2 successfully
+2024-10-13 23:25:03,874 - INFO - Processed band 1 successfully
+2024-10-13 23:25:03,892 - INFO - Processed band 3 successfully
+2024-10-13 23:25:16,348 - INFO - Processed band 5 successfully
+2024-10-13 23:25:16,856 - INFO - Processed band 7 successfully
+2024-10-13 23:25:17,030 - INFO - Processed band 6 successfully
+2024-10-13 23:25:19,311 - INFO - Processed band 8 successfully
+2024-10-13 23:25:29,774 - INFO - Processed band 10 successfully
+2024-10-13 23:25:29,814 - INFO - Processed band 11 successfully
+2024-10-13 23:25:31,563 - INFO - Processed band 9 successfully
+2024-10-13 23:25:33,644 - INFO - Processed band 12 successfully
+2024-10-13 23:25:40,533 - INFO - Processed band 13 successfully
+2024-10-13 23:25:52,217 - INFO - Processed band 1 successfully
+2024-10-13 23:25:52,217 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 2, 5431 value is larger than assumed possible values for this band
+2024-10-13 23:25:52,225 - INFO - Processed band 2 successfully
+2024-10-13 23:25:54,096 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 4, 6558 value is larger than assumed possible values for this band
+2024-10-13 23:25:54,103 - INFO - Processed band 4 successfully
+2024-10-13 23:25:54,119 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 3, 5742 value is larger than assumed possible values for this band
+2024-10-13 23:25:54,126 - INFO - Processed band 3 successfully
+2024-10-13 23:26:05,070 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 5, 6490 value is larger than assumed possible values for this band
+2024-10-13 23:26:05,077 - INFO - Processed band 5 successfully
+2024-10-13 23:26:06,820 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 6, 6856 value is larger than assumed possible values for this band
+2024-10-13 23:26:06,827 - INFO - Processed band 6 successfully
+2024-10-13 23:26:08,563 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 7, 8322 value is larger than assumed possible values for this band
+2024-10-13 23:26:08,570 - INFO - Processed band 7 successfully
+2024-10-13 23:26:08,669 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 8, 6900 value is larger than assumed possible values for this band
+2024-10-13 23:26:08,676 - INFO - Processed band 8 successfully
+2024-10-13 23:26:16,322 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 9, 8675 value is larger than assumed possible values for this band
+2024-10-13 23:26:16,329 - INFO - Processed band 9 successfully
+2024-10-13 23:26:19,958 - INFO - Processed band 10 successfully
+2024-10-13 23:26:21,318 - INFO - Processed band 11 successfully
+2024-10-13 23:26:21,653 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 12, 7708 value is larger than assumed possible values for this band
+2024-10-13 23:26:21,660 - INFO - Processed band 12 successfully
+2024-10-13 23:26:26,261 - WARNING - image: images/Lancaster_2018_7-8_100_0000000000-0000016384.tif, band: 13, 6421 value is larger than assumed possible values for this band
+2024-10-13 23:26:26,270 - INFO - Processed band 13 successfully
+2024-10-13 23:26:26,271 - INFO - Image images/Lancaster_2018_7-8 has been processed in 1.6527 minuntes
+2024-10-13 23:26:26,556 - INFO - Histogram uploaded to gs://vgnn/histograms/Lancaster/2018/7-8/100/hist.npy
+2024-10-13 23:26:40,032 - INFO - Processed band 1 successfully
+2024-10-13 23:26:40,077 - INFO - Processed band 3 successfully
+2024-10-13 23:26:42,287 - INFO - Processed band 2 successfully
+2024-10-13 23:26:42,334 - INFO - Processed band 4 successfully
+2024-10-13 23:26:53,071 - INFO - Processed band 5 successfully
+2024-10-13 23:26:55,189 - INFO - Processed band 6 successfully
+2024-10-13 23:26:55,253 - INFO - Processed band 7 successfully
+2024-10-13 23:26:57,571 - INFO - Processed band 8 successfully
+2024-10-13 23:27:07,401 - INFO - Processed band 9 successfully
+2024-10-13 23:27:09,155 - INFO - Processed band 11 successfully
+2024-10-13 23:27:11,505 - INFO - Processed band 10 successfully
+2024-10-13 23:27:13,137 - INFO - Processed band 12 successfully
+2024-10-13 23:27:18,179 - INFO - Processed band 13 successfully
+2024-10-13 23:27:29,834 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 4, 8539 value is larger than assumed possible values for this band
+2024-10-13 23:27:29,841 - INFO - Processed band 4 successfully
+2024-10-13 23:27:29,900 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 1, 8263 value is larger than assumed possible values for this band
+2024-10-13 23:27:29,905 - INFO - Processed band 1 successfully
+2024-10-13 23:27:31,814 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 3, 7334 value is larger than assumed possible values for this band
+2024-10-13 23:27:31,822 - INFO - Processed band 3 successfully
+2024-10-13 23:27:31,837 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 2, 6575 value is larger than assumed possible values for this band
+2024-10-13 23:27:31,843 - INFO - Processed band 2 successfully
+2024-10-13 23:27:41,096 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 6, 10108 value is larger than assumed possible values for this band
+2024-10-13 23:27:41,103 - INFO - Processed band 6 successfully
+2024-10-13 23:27:42,997 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 5, 9250 value is larger than assumed possible values for this band
+2024-10-13 23:27:43,004 - INFO - Processed band 5 successfully
+2024-10-13 23:27:44,765 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 7, 10750 value is larger than assumed possible values for this band
+2024-10-13 23:27:44,772 - INFO - Processed band 7 successfully
+2024-10-13 23:27:45,065 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 8, 8840 value is larger than assumed possible values for this band
+2024-10-13 23:27:45,072 - INFO - Processed band 8 successfully
+2024-10-13 23:27:52,686 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 9, 10841 value is larger than assumed possible values for this band
+2024-10-13 23:27:52,694 - INFO - Processed band 9 successfully
+2024-10-13 23:27:53,782 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 10, 4618 value is larger than assumed possible values for this band
+2024-10-13 23:27:53,789 - INFO - Processed band 10 successfully
+2024-10-13 23:27:57,164 - INFO - Processed band 11 successfully
+2024-10-13 23:27:57,982 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 12, 12614 value is larger than assumed possible values for this band
+2024-10-13 23:27:57,989 - INFO - Processed band 12 successfully
+2024-10-13 23:28:02,544 - WARNING - image: images/Lancaster_2018_9-10_100_0000000000-0000016384.tif, band: 13, 11354 value is larger than assumed possible values for this band
+2024-10-13 23:28:02,555 - INFO - Processed band 13 successfully
+2024-10-13 23:28:02,556 - INFO - Image images/Lancaster_2018_9-10 has been processed in 1.6000 minuntes
+2024-10-13 23:28:02,822 - INFO - Histogram uploaded to gs://vgnn/histograms/Lancaster/2018/9-10/100/hist.npy
+2024-10-13 23:28:18,213 - INFO - Processed band 3 successfully
+2024-10-13 23:28:18,292 - INFO - Processed band 2 successfully
+2024-10-13 23:28:20,591 - INFO - Processed band 1 successfully
+2024-10-13 23:28:20,810 - INFO - Processed band 4 successfully
+2024-10-13 23:28:32,683 - INFO - Processed band 6 successfully
+2024-10-13 23:28:35,293 - INFO - Processed band 5 successfully
+2024-10-13 23:28:37,752 - INFO - Processed band 7 successfully
+2024-10-13 23:28:37,758 - INFO - Processed band 8 successfully
+2024-10-13 23:28:47,063 - INFO - Processed band 9 successfully
+2024-10-13 23:28:49,590 - INFO - Processed band 10 successfully
+2024-10-13 23:28:51,644 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000000000.tif, band: 11, 156 value is larger than assumed possible values for this band
+2024-10-13 23:28:51,649 - INFO - Processed band 11 successfully
+2024-10-13 23:28:52,162 - INFO - Processed band 12 successfully
+2024-10-13 23:28:59,523 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000000000.tif, band: 13, 4194 value is smaller than assumed possible values for this band
+2024-10-13 23:28:59,537 - INFO - Processed band 13 successfully
+2024-10-13 23:29:14,344 - INFO - Processed band 4 successfully
+2024-10-13 23:29:14,752 - INFO - Processed band 3 successfully
+2024-10-13 23:29:15,268 - INFO - Processed band 1 successfully
+2024-10-13 23:29:18,113 - INFO - Processed band 2 successfully
+2024-10-13 23:29:29,564 - INFO - Processed band 7 successfully
+2024-10-13 23:29:31,382 - INFO - Processed band 5 successfully
+2024-10-13 23:29:31,497 - INFO - Processed band 6 successfully
+2024-10-13 23:29:35,080 - INFO - Processed band 8 successfully
+2024-10-13 23:29:43,965 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000008192.tif, band: 9, 6002 value is larger than assumed possible values for this band
+2024-10-13 23:29:43,972 - INFO - Processed band 9 successfully
+2024-10-13 23:29:45,102 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000008192.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:29:45,107 - INFO - Processed band 11 successfully
+2024-10-13 23:29:48,308 - INFO - Processed band 10 successfully
+2024-10-13 23:29:48,549 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000008192.tif, band: 12, 5614 value is larger than assumed possible values for this band
+2024-10-13 23:29:48,554 - INFO - Processed band 12 successfully
+2024-10-13 23:29:55,732 - INFO - Processed band 13 successfully
+2024-10-13 23:29:58,545 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 4, 5528 value is larger than assumed possible values for this band
+2024-10-13 23:29:58,547 - INFO - Processed band 4 successfully
+2024-10-13 23:29:58,627 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 3, 5031 value is larger than assumed possible values for this band
+2024-10-13 23:29:58,629 - INFO - Processed band 3 successfully
+2024-10-13 23:29:58,640 - INFO - Processed band 2 successfully
+2024-10-13 23:29:58,651 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 1, 5279 value is larger than assumed possible values for this band
+2024-10-13 23:29:58,655 - INFO - Processed band 1 successfully
+2024-10-13 23:30:01,118 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 5, 5876 value is larger than assumed possible values for this band
+2024-10-13 23:30:01,121 - INFO - Processed band 5 successfully
+2024-10-13 23:30:01,328 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 7, 7148 value is larger than assumed possible values for this band
+2024-10-13 23:30:01,330 - INFO - Processed band 7 successfully
+2024-10-13 23:30:01,331 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 8, 6727 value is larger than assumed possible values for this band
+2024-10-13 23:30:01,333 - INFO - Processed band 8 successfully
+2024-10-13 23:30:01,361 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 6, 6668 value is larger than assumed possible values for this band
+2024-10-13 23:30:01,363 - INFO - Processed band 6 successfully
+2024-10-13 23:30:04,298 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 9, 7447 value is larger than assumed possible values for this band
+2024-10-13 23:30:04,301 - INFO - Processed band 9 successfully
+2024-10-13 23:30:04,705 - INFO - Processed band 11 successfully
+2024-10-13 23:30:04,733 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 10, 3664 value is larger than assumed possible values for this band
+2024-10-13 23:30:04,735 - INFO - Processed band 10 successfully
+2024-10-13 23:30:04,811 - WARNING - image: images/Crawford_2017_5-6_100_0000000000-0000016384.tif, band: 12, 6369 value is larger than assumed possible values for this band
+2024-10-13 23:30:04,813 - INFO - Processed band 12 successfully
+2024-10-13 23:30:06,507 - INFO - Processed band 13 successfully
+2024-10-13 23:30:16,432 - INFO - Processed band 4 successfully
+2024-10-13 23:30:17,112 - INFO - Processed band 3 successfully
+2024-10-13 23:30:18,921 - INFO - Processed band 2 successfully
+2024-10-13 23:30:18,960 - INFO - Processed band 1 successfully
+2024-10-13 23:30:27,266 - INFO - Processed band 6 successfully
+2024-10-13 23:30:28,028 - INFO - Processed band 5 successfully
+2024-10-13 23:30:28,358 - INFO - Processed band 7 successfully
+2024-10-13 23:30:28,361 - INFO - Processed band 8 successfully
+2024-10-13 23:30:37,022 - INFO - Processed band 9 successfully
+2024-10-13 23:30:37,727 - INFO - Processed band 10 successfully
+2024-10-13 23:30:39,412 - INFO - Processed band 12 successfully
+2024-10-13 23:30:39,761 - INFO - Processed band 11 successfully
+2024-10-13 23:30:45,372 - INFO - Processed band 13 successfully
+2024-10-13 23:30:54,818 - INFO - Processed band 3 successfully
+2024-10-13 23:30:54,954 - INFO - Processed band 4 successfully
+2024-10-13 23:30:55,440 - INFO - Processed band 1 successfully
+2024-10-13 23:30:55,471 - INFO - Processed band 2 successfully
+2024-10-13 23:31:06,645 - INFO - Processed band 5 successfully
+2024-10-13 23:31:07,061 - INFO - Processed band 6 successfully
+2024-10-13 23:31:07,801 - INFO - Processed band 8 successfully
+2024-10-13 23:31:08,043 - INFO - Processed band 7 successfully
+2024-10-13 23:31:17,018 - INFO - Processed band 10 successfully
+2024-10-13 23:31:17,083 - INFO - Processed band 9 successfully
+2024-10-13 23:31:17,921 - INFO - Processed band 12 successfully
+2024-10-13 23:31:19,750 - INFO - Processed band 11 successfully
+2024-10-13 23:31:24,599 - INFO - Processed band 13 successfully
+2024-10-13 23:31:24,601 - INFO - Image images/Crawford_2017_5-6 has been processed in 3.3630 minuntes
+2024-10-13 23:31:24,882 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2017/5-6/100/hist.npy
+2024-10-13 23:31:39,336 - INFO - Processed band 3 successfully
+2024-10-13 23:31:39,388 - INFO - Processed band 2 successfully
+2024-10-13 23:31:39,908 - INFO - Processed band 4 successfully
+2024-10-13 23:31:40,211 - INFO - Processed band 1 successfully
+2024-10-13 23:31:52,934 - INFO - Processed band 6 successfully
+2024-10-13 23:31:53,715 - INFO - Processed band 8 successfully
+2024-10-13 23:31:54,330 - INFO - Processed band 7 successfully
+2024-10-13 23:31:56,261 - INFO - Processed band 5 successfully
+2024-10-13 23:32:07,908 - INFO - Processed band 10 successfully
+2024-10-13 23:32:10,345 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000000000.tif, band: 9, 6110 value is larger than assumed possible values for this band
+2024-10-13 23:32:10,355 - INFO - Processed band 9 successfully
+2024-10-13 23:32:11,955 - INFO - Processed band 11 successfully
+2024-10-13 23:32:13,862 - INFO - Processed band 12 successfully
+2024-10-13 23:32:19,577 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000000000.tif, band: 13, 3701 value is smaller than assumed possible values for this band
+2024-10-13 23:32:19,589 - INFO - Processed band 13 successfully
+2024-10-13 23:32:33,970 - INFO - Processed band 4 successfully
+2024-10-13 23:32:34,077 - INFO - Processed band 2 successfully
+2024-10-13 23:32:34,623 - INFO - Processed band 3 successfully
+2024-10-13 23:32:34,647 - INFO - Processed band 1 successfully
+2024-10-13 23:32:47,689 - INFO - Processed band 6 successfully
+2024-10-13 23:32:50,929 - INFO - Processed band 5 successfully
+2024-10-13 23:32:51,481 - INFO - Processed band 8 successfully
+2024-10-13 23:32:51,617 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000008192.tif, band: 7, 6182 value is larger than assumed possible values for this band
+2024-10-13 23:32:51,624 - INFO - Processed band 7 successfully
+2024-10-13 23:33:01,222 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000008192.tif, band: 9, 6453 value is larger than assumed possible values for this band
+2024-10-13 23:33:01,237 - INFO - Processed band 9 successfully
+2024-10-13 23:33:05,698 - INFO - Processed band 12 successfully
+2024-10-13 23:33:05,837 - INFO - Processed band 11 successfully
+2024-10-13 23:33:07,852 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000008192.tif, band: 10, 2891 value is larger than assumed possible values for this band
+2024-10-13 23:33:07,857 - INFO - Processed band 10 successfully
+2024-10-13 23:33:14,140 - INFO - Processed band 13 successfully
+2024-10-13 23:33:16,928 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 3, 6750 value is larger than assumed possible values for this band
+2024-10-13 23:33:16,930 - INFO - Processed band 3 successfully
+2024-10-13 23:33:17,051 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 4, 7366 value is larger than assumed possible values for this band
+2024-10-13 23:33:17,053 - INFO - Processed band 4 successfully
+2024-10-13 23:33:17,066 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 2, 6817 value is larger than assumed possible values for this band
+2024-10-13 23:33:17,069 - INFO - Processed band 2 successfully
+2024-10-13 23:33:17,087 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 1, 6957 value is larger than assumed possible values for this band
+2024-10-13 23:33:17,091 - INFO - Processed band 1 successfully
+2024-10-13 23:33:19,462 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 5, 7401 value is larger than assumed possible values for this band
+2024-10-13 23:33:19,465 - INFO - Processed band 5 successfully
+2024-10-13 23:33:19,719 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 7, 8591 value is larger than assumed possible values for this band
+2024-10-13 23:33:19,722 - INFO - Processed band 7 successfully
+2024-10-13 23:33:19,734 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 6, 8051 value is larger than assumed possible values for this band
+2024-10-13 23:33:19,737 - INFO - Processed band 6 successfully
+2024-10-13 23:33:19,744 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 8, 7977 value is larger than assumed possible values for this band
+2024-10-13 23:33:19,748 - INFO - Processed band 8 successfully
+2024-10-13 23:33:21,994 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 9, 8878 value is larger than assumed possible values for this band
+2024-10-13 23:33:21,997 - INFO - Processed band 9 successfully
+2024-10-13 23:33:22,439 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:33:22,441 - INFO - Processed band 11 successfully
+2024-10-13 23:33:22,468 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 12, 7547 value is larger than assumed possible values for this band
+2024-10-13 23:33:22,470 - INFO - Processed band 12 successfully
+2024-10-13 23:33:22,503 - INFO - Processed band 10 successfully
+2024-10-13 23:33:24,073 - WARNING - image: images/Crawford_2017_7-8_100_0000000000-0000016384.tif, band: 13, 5935 value is larger than assumed possible values for this band
+2024-10-13 23:33:24,075 - INFO - Processed band 13 successfully
+2024-10-13 23:33:33,500 - INFO - Processed band 1 successfully
+2024-10-13 23:33:34,146 - INFO - Processed band 2 successfully
+2024-10-13 23:33:34,186 - INFO - Processed band 3 successfully
+2024-10-13 23:33:35,762 - INFO - Processed band 4 successfully
+2024-10-13 23:33:43,880 - INFO - Processed band 6 successfully
+2024-10-13 23:33:43,960 - INFO - Processed band 7 successfully
+2024-10-13 23:33:44,969 - INFO - Processed band 5 successfully
+2024-10-13 23:33:47,185 - INFO - Processed band 8 successfully
+2024-10-13 23:33:53,858 - INFO - Processed band 9 successfully
+2024-10-13 23:33:53,982 - INFO - Processed band 10 successfully
+2024-10-13 23:33:54,257 - WARNING - image: images/Crawford_2017_7-8_100_0000008192-0000000000.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:33:54,259 - INFO - Processed band 11 successfully
+2024-10-13 23:33:56,147 - INFO - Processed band 12 successfully
+2024-10-13 23:34:01,772 - INFO - Processed band 13 successfully
+2024-10-13 23:34:11,840 - INFO - Processed band 3 successfully
+2024-10-13 23:34:12,455 - INFO - Processed band 4 successfully
+2024-10-13 23:34:12,505 - INFO - Processed band 1 successfully
+2024-10-13 23:34:13,775 - INFO - Processed band 2 successfully
+2024-10-13 23:34:21,373 - INFO - Processed band 5 successfully
+2024-10-13 23:34:22,438 - INFO - Processed band 6 successfully
+2024-10-13 23:34:22,595 - INFO - Processed band 7 successfully
+2024-10-13 23:34:23,932 - INFO - Processed band 8 successfully
+2024-10-13 23:34:32,125 - INFO - Processed band 10 successfully
+2024-10-13 23:34:32,259 - INFO - Processed band 11 successfully
+2024-10-13 23:34:32,720 - INFO - Processed band 9 successfully
+2024-10-13 23:34:33,319 - INFO - Processed band 12 successfully
+2024-10-13 23:34:40,075 - INFO - Processed band 13 successfully
+2024-10-13 23:34:40,076 - INFO - Image images/Crawford_2017_7-8 has been processed in 3.2532 minuntes
+2024-10-13 23:34:40,333 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2017/7-8/100/hist.npy
+2024-10-13 23:34:54,611 - INFO - Processed band 3 successfully
+2024-10-13 23:34:55,321 - INFO - Processed band 1 successfully
+2024-10-13 23:34:55,422 - INFO - Processed band 4 successfully
+2024-10-13 23:34:57,806 - INFO - Processed band 2 successfully
+2024-10-13 23:35:10,463 - INFO - Processed band 6 successfully
+2024-10-13 23:35:10,661 - INFO - Processed band 7 successfully
+2024-10-13 23:35:11,683 - INFO - Processed band 8 successfully
+2024-10-13 23:35:12,206 - INFO - Processed band 5 successfully
+2024-10-13 23:35:25,473 - INFO - Processed band 9 successfully
+2024-10-13 23:35:25,545 - INFO - Processed band 10 successfully
+2024-10-13 23:35:25,973 - INFO - Processed band 11 successfully
+2024-10-13 23:35:26,542 - INFO - Processed band 12 successfully
+2024-10-13 23:35:37,176 - INFO - Processed band 13 successfully
+2024-10-13 23:35:51,355 - INFO - Processed band 2 successfully
+2024-10-13 23:35:52,029 - INFO - Processed band 1 successfully
+2024-10-13 23:35:52,173 - INFO - Processed band 4 successfully
+2024-10-13 23:35:54,656 - INFO - Processed band 3 successfully
+2024-10-13 23:36:06,674 - INFO - Processed band 6 successfully
+2024-10-13 23:36:07,158 - INFO - Processed band 7 successfully
+2024-10-13 23:36:09,003 - INFO - Processed band 5 successfully
+2024-10-13 23:36:09,933 - INFO - Processed band 8 successfully
+2024-10-13 23:36:21,486 - INFO - Processed band 9 successfully
+2024-10-13 23:36:21,984 - INFO - Processed band 10 successfully
+2024-10-13 23:36:23,171 - INFO - Processed band 11 successfully
+2024-10-13 23:36:24,226 - INFO - Processed band 12 successfully
+2024-10-13 23:36:33,240 - INFO - Processed band 13 successfully
+2024-10-13 23:36:36,143 - INFO - Processed band 3 successfully
+2024-10-13 23:36:36,248 - INFO - Processed band 1 successfully
+2024-10-13 23:36:36,251 - INFO - Processed band 2 successfully
+2024-10-13 23:36:36,260 - INFO - Processed band 4 successfully
+2024-10-13 23:36:38,704 - INFO - Processed band 5 successfully
+2024-10-13 23:36:38,958 - INFO - Processed band 6 successfully
+2024-10-13 23:36:38,972 - INFO - Processed band 8 successfully
+2024-10-13 23:36:39,007 - INFO - Processed band 7 successfully
+2024-10-13 23:36:41,255 - INFO - Processed band 9 successfully
+2024-10-13 23:36:41,628 - INFO - Processed band 10 successfully
+2024-10-13 23:36:41,747 - INFO - Processed band 12 successfully
+2024-10-13 23:36:41,975 - INFO - Processed band 11 successfully
+2024-10-13 23:36:43,304 - INFO - Processed band 13 successfully
+2024-10-13 23:36:53,118 - INFO - Processed band 1 successfully
+2024-10-13 23:36:53,741 - INFO - Processed band 4 successfully
+2024-10-13 23:36:53,780 - INFO - Processed band 2 successfully
+2024-10-13 23:36:55,360 - INFO - Processed band 3 successfully
+2024-10-13 23:37:02,377 - INFO - Processed band 5 successfully
+2024-10-13 23:37:04,213 - INFO - Processed band 7 successfully
+2024-10-13 23:37:04,352 - INFO - Processed band 6 successfully
+2024-10-13 23:37:07,699 - INFO - Processed band 8 successfully
+2024-10-13 23:37:13,938 - INFO - Processed band 9 successfully
+2024-10-13 23:37:14,061 - INFO - Processed band 10 successfully
+2024-10-13 23:37:14,191 - INFO - Processed band 11 successfully
+2024-10-13 23:37:16,408 - INFO - Processed band 12 successfully
+2024-10-13 23:37:23,081 - INFO - Processed band 13 successfully
+2024-10-13 23:37:32,728 - INFO - Processed band 1 successfully
+2024-10-13 23:37:33,216 - INFO - Processed band 3 successfully
+2024-10-13 23:37:33,293 - INFO - Processed band 4 successfully
+2024-10-13 23:37:35,093 - INFO - Processed band 2 successfully
+2024-10-13 23:37:42,978 - INFO - Processed band 6 successfully
+2024-10-13 23:37:43,132 - INFO - Processed band 7 successfully
+2024-10-13 23:37:44,266 - INFO - Processed band 5 successfully
+2024-10-13 23:37:46,573 - INFO - Processed band 8 successfully
+2024-10-13 23:37:52,914 - INFO - Processed band 10 successfully
+2024-10-13 23:37:52,974 - INFO - Processed band 9 successfully
+2024-10-13 23:37:53,534 - INFO - Processed band 11 successfully
+2024-10-13 23:37:55,272 - INFO - Processed band 12 successfully
+2024-10-13 23:38:00,878 - INFO - Processed band 13 successfully
+2024-10-13 23:38:00,879 - INFO - Image images/Crawford_2017_9-10 has been processed in 3.3424 minuntes
+2024-10-13 23:38:01,159 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2017/9-10/100/hist.npy
+2024-10-13 23:38:15,988 - INFO - Processed band 4 successfully
+2024-10-13 23:38:16,639 - INFO - Processed band 1 successfully
+2024-10-13 23:38:17,066 - INFO - Processed band 3 successfully
+2024-10-13 23:38:19,635 - INFO - Processed band 2 successfully
+2024-10-13 23:38:30,053 - INFO - Processed band 5 successfully
+2024-10-13 23:38:31,737 - INFO - Processed band 6 successfully
+2024-10-13 23:38:32,075 - INFO - Processed band 7 successfully
+2024-10-13 23:38:34,812 - INFO - Processed band 8 successfully
+2024-10-13 23:38:46,218 - INFO - Processed band 10 successfully
+2024-10-13 23:38:46,397 - INFO - Processed band 11 successfully
+2024-10-13 23:38:46,881 - INFO - Processed band 9 successfully
+2024-10-13 23:38:48,610 - INFO - Processed band 12 successfully
+2024-10-13 23:38:57,921 - INFO - Processed band 13 successfully
+2024-10-13 23:39:12,419 - INFO - Processed band 3 successfully
+2024-10-13 23:39:13,421 - INFO - Processed band 4 successfully
+2024-10-13 23:39:13,530 - INFO - Processed band 2 successfully
+2024-10-13 23:39:16,027 - INFO - Processed band 1 successfully
+2024-10-13 23:39:28,202 - INFO - Processed band 6 successfully
+2024-10-13 23:39:28,365 - INFO - Processed band 7 successfully
+2024-10-13 23:39:29,701 - INFO - Processed band 5 successfully
+2024-10-13 23:39:33,393 - INFO - Processed band 8 successfully
+2024-10-13 23:39:42,553 - INFO - Processed band 9 successfully
+2024-10-13 23:39:42,789 - INFO - Processed band 10 successfully
+2024-10-13 23:39:43,173 - INFO - Processed band 11 successfully
+2024-10-13 23:39:48,712 - INFO - Processed band 12 successfully
+2024-10-13 23:39:54,206 - INFO - Processed band 13 successfully
+2024-10-13 23:39:57,012 - INFO - Processed band 3 successfully
+2024-10-13 23:39:57,125 - INFO - Processed band 1 successfully
+2024-10-13 23:39:57,139 - INFO - Processed band 2 successfully
+2024-10-13 23:39:57,169 - INFO - Processed band 4 successfully
+2024-10-13 23:39:59,523 - INFO - Processed band 5 successfully
+2024-10-13 23:39:59,776 - WARNING - image: images/Crawford_2018_5-6_100_0000000000-0000016384.tif, band: 7, 6037 value is larger than assumed possible values for this band
+2024-10-13 23:39:59,778 - INFO - Processed band 7 successfully
+2024-10-13 23:39:59,792 - INFO - Processed band 6 successfully
+2024-10-13 23:39:59,840 - INFO - Processed band 8 successfully
+2024-10-13 23:40:02,135 - WARNING - image: images/Crawford_2018_5-6_100_0000000000-0000016384.tif, band: 9, 6604 value is larger than assumed possible values for this band
+2024-10-13 23:40:02,149 - INFO - Processed band 9 successfully
+2024-10-13 23:40:02,690 - INFO - Processed band 12 successfully
+2024-10-13 23:40:02,730 - WARNING - image: images/Crawford_2018_5-6_100_0000000000-0000016384.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:40:02,731 - INFO - Processed band 11 successfully
+2024-10-13 23:40:02,901 - INFO - Processed band 10 successfully
+2024-10-13 23:40:04,440 - INFO - Processed band 13 successfully
+2024-10-13 23:40:14,380 - INFO - Processed band 2 successfully
+2024-10-13 23:40:14,451 - INFO - Processed band 1 successfully
+2024-10-13 23:40:14,514 - INFO - Processed band 4 successfully
+2024-10-13 23:40:16,139 - INFO - Processed band 3 successfully
+2024-10-13 23:40:24,133 - INFO - Processed band 7 successfully
+2024-10-13 23:40:26,174 - INFO - Processed band 8 successfully
+2024-10-13 23:40:26,391 - INFO - Processed band 5 successfully
+2024-10-13 23:40:26,562 - INFO - Processed band 6 successfully
+2024-10-13 23:40:35,835 - WARNING - image: images/Crawford_2018_5-6_100_0000008192-0000000000.tif, band: 9, 6169 value is larger than assumed possible values for this band
+2024-10-13 23:40:35,837 - INFO - Processed band 9 successfully
+2024-10-13 23:40:37,746 - INFO - Processed band 10 successfully
+2024-10-13 23:40:37,993 - INFO - Processed band 11 successfully
+2024-10-13 23:40:38,139 - INFO - Processed band 12 successfully
+2024-10-13 23:40:43,641 - INFO - Processed band 13 successfully
+2024-10-13 23:40:53,797 - INFO - Processed band 3 successfully
+2024-10-13 23:40:53,873 - INFO - Processed band 1 successfully
+2024-10-13 23:40:53,927 - INFO - Processed band 4 successfully
+2024-10-13 23:40:55,710 - INFO - Processed band 2 successfully
+2024-10-13 23:41:03,379 - INFO - Processed band 6 successfully
+2024-10-13 23:41:04,346 - INFO - Processed band 5 successfully
+2024-10-13 23:41:04,588 - INFO - Processed band 7 successfully
+2024-10-13 23:41:07,969 - INFO - Processed band 8 successfully
+2024-10-13 23:41:12,830 - INFO - Processed band 9 successfully
+2024-10-13 23:41:14,487 - INFO - Processed band 11 successfully
+2024-10-13 23:41:15,976 - INFO - Processed band 10 successfully
+2024-10-13 23:41:18,783 - INFO - Processed band 12 successfully
+2024-10-13 23:41:20,597 - INFO - Processed band 13 successfully
+2024-10-13 23:41:20,598 - INFO - Image images/Crawford_2018_5-6 has been processed in 3.3240 minuntes
+2024-10-13 23:41:20,857 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2018/5-6/100/hist.npy
+2024-10-13 23:41:36,873 - INFO - Processed band 2 successfully
+2024-10-13 23:41:36,895 - INFO - Processed band 4 successfully
+2024-10-13 23:41:37,018 - INFO - Processed band 1 successfully
+2024-10-13 23:41:37,051 - INFO - Processed band 3 successfully
+2024-10-13 23:41:50,638 - INFO - Processed band 5 successfully
+2024-10-13 23:41:51,336 - INFO - Processed band 6 successfully
+2024-10-13 23:41:51,462 - INFO - Processed band 7 successfully
+2024-10-13 23:41:51,861 - INFO - Processed band 8 successfully
+2024-10-13 23:42:04,714 - WARNING - image: images/Crawford_2018_7-8_100_0000000000-0000000000.tif, band: 9, 6033 value is larger than assumed possible values for this band
+2024-10-13 23:42:04,729 - INFO - Processed band 9 successfully
+2024-10-13 23:42:07,076 - INFO - Processed band 10 successfully
+2024-10-13 23:42:07,579 - INFO - Processed band 12 successfully
+2024-10-13 23:42:09,307 - INFO - Processed band 11 successfully
+2024-10-13 23:42:19,033 - INFO - Processed band 13 successfully
+2024-10-13 23:42:33,505 - INFO - Processed band 1 successfully
+2024-10-13 23:42:34,144 - INFO - Processed band 4 successfully
+2024-10-13 23:42:34,241 - INFO - Processed band 2 successfully
+2024-10-13 23:42:34,383 - INFO - Processed band 3 successfully
+2024-10-13 23:42:46,908 - INFO - Processed band 5 successfully
+2024-10-13 23:42:48,303 - INFO - Processed band 6 successfully
+2024-10-13 23:42:48,349 - INFO - Processed band 7 successfully
+2024-10-13 23:42:48,539 - INFO - Processed band 8 successfully
+2024-10-13 23:43:03,416 - INFO - Processed band 12 successfully
+2024-10-13 23:43:03,642 - INFO - Processed band 10 successfully
+2024-10-13 23:43:04,720 - WARNING - image: images/Crawford_2018_7-8_100_0000000000-0000008192.tif, band: 9, 6271 value is larger than assumed possible values for this band
+2024-10-13 23:43:04,726 - INFO - Processed band 9 successfully
+2024-10-13 23:43:05,533 - INFO - Processed band 11 successfully
+2024-10-13 23:43:15,244 - INFO - Processed band 13 successfully
+2024-10-13 23:43:18,275 - INFO - Processed band 2 successfully
+2024-10-13 23:43:18,291 - INFO - Processed band 4 successfully
+2024-10-13 23:43:18,306 - INFO - Processed band 3 successfully
+2024-10-13 23:43:18,620 - INFO - Processed band 1 successfully
+2024-10-13 23:43:20,964 - INFO - Processed band 5 successfully
+2024-10-13 23:43:21,002 - INFO - Processed band 6 successfully
+2024-10-13 23:43:21,017 - INFO - Processed band 7 successfully
+2024-10-13 23:43:21,687 - INFO - Processed band 8 successfully
+2024-10-13 23:43:23,640 - WARNING - image: images/Crawford_2018_7-8_100_0000000000-0000016384.tif, band: 9, 6212 value is larger than assumed possible values for this band
+2024-10-13 23:43:23,643 - INFO - Processed band 9 successfully
+2024-10-13 23:43:23,666 - INFO - Processed band 10 successfully
+2024-10-13 23:43:23,712 - INFO - Processed band 11 successfully
+2024-10-13 23:43:24,209 - INFO - Processed band 12 successfully
+2024-10-13 23:43:25,726 - INFO - Processed band 13 successfully
+2024-10-13 23:43:35,642 - INFO - Processed band 2 successfully
+2024-10-13 23:43:36,118 - INFO - Processed band 3 successfully
+2024-10-13 23:43:36,149 - INFO - Processed band 1 successfully
+2024-10-13 23:43:36,197 - INFO - Processed band 4 successfully
+2024-10-13 23:43:45,840 - INFO - Processed band 6 successfully
+2024-10-13 23:43:45,876 - INFO - Processed band 7 successfully
+2024-10-13 23:43:46,051 - INFO - Processed band 8 successfully
+2024-10-13 23:43:47,021 - INFO - Processed band 5 successfully
+2024-10-13 23:43:55,181 - INFO - Processed band 9 successfully
+2024-10-13 23:43:55,837 - INFO - Processed band 11 successfully
+2024-10-13 23:43:56,538 - INFO - Processed band 12 successfully
+2024-10-13 23:43:57,129 - INFO - Processed band 10 successfully
+2024-10-13 23:44:04,540 - INFO - Processed band 13 successfully
+2024-10-13 23:44:14,149 - INFO - Processed band 3 successfully
+2024-10-13 23:44:14,513 - INFO - Processed band 2 successfully
+2024-10-13 23:44:14,751 - INFO - Processed band 1 successfully
+2024-10-13 23:44:14,761 - INFO - Processed band 4 successfully
+2024-10-13 23:44:24,011 - INFO - Processed band 7 successfully
+2024-10-13 23:44:24,711 - INFO - Processed band 8 successfully
+2024-10-13 23:44:25,513 - INFO - Processed band 5 successfully
+2024-10-13 23:44:25,986 - INFO - Processed band 6 successfully
+2024-10-13 23:44:33,572 - INFO - Processed band 9 successfully
+2024-10-13 23:44:36,048 - INFO - Processed band 12 successfully
+2024-10-13 23:44:36,478 - INFO - Processed band 10 successfully
+2024-10-13 23:44:37,150 - INFO - Processed band 11 successfully
+2024-10-13 23:44:41,586 - INFO - Processed band 13 successfully
+2024-10-13 23:44:41,587 - INFO - Image images/Crawford_2018_7-8 has been processed in 3.3455 minuntes
+2024-10-13 23:44:41,855 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2018/7-8/100/hist.npy
+2024-10-13 23:44:56,442 - INFO - Processed band 3 successfully
+2024-10-13 23:44:57,065 - INFO - Processed band 1 successfully
+2024-10-13 23:44:57,252 - INFO - Processed band 4 successfully
+2024-10-13 23:44:57,315 - INFO - Processed band 2 successfully
+2024-10-13 23:45:11,992 - INFO - Processed band 7 successfully
+2024-10-13 23:45:12,410 - INFO - Processed band 8 successfully
+2024-10-13 23:45:13,932 - INFO - Processed band 5 successfully
+2024-10-13 23:45:14,550 - INFO - Processed band 6 successfully
+2024-10-13 23:45:26,761 - INFO - Processed band 10 successfully
+2024-10-13 23:45:28,834 - INFO - Processed band 9 successfully
+2024-10-13 23:45:28,888 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000000000.tif, band: 12, 4718 value is smaller than assumed possible values for this band
+2024-10-13 23:45:28,897 - INFO - Processed band 12 successfully
+2024-10-13 23:45:30,333 - INFO - Processed band 11 successfully
+2024-10-13 23:45:38,727 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000000000.tif, band: 13, 3336 value is smaller than assumed possible values for this band
+2024-10-13 23:45:38,739 - INFO - Processed band 13 successfully
+2024-10-13 23:45:53,023 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 2, 6272 value is larger than assumed possible values for this band
+2024-10-13 23:45:53,029 - INFO - Processed band 2 successfully
+2024-10-13 23:45:53,787 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 4, 7025 value is larger than assumed possible values for this band
+2024-10-13 23:45:53,794 - INFO - Processed band 4 successfully
+2024-10-13 23:45:53,998 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 1, 6215 value is larger than assumed possible values for this band
+2024-10-13 23:45:54,004 - INFO - Processed band 1 successfully
+2024-10-13 23:45:54,083 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 3, 6389 value is larger than assumed possible values for this band
+2024-10-13 23:45:54,089 - INFO - Processed band 3 successfully
+2024-10-13 23:46:08,061 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 6, 7865 value is larger than assumed possible values for this band
+2024-10-13 23:46:08,068 - INFO - Processed band 6 successfully
+2024-10-13 23:46:08,611 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 8, 8034 value is larger than assumed possible values for this band
+2024-10-13 23:46:08,618 - INFO - Processed band 8 successfully
+2024-10-13 23:46:09,159 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 7, 8740 value is larger than assumed possible values for this band
+2024-10-13 23:46:09,165 - INFO - Processed band 7 successfully
+2024-10-13 23:46:10,745 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 5, 6940 value is larger than assumed possible values for this band
+2024-10-13 23:46:10,751 - INFO - Processed band 5 successfully
+2024-10-13 23:46:23,572 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:46:23,576 - INFO - Processed band 11 successfully
+2024-10-13 23:46:24,378 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 12, 8281 value is larger than assumed possible values for this band
+2024-10-13 23:46:24,384 - INFO - Processed band 12 successfully
+2024-10-13 23:46:24,977 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 9, 9188 value is larger than assumed possible values for this band
+2024-10-13 23:46:24,984 - INFO - Processed band 9 successfully
+2024-10-13 23:46:25,351 - INFO - Processed band 10 successfully
+2024-10-13 23:46:37,288 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000008192.tif, band: 13, 6185 value is larger than assumed possible values for this band
+2024-10-13 23:46:37,295 - INFO - Processed band 13 successfully
+2024-10-13 23:46:40,243 - INFO - Processed band 1 successfully
+2024-10-13 23:46:40,269 - INFO - Processed band 4 successfully
+2024-10-13 23:46:40,296 - INFO - Processed band 3 successfully
+2024-10-13 23:46:40,311 - INFO - Processed band 2 successfully
+2024-10-13 23:46:42,879 - INFO - Processed band 6 successfully
+2024-10-13 23:46:42,961 - INFO - Processed band 5 successfully
+2024-10-13 23:46:42,995 - INFO - Processed band 7 successfully
+2024-10-13 23:46:43,031 - INFO - Processed band 8 successfully
+2024-10-13 23:46:45,500 - INFO - Processed band 9 successfully
+2024-10-13 23:46:45,666 - INFO - Processed band 10 successfully
+2024-10-13 23:46:45,690 - INFO - Processed band 11 successfully
+2024-10-13 23:46:45,812 - INFO - Processed band 12 successfully
+2024-10-13 23:46:47,525 - WARNING - image: images/Crawford_2018_9-10_100_0000000000-0000016384.tif, band: 13, 2804 value is smaller than assumed possible values for this band
+2024-10-13 23:46:47,527 - INFO - Processed band 13 successfully
+2024-10-13 23:46:57,771 - INFO - Processed band 2 successfully
+2024-10-13 23:46:57,824 - INFO - Processed band 1 successfully
+2024-10-13 23:46:57,866 - INFO - Processed band 3 successfully
+2024-10-13 23:46:57,934 - INFO - Processed band 4 successfully
+2024-10-13 23:47:07,882 - INFO - Processed band 6 successfully
+2024-10-13 23:47:08,060 - INFO - Processed band 5 successfully
+2024-10-13 23:47:08,417 - INFO - Processed band 7 successfully
+2024-10-13 23:47:08,480 - INFO - Processed band 8 successfully
+2024-10-13 23:47:17,218 - INFO - Processed band 10 successfully
+2024-10-13 23:47:18,005 - WARNING - image: images/Crawford_2018_9-10_100_0000008192-0000000000.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:47:18,006 - INFO - Processed band 11 successfully
+2024-10-13 23:47:18,178 - WARNING - image: images/Crawford_2018_9-10_100_0000008192-0000000000.tif, band: 12, 5538 value is larger than assumed possible values for this band
+2024-10-13 23:47:18,181 - INFO - Processed band 12 successfully
+2024-10-13 23:47:19,080 - WARNING - image: images/Crawford_2018_9-10_100_0000008192-0000000000.tif, band: 9, 6030 value is larger than assumed possible values for this band
+2024-10-13 23:47:19,082 - INFO - Processed band 9 successfully
+2024-10-13 23:47:25,224 - INFO - Processed band 13 successfully
+2024-10-13 23:47:34,738 - INFO - Processed band 4 successfully
+2024-10-13 23:47:35,110 - INFO - Processed band 2 successfully
+2024-10-13 23:47:35,486 - INFO - Processed band 1 successfully
+2024-10-13 23:47:35,528 - INFO - Processed band 3 successfully
+2024-10-13 23:47:45,290 - INFO - Processed band 7 successfully
+2024-10-13 23:47:46,357 - INFO - Processed band 5 successfully
+2024-10-13 23:47:46,899 - INFO - Processed band 6 successfully
+2024-10-13 23:47:47,143 - INFO - Processed band 8 successfully
+2024-10-13 23:47:54,465 - INFO - Processed band 9 successfully
+2024-10-13 23:47:56,295 - INFO - Processed band 12 successfully
+2024-10-13 23:47:57,781 - INFO - Processed band 10 successfully
+2024-10-13 23:47:57,922 - INFO - Processed band 11 successfully
+2024-10-13 23:48:02,560 - INFO - Processed band 13 successfully
+2024-10-13 23:48:02,561 - INFO - Image images/Crawford_2018_9-10 has been processed in 3.3451 minuntes
+2024-10-13 23:48:02,843 - INFO - Histogram uploaded to gs://vgnn/histograms/Crawford/2018/9-10/100/hist.npy
+2024-10-13 23:48:17,001 - INFO - Processed band 4 successfully
+2024-10-13 23:48:17,015 - INFO - Processed band 1 successfully
+2024-10-13 23:48:17,777 - INFO - Processed band 2 successfully
+2024-10-13 23:48:17,912 - INFO - Processed band 3 successfully
+2024-10-13 23:48:31,680 - INFO - Processed band 5 successfully
+2024-10-13 23:48:32,461 - INFO - Processed band 8 successfully
+2024-10-13 23:48:34,152 - INFO - Processed band 6 successfully
+2024-10-13 23:48:34,961 - INFO - Processed band 7 successfully
+2024-10-13 23:48:46,445 - INFO - Processed band 9 successfully
+2024-10-13 23:48:47,426 - INFO - Processed band 10 successfully
+2024-10-13 23:48:51,492 - INFO - Processed band 11 successfully
+2024-10-13 23:48:52,231 - INFO - Processed band 12 successfully
+2024-10-13 23:48:57,521 - INFO - Processed band 13 successfully
+2024-10-13 23:49:05,114 - INFO - Processed band 4 successfully
+2024-10-13 23:49:05,467 - INFO - Processed band 2 successfully
+2024-10-13 23:49:05,584 - INFO - Processed band 1 successfully
+2024-10-13 23:49:05,696 - INFO - Processed band 3 successfully
+2024-10-13 23:49:12,237 - INFO - Processed band 5 successfully
+2024-10-13 23:49:12,642 - INFO - Processed band 7 successfully
+2024-10-13 23:49:12,707 - INFO - Processed band 8 successfully
+2024-10-13 23:49:13,646 - INFO - Processed band 6 successfully
+2024-10-13 23:49:19,642 - WARNING - image: images/Orleans_2017_5-6_100_0000000000-0000016384.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:49:19,643 - INFO - Processed band 11 successfully
+2024-10-13 23:49:19,758 - INFO - Processed band 10 successfully
+2024-10-13 23:49:20,357 - INFO - Processed band 9 successfully
+2024-10-13 23:49:20,601 - INFO - Processed band 12 successfully
+2024-10-13 23:49:25,358 - INFO - Processed band 13 successfully
+2024-10-13 23:49:26,347 - INFO - Processed band 3 successfully
+2024-10-13 23:49:26,369 - INFO - Processed band 2 successfully
+2024-10-13 23:49:26,400 - INFO - Processed band 1 successfully
+2024-10-13 23:49:26,408 - INFO - Processed band 4 successfully
+2024-10-13 23:49:27,223 - INFO - Processed band 5 successfully
+2024-10-13 23:49:27,241 - INFO - Processed band 6 successfully
+2024-10-13 23:49:27,334 - INFO - Processed band 7 successfully
+2024-10-13 23:49:27,334 - INFO - Processed band 8 successfully
+2024-10-13 23:49:28,105 - INFO - Processed band 9 successfully
+2024-10-13 23:49:28,171 - INFO - Processed band 10 successfully
+2024-10-13 23:49:28,248 - INFO - Processed band 12 successfully
+2024-10-13 23:49:28,263 - INFO - Processed band 11 successfully
+2024-10-13 23:49:28,882 - INFO - Processed band 13 successfully
+2024-10-13 23:49:28,883 - INFO - Image images/Orleans_2017_5-6 has been processed in 1.4340 minuntes
+2024-10-13 23:49:29,165 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2017/5-6/100/hist.npy
+2024-10-13 23:49:43,541 - INFO - Processed band 1 successfully
+2024-10-13 23:49:44,054 - INFO - Processed band 3 successfully
+2024-10-13 23:49:44,481 - INFO - Processed band 2 successfully
+2024-10-13 23:49:44,649 - INFO - Processed band 4 successfully
+2024-10-13 23:49:58,950 - INFO - Processed band 7 successfully
+2024-10-13 23:49:59,041 - INFO - Processed band 8 successfully
+2024-10-13 23:50:00,684 - INFO - Processed band 5 successfully
+2024-10-13 23:50:01,181 - INFO - Processed band 6 successfully
+2024-10-13 23:50:13,863 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000008192.tif, band: 10, 2574 value is larger than assumed possible values for this band
+2024-10-13 23:50:13,866 - INFO - Processed band 10 successfully
+2024-10-13 23:50:14,178 - INFO - Processed band 9 successfully
+2024-10-13 23:50:16,113 - INFO - Processed band 12 successfully
+2024-10-13 23:50:17,598 - INFO - Processed band 11 successfully
+2024-10-13 23:50:27,312 - INFO - Processed band 13 successfully
+2024-10-13 23:50:34,604 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 2, 5552 value is larger than assumed possible values for this band
+2024-10-13 23:50:34,605 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 3, 5402 value is larger than assumed possible values for this band
+2024-10-13 23:50:34,606 - INFO - Processed band 2 successfully
+2024-10-13 23:50:34,608 - INFO - Processed band 3 successfully
+2024-10-13 23:50:34,628 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 4, 5847 value is larger than assumed possible values for this band
+2024-10-13 23:50:34,631 - INFO - Processed band 4 successfully
+2024-10-13 23:50:34,658 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 1, 5613 value is larger than assumed possible values for this band
+2024-10-13 23:50:34,659 - INFO - Processed band 1 successfully
+2024-10-13 23:50:42,004 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 8, 7120 value is larger than assumed possible values for this band
+2024-10-13 23:50:42,005 - INFO - Processed band 8 successfully
+2024-10-13 23:50:42,125 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 5, 6131 value is larger than assumed possible values for this band
+2024-10-13 23:50:42,127 - INFO - Processed band 5 successfully
+2024-10-13 23:50:42,236 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 7, 7378 value is larger than assumed possible values for this band
+2024-10-13 23:50:42,237 - INFO - Processed band 7 successfully
+2024-10-13 23:50:43,326 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 6, 6857 value is larger than assumed possible values for this band
+2024-10-13 23:50:43,328 - INFO - Processed band 6 successfully
+2024-10-13 23:50:49,060 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 9, 7640 value is larger than assumed possible values for this band
+2024-10-13 23:50:49,061 - INFO - Processed band 9 successfully
+2024-10-13 23:50:49,289 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:50:49,291 - INFO - Processed band 11 successfully
+2024-10-13 23:50:50,377 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 10, 3464 value is larger than assumed possible values for this band
+2024-10-13 23:50:50,378 - INFO - Processed band 10 successfully
+2024-10-13 23:50:51,346 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 12, 6139 value is larger than assumed possible values for this band
+2024-10-13 23:50:51,347 - INFO - Processed band 12 successfully
+2024-10-13 23:50:55,603 - WARNING - image: images/Orleans_2017_7-8_100_0000000000-0000016384.tif, band: 13, 5004 value is smaller than assumed possible values for this band
+2024-10-13 23:50:55,605 - INFO - Processed band 13 successfully
+2024-10-13 23:50:56,590 - INFO - Processed band 3 successfully
+2024-10-13 23:50:56,622 - INFO - Processed band 2 successfully
+2024-10-13 23:50:56,644 - INFO - Processed band 1 successfully
+2024-10-13 23:50:56,654 - INFO - Processed band 4 successfully
+2024-10-13 23:50:57,453 - INFO - Processed band 5 successfully
+2024-10-13 23:50:57,534 - INFO - Processed band 7 successfully
+2024-10-13 23:50:57,562 - INFO - Processed band 6 successfully
+2024-10-13 23:50:57,567 - INFO - Processed band 8 successfully
+2024-10-13 23:50:58,320 - INFO - Processed band 9 successfully
+2024-10-13 23:50:58,410 - INFO - Processed band 10 successfully
+2024-10-13 23:50:58,436 - INFO - Processed band 12 successfully
+2024-10-13 23:50:58,525 - INFO - Processed band 11 successfully
+2024-10-13 23:50:59,056 - INFO - Processed band 13 successfully
+2024-10-13 23:50:59,057 - INFO - Image images/Orleans_2017_7-8 has been processed in 1.4982 minuntes
+2024-10-13 23:50:59,326 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2017/7-8/100/hist.npy
+2024-10-13 23:51:14,544 - INFO - Processed band 2 successfully
+2024-10-13 23:51:14,704 - INFO - Processed band 4 successfully
+2024-10-13 23:51:14,776 - INFO - Processed band 1 successfully
+2024-10-13 23:51:14,941 - INFO - Processed band 3 successfully
+2024-10-13 23:51:29,123 - INFO - Processed band 5 successfully
+2024-10-13 23:51:29,184 - INFO - Processed band 6 successfully
+2024-10-13 23:51:29,297 - INFO - Processed band 7 successfully
+2024-10-13 23:51:29,548 - INFO - Processed band 8 successfully
+2024-10-13 23:51:43,801 - INFO - Processed band 10 successfully
+2024-10-13 23:51:43,960 - INFO - Processed band 9 successfully
+2024-10-13 23:51:44,037 - INFO - Processed band 11 successfully
+2024-10-13 23:51:44,128 - INFO - Processed band 12 successfully
+2024-10-13 23:51:55,336 - INFO - Processed band 13 successfully
+2024-10-13 23:52:02,666 - INFO - Processed band 4 successfully
+2024-10-13 23:52:02,794 - INFO - Processed band 1 successfully
+2024-10-13 23:52:02,810 - INFO - Processed band 2 successfully
+2024-10-13 23:52:02,839 - INFO - Processed band 3 successfully
+2024-10-13 23:52:10,040 - INFO - Processed band 8 successfully
+2024-10-13 23:52:10,259 - INFO - Processed band 7 successfully
+2024-10-13 23:52:10,272 - INFO - Processed band 5 successfully
+2024-10-13 23:52:10,454 - INFO - Processed band 6 successfully
+2024-10-13 23:52:17,392 - WARNING - image: images/Orleans_2017_9-10_100_0000000000-0000016384.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:52:17,393 - INFO - Processed band 11 successfully
+2024-10-13 23:52:17,436 - INFO - Processed band 10 successfully
+2024-10-13 23:52:17,475 - INFO - Processed band 12 successfully
+2024-10-13 23:52:18,061 - WARNING - image: images/Orleans_2017_9-10_100_0000000000-0000016384.tif, band: 9, 6225 value is larger than assumed possible values for this band
+2024-10-13 23:52:18,063 - INFO - Processed band 9 successfully
+2024-10-13 23:52:23,049 - INFO - Processed band 13 successfully
+2024-10-13 23:52:24,075 - INFO - Processed band 1 successfully
+2024-10-13 23:52:24,128 - INFO - Processed band 4 successfully
+2024-10-13 23:52:24,130 - INFO - Processed band 3 successfully
+2024-10-13 23:52:24,141 - INFO - Processed band 2 successfully
+2024-10-13 23:52:24,945 - INFO - Processed band 5 successfully
+2024-10-13 23:52:25,113 - INFO - Processed band 6 successfully
+2024-10-13 23:52:25,146 - INFO - Processed band 7 successfully
+2024-10-13 23:52:25,146 - INFO - Processed band 8 successfully
+2024-10-13 23:52:25,810 - INFO - Processed band 9 successfully
+2024-10-13 23:52:26,052 - INFO - Processed band 12 successfully
+2024-10-13 23:52:26,059 - INFO - Processed band 10 successfully
+2024-10-13 23:52:26,067 - INFO - Processed band 11 successfully
+2024-10-13 23:52:26,567 - INFO - Processed band 13 successfully
+2024-10-13 23:52:26,568 - INFO - Image images/Orleans_2017_9-10 has been processed in 1.4540 minuntes
+2024-10-13 23:52:26,829 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2017/9-10/100/hist.npy
+2024-10-13 23:52:41,448 - INFO - Processed band 2 successfully
+2024-10-13 23:52:41,544 - INFO - Processed band 4 successfully
+2024-10-13 23:52:41,597 - INFO - Processed band 1 successfully
+2024-10-13 23:52:41,833 - INFO - Processed band 3 successfully
+2024-10-13 23:52:56,050 - INFO - Processed band 6 successfully
+2024-10-13 23:52:56,527 - INFO - Processed band 5 successfully
+2024-10-13 23:52:57,302 - INFO - Processed band 8 successfully
+2024-10-13 23:52:59,043 - INFO - Processed band 7 successfully
+2024-10-13 23:53:11,722 - INFO - Processed band 10 successfully
+2024-10-13 23:53:12,169 - INFO - Processed band 11 successfully
+2024-10-13 23:53:13,674 - INFO - Processed band 12 successfully
+2024-10-13 23:53:13,718 - INFO - Processed band 9 successfully
+2024-10-13 23:53:23,671 - INFO - Processed band 13 successfully
+2024-10-13 23:53:30,888 - INFO - Processed band 3 successfully
+2024-10-13 23:53:30,916 - INFO - Processed band 1 successfully
+2024-10-13 23:53:31,001 - INFO - Processed band 2 successfully
+2024-10-13 23:53:31,038 - INFO - Processed band 4 successfully
+2024-10-13 23:53:37,569 - INFO - Processed band 6 successfully
+2024-10-13 23:53:37,869 - INFO - Processed band 5 successfully
+2024-10-13 23:53:37,976 - INFO - Processed band 7 successfully
+2024-10-13 23:53:38,089 - INFO - Processed band 8 successfully
+2024-10-13 23:53:45,344 - INFO - Processed band 12 successfully
+2024-10-13 23:53:45,414 - INFO - Processed band 10 successfully
+2024-10-13 23:53:45,444 - INFO - Processed band 11 successfully
+2024-10-13 23:53:45,962 - INFO - Processed band 9 successfully
+2024-10-13 23:53:50,996 - INFO - Processed band 13 successfully
+2024-10-13 23:53:51,002 - INFO - Image images/Orleans_2018_5-6 has been processed in 1.4029 minuntes
+2024-10-13 23:53:51,271 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2018/5-6/100/hist.npy
+2024-10-13 23:54:06,591 - INFO - Processed band 4 successfully
+2024-10-13 23:54:06,595 - INFO - Processed band 3 successfully
+2024-10-13 23:54:06,884 - INFO - Processed band 1 successfully
+2024-10-13 23:54:07,034 - INFO - Processed band 2 successfully
+2024-10-13 23:54:20,229 - INFO - Processed band 6 successfully
+2024-10-13 23:54:21,377 - INFO - Processed band 8 successfully
+2024-10-13 23:54:23,947 - INFO - Processed band 5 successfully
+2024-10-13 23:54:24,185 - INFO - Processed band 7 successfully
+2024-10-13 23:54:35,908 - INFO - Processed band 10 successfully
+2024-10-13 23:54:37,407 - INFO - Processed band 9 successfully
+2024-10-13 23:54:40,406 - INFO - Processed band 12 successfully
+2024-10-13 23:54:40,752 - INFO - Processed band 11 successfully
+2024-10-13 23:54:48,335 - INFO - Processed band 13 successfully
+2024-10-13 23:54:55,601 - INFO - Processed band 1 successfully
+2024-10-13 23:54:55,627 - INFO - Processed band 3 successfully
+2024-10-13 23:54:55,656 - INFO - Processed band 4 successfully
+2024-10-13 23:54:55,697 - INFO - Processed band 2 successfully
+2024-10-13 23:55:02,622 - INFO - Processed band 5 successfully
+2024-10-13 23:55:03,184 - INFO - Processed band 8 successfully
+2024-10-13 23:55:03,233 - INFO - Processed band 7 successfully
+2024-10-13 23:55:04,402 - INFO - Processed band 6 successfully
+2024-10-13 23:55:09,494 - INFO - Processed band 9 successfully
+2024-10-13 23:55:10,369 - INFO - Processed band 10 successfully
+2024-10-13 23:55:10,407 - INFO - Processed band 11 successfully
+2024-10-13 23:55:12,146 - INFO - Processed band 12 successfully
+2024-10-13 23:55:15,268 - INFO - Processed band 13 successfully
+2024-10-13 23:55:15,269 - INFO - Image images/Orleans_2018_7-8 has been processed in 1.4000 minuntes
+2024-10-13 23:55:15,544 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2018/7-8/100/hist.npy
+2024-10-13 23:55:30,283 - INFO - Processed band 1 successfully
+2024-10-13 23:55:30,287 - INFO - Processed band 2 successfully
+2024-10-13 23:55:30,383 - INFO - Processed band 3 successfully
+2024-10-13 23:55:32,916 - INFO - Processed band 4 successfully
+2024-10-13 23:55:44,715 - INFO - Processed band 6 successfully
+2024-10-13 23:55:44,769 - INFO - Processed band 7 successfully
+2024-10-13 23:55:47,604 - INFO - Processed band 5 successfully
+2024-10-13 23:55:47,607 - INFO - Processed band 8 successfully
+2024-10-13 23:55:59,975 - INFO - Processed band 10 successfully
+2024-10-13 23:56:01,825 - INFO - Processed band 9 successfully
+2024-10-13 23:56:02,151 - INFO - Processed band 11 successfully
+2024-10-13 23:56:02,355 - INFO - Processed band 12 successfully
+2024-10-13 23:56:11,977 - INFO - Processed band 13 successfully
+2024-10-13 23:56:19,258 - INFO - Processed band 3 successfully
+2024-10-13 23:56:19,282 - INFO - Processed band 2 successfully
+2024-10-13 23:56:19,296 - INFO - Processed band 1 successfully
+2024-10-13 23:56:19,393 - INFO - Processed band 4 successfully
+2024-10-13 23:56:25,952 - INFO - Processed band 7 successfully
+2024-10-13 23:56:26,179 - INFO - Processed band 5 successfully
+2024-10-13 23:56:26,193 - INFO - Processed band 6 successfully
+2024-10-13 23:56:26,428 - INFO - Processed band 8 successfully
+2024-10-13 23:56:33,491 - INFO - Processed band 12 successfully
+2024-10-13 23:56:34,191 - INFO - Processed band 9 successfully
+2024-10-13 23:56:34,367 - INFO - Processed band 11 successfully
+2024-10-13 23:56:34,441 - INFO - Processed band 10 successfully
+2024-10-13 23:56:40,104 - INFO - Processed band 13 successfully
+2024-10-13 23:56:40,105 - INFO - Image images/Orleans_2018_9-10 has been processed in 1.4093 minuntes
+2024-10-13 23:56:40,387 - INFO - Histogram uploaded to gs://vgnn/histograms/Orleans/2018/9-10/100/hist.npy
+2024-10-13 23:56:41,112 - INFO - Processed band 3 successfully
+2024-10-13 23:56:41,132 - INFO - Processed band 2 successfully
+2024-10-13 23:56:41,156 - INFO - Processed band 4 successfully
+2024-10-13 23:56:41,160 - INFO - Processed band 1 successfully
+2024-10-13 23:56:41,720 - INFO - Processed band 7 successfully
+2024-10-13 23:56:41,754 - INFO - Processed band 8 successfully
+2024-10-13 23:56:41,758 - INFO - Processed band 5 successfully
+2024-10-13 23:56:41,805 - INFO - Processed band 6 successfully
+2024-10-13 23:56:42,288 - INFO - Processed band 9 successfully
+2024-10-13 23:56:42,325 - INFO - Processed band 11 successfully
+2024-10-13 23:56:42,377 - INFO - Processed band 10 successfully
+2024-10-13 23:56:42,441 - INFO - Processed band 12 successfully
+2024-10-13 23:56:42,776 - INFO - Processed band 13 successfully
+2024-10-13 23:56:42,777 - INFO - Image images/Tulare_2017_5-6 has been processed in 0.0398 minuntes
+2024-10-13 23:56:43,051 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2017/5-6/100/hist.npy
+2024-10-13 23:56:43,791 - INFO - Processed band 1 successfully
+2024-10-13 23:56:43,811 - INFO - Processed band 4 successfully
+2024-10-13 23:56:43,846 - INFO - Processed band 3 successfully
+2024-10-13 23:56:43,866 - INFO - Processed band 2 successfully
+2024-10-13 23:56:44,368 - INFO - Processed band 5 successfully
+2024-10-13 23:56:44,431 - INFO - Processed band 6 successfully
+2024-10-13 23:56:44,434 - INFO - Processed band 7 successfully
+2024-10-13 23:56:44,477 - INFO - Processed band 8 successfully
+2024-10-13 23:56:44,996 - INFO - Processed band 9 successfully
+2024-10-13 23:56:45,040 - INFO - Processed band 10 successfully
+2024-10-13 23:56:45,043 - INFO - Processed band 11 successfully
+2024-10-13 23:56:45,122 - INFO - Processed band 12 successfully
+2024-10-13 23:56:45,485 - INFO - Processed band 13 successfully
+2024-10-13 23:56:45,489 - INFO - Image images/Tulare_2017_7-8 has been processed in 0.0406 minuntes
+2024-10-13 23:56:45,748 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2017/7-8/100/hist.npy
+2024-10-13 23:56:46,524 - INFO - Processed band 1 successfully
+2024-10-13 23:56:46,531 - INFO - Processed band 4 successfully
+2024-10-13 23:56:46,560 - INFO - Processed band 2 successfully
+2024-10-13 23:56:46,574 - INFO - Processed band 3 successfully
+2024-10-13 23:56:47,111 - INFO - Processed band 5 successfully
+2024-10-13 23:56:47,164 - INFO - Processed band 6 successfully
+2024-10-13 23:56:47,191 - INFO - Processed band 8 successfully
+2024-10-13 23:56:47,244 - INFO - Processed band 7 successfully
+2024-10-13 23:56:47,687 - INFO - Processed band 9 successfully
+2024-10-13 23:56:47,758 - INFO - Processed band 10 successfully
+2024-10-13 23:56:47,841 - INFO - Processed band 12 successfully
+2024-10-13 23:56:47,843 - INFO - Processed band 11 successfully
+2024-10-13 23:56:48,201 - INFO - Processed band 13 successfully
+2024-10-13 23:56:48,205 - INFO - Image images/Tulare_2017_9-10 has been processed in 0.0409 minuntes
+2024-10-13 23:56:48,467 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2017/9-10/100/hist.npy
+2024-10-13 23:56:49,264 - INFO - Processed band 2 successfully
+2024-10-13 23:56:49,347 - INFO - Processed band 1 successfully
+2024-10-13 23:56:49,356 - INFO - Processed band 3 successfully
+2024-10-13 23:56:49,356 - INFO - Processed band 4 successfully
+2024-10-13 23:56:49,914 - INFO - Processed band 5 successfully
+2024-10-13 23:56:49,923 - INFO - Processed band 8 successfully
+2024-10-13 23:56:49,982 - INFO - Processed band 6 successfully
+2024-10-13 23:56:49,994 - INFO - Processed band 7 successfully
+2024-10-13 23:56:50,491 - INFO - Processed band 9 successfully
+2024-10-13 23:56:50,545 - INFO - Processed band 12 successfully
+2024-10-13 23:56:50,572 - INFO - Processed band 11 successfully
+2024-10-13 23:56:50,586 - INFO - Processed band 10 successfully
+2024-10-13 23:56:51,020 - INFO - Processed band 13 successfully
+2024-10-13 23:56:51,021 - INFO - Image images/Tulare_2018_5-6 has been processed in 0.0426 minuntes
+2024-10-13 23:56:51,299 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2018/5-6/100/hist.npy
+2024-10-13 23:56:52,019 - INFO - Processed band 1 successfully
+2024-10-13 23:56:52,062 - INFO - Processed band 4 successfully
+2024-10-13 23:56:52,076 - INFO - Processed band 2 successfully
+2024-10-13 23:56:52,118 - INFO - Processed band 3 successfully
+2024-10-13 23:56:52,550 - INFO - Processed band 5 successfully
+2024-10-13 23:56:52,677 - INFO - Processed band 7 successfully
+2024-10-13 23:56:52,678 - INFO - Processed band 6 successfully
+2024-10-13 23:56:52,746 - INFO - Processed band 8 successfully
+2024-10-13 23:56:53,167 - INFO - Processed band 9 successfully
+2024-10-13 23:56:53,278 - INFO - Processed band 11 successfully
+2024-10-13 23:56:53,308 - INFO - Processed band 10 successfully
+2024-10-13 23:56:53,328 - INFO - Processed band 12 successfully
+2024-10-13 23:56:53,648 - INFO - Processed band 13 successfully
+2024-10-13 23:56:53,649 - INFO - Image images/Tulare_2018_7-8 has been processed in 0.0392 minuntes
+2024-10-13 23:56:53,912 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2018/7-8/100/hist.npy
+2024-10-13 23:56:54,586 - INFO - Processed band 2 successfully
+2024-10-13 23:56:54,608 - INFO - Processed band 4 successfully
+2024-10-13 23:56:54,611 - INFO - Processed band 1 successfully
+2024-10-13 23:56:54,629 - INFO - Processed band 3 successfully
+2024-10-13 23:56:55,142 - INFO - Processed band 5 successfully
+2024-10-13 23:56:55,173 - INFO - Processed band 6 successfully
+2024-10-13 23:56:55,200 - INFO - Processed band 7 successfully
+2024-10-13 23:56:55,233 - INFO - Processed band 8 successfully
+2024-10-13 23:56:55,680 - INFO - Processed band 9 successfully
+2024-10-13 23:56:55,750 - INFO - Processed band 10 successfully
+2024-10-13 23:56:55,778 - INFO - Processed band 11 successfully
+2024-10-13 23:56:55,817 - INFO - Processed band 12 successfully
+2024-10-13 23:56:56,175 - INFO - Processed band 13 successfully
+2024-10-13 23:56:56,176 - INFO - Image images/Tulare_2018_9-10 has been processed in 0.0377 minuntes
+2024-10-13 23:56:56,443 - INFO - Histogram uploaded to gs://vgnn/histograms/Tulare/2018/9-10/100/hist.npy
+2024-10-13 23:56:56,925 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 4, 6484 value is larger than assumed possible values for this band
+2024-10-13 23:56:56,928 - INFO - Processed band 4 successfully
+2024-10-13 23:56:56,937 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 2, 5941 value is larger than assumed possible values for this band
+2024-10-13 23:56:56,940 - INFO - Processed band 2 successfully
+2024-10-13 23:56:56,977 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 3, 5978 value is larger than assumed possible values for this band
+2024-10-13 23:56:56,979 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 1, 5897 value is larger than assumed possible values for this band
+2024-10-13 23:56:56,981 - INFO - Processed band 3 successfully
+2024-10-13 23:56:56,982 - INFO - Processed band 1 successfully
+2024-10-13 23:56:57,316 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 8, 7705 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,319 - INFO - Processed band 8 successfully
+2024-10-13 23:56:57,351 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 6, 7436 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,354 - INFO - Processed band 6 successfully
+2024-10-13 23:56:57,356 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 7, 7899 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,362 - INFO - Processed band 7 successfully
+2024-10-13 23:56:57,364 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 5, 6775 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,368 - INFO - Processed band 5 successfully
+2024-10-13 23:56:57,599 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 9, 8220 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,602 - INFO - Processed band 9 successfully
+2024-10-13 23:56:57,646 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 10, 4347 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,650 - INFO - Processed band 10 successfully
+2024-10-13 23:56:57,670 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 11, 1000 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,671 - INFO - Processed band 11 successfully
+2024-10-13 23:56:57,681 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 12, 7447 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,684 - INFO - Processed band 12 successfully
+2024-10-13 23:56:57,849 - WARNING - image: images/Wharton_2017_5-6_100_.tif, band: 13, 5809 value is larger than assumed possible values for this band
+2024-10-13 23:56:57,852 - INFO - Processed band 13 successfully
+2024-10-13 23:56:57,853 - INFO - Image images/Wharton_2017_5-6 has been processed in 0.0235 minuntes
+2024-10-13 23:56:58,129 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2017/5-6/100/hist.npy
+2024-10-13 23:56:58,672 - INFO - Processed band 4 successfully
+2024-10-13 23:56:58,684 - INFO - Processed band 1 successfully
+2024-10-13 23:56:58,689 - INFO - Processed band 3 successfully
+2024-10-13 23:56:58,732 - INFO - Processed band 2 successfully
+2024-10-13 23:56:58,942 - INFO - Processed band 6 successfully
+2024-10-13 23:56:59,070 - INFO - Processed band 8 successfully
+2024-10-13 23:56:59,084 - INFO - Processed band 5 successfully
+2024-10-13 23:56:59,143 - INFO - Processed band 7 successfully
+2024-10-13 23:56:59,300 - WARNING - image: images/Wharton_2017_7-8_100_.tif, band: 9, 6004 value is larger than assumed possible values for this band
+2024-10-13 23:56:59,303 - INFO - Processed band 9 successfully
+2024-10-13 23:56:59,353 - INFO - Processed band 10 successfully
+2024-10-13 23:56:59,360 - INFO - Processed band 11 successfully
+2024-10-13 23:56:59,425 - INFO - Processed band 12 successfully
+2024-10-13 23:56:59,565 - INFO - Processed band 13 successfully
+2024-10-13 23:56:59,566 - INFO - Image images/Wharton_2017_7-8 has been processed in 0.0240 minuntes
+2024-10-13 23:56:59,846 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2017/7-8/100/hist.npy
+2024-10-13 23:57:00,377 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 2, 5547 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,381 - INFO - Processed band 2 successfully
+2024-10-13 23:57:00,412 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 3, 5435 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,414 - INFO - Processed band 3 successfully
+2024-10-13 23:57:00,421 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 4, 5858 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,426 - INFO - Processed band 4 successfully
+2024-10-13 23:57:00,445 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 1, 5429 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,448 - INFO - Processed band 1 successfully
+2024-10-13 23:57:00,638 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 5, 5667 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,641 - INFO - Processed band 5 successfully
+2024-10-13 23:57:00,716 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 7, 6553 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,720 - INFO - Processed band 7 successfully
+2024-10-13 23:57:00,736 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 8, 6410 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,739 - INFO - Processed band 8 successfully
+2024-10-13 23:57:00,770 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 6, 6011 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,773 - INFO - Processed band 6 successfully
+2024-10-13 23:57:00,913 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 9, 6950 value is larger than assumed possible values for this band
+2024-10-13 23:57:00,916 - INFO - Processed band 9 successfully
+2024-10-13 23:57:01,009 - INFO - Processed band 11 successfully
+2024-10-13 23:57:01,032 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 12, 6393 value is larger than assumed possible values for this band
+2024-10-13 23:57:01,035 - INFO - Processed band 12 successfully
+2024-10-13 23:57:01,068 - INFO - Processed band 10 successfully
+2024-10-13 23:57:01,283 - WARNING - image: images/Wharton_2017_9-10_100_.tif, band: 13, 5064 value is smaller than assumed possible values for this band
+2024-10-13 23:57:01,286 - INFO - Processed band 13 successfully
+2024-10-13 23:57:01,287 - INFO - Image images/Wharton_2017_9-10 has been processed in 0.0240 minuntes
+2024-10-13 23:57:01,545 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2017/9-10/100/hist.npy
+2024-10-13 23:57:01,988 - INFO - Processed band 3 successfully
+2024-10-13 23:57:02,057 - INFO - Processed band 1 successfully
+2024-10-13 23:57:02,121 - INFO - Processed band 2 successfully
+2024-10-13 23:57:02,124 - INFO - Processed band 4 successfully
+2024-10-13 23:57:02,266 - INFO - Processed band 5 successfully
+2024-10-13 23:57:02,342 - INFO - Processed band 6 successfully
+2024-10-13 23:57:02,473 - INFO - Processed band 8 successfully
+2024-10-13 23:57:02,501 - INFO - Processed band 7 successfully
+2024-10-13 23:57:02,640 - INFO - Processed band 10 successfully
+2024-10-13 23:57:02,655 - INFO - Processed band 9 successfully
+2024-10-13 23:57:02,735 - INFO - Processed band 11 successfully
+2024-10-13 23:57:02,794 - INFO - Processed band 12 successfully
+2024-10-13 23:57:02,899 - INFO - Processed band 13 successfully
+2024-10-13 23:57:02,900 - INFO - Image images/Wharton_2018_5-6 has been processed in 0.0226 minuntes
+2024-10-13 23:57:03,163 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2018/5-6/100/hist.npy
+2024-10-13 23:57:03,634 - INFO - Processed band 1 successfully
+2024-10-13 23:57:03,677 - INFO - Processed band 3 successfully
+2024-10-13 23:57:03,716 - INFO - Processed band 4 successfully
+2024-10-13 23:57:03,731 - INFO - Processed band 2 successfully
+2024-10-13 23:57:04,047 - INFO - Processed band 7 successfully
+2024-10-13 23:57:04,080 - INFO - Processed band 8 successfully
+2024-10-13 23:57:04,092 - INFO - Processed band 5 successfully
+2024-10-13 23:57:04,103 - INFO - Processed band 6 successfully
+2024-10-13 23:57:04,306 - INFO - Processed band 9 successfully
+2024-10-13 23:57:04,335 - INFO - Processed band 10 successfully
+2024-10-13 23:57:04,375 - INFO - Processed band 12 successfully
+2024-10-13 23:57:04,447 - INFO - Processed band 11 successfully
+2024-10-13 23:57:04,551 - INFO - Processed band 13 successfully
+2024-10-13 23:57:04,552 - INFO - Image images/Wharton_2018_7-8 has been processed in 0.0231 minuntes
+2024-10-13 23:57:04,831 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2018/7-8/100/hist.npy
+2024-10-13 23:57:05,374 - INFO - Processed band 1 successfully
+2024-10-13 23:57:05,386 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 2, 5019 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,389 - INFO - Processed band 2 successfully
+2024-10-13 23:57:05,417 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 4, 5174 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,419 - INFO - Processed band 4 successfully
+2024-10-13 23:57:05,426 - INFO - Processed band 3 successfully
+2024-10-13 23:57:05,712 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 5, 5279 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,715 - INFO - Processed band 5 successfully
+2024-10-13 23:57:05,753 - INFO - Processed band 6 successfully
+2024-10-13 23:57:05,791 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 8, 6329 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,795 - INFO - Processed band 8 successfully
+2024-10-13 23:57:05,813 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 7, 6594 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,816 - INFO - Processed band 7 successfully
+2024-10-13 23:57:05,983 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 9, 6942 value is larger than assumed possible values for this band
+2024-10-13 23:57:05,986 - INFO - Processed band 9 successfully
+2024-10-13 23:57:06,000 - INFO - Processed band 10 successfully
+2024-10-13 23:57:06,062 - INFO - Processed band 11 successfully
+2024-10-13 23:57:06,181 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 12, 5967 value is larger than assumed possible values for this band
+2024-10-13 23:57:06,183 - INFO - Processed band 12 successfully
+2024-10-13 23:57:06,315 - WARNING - image: images/Wharton_2018_9-10_100_.tif, band: 13, 4949 value is smaller than assumed possible values for this band
+2024-10-13 23:57:06,317 - INFO - Processed band 13 successfully
+2024-10-13 23:57:06,318 - INFO - Image images/Wharton_2018_9-10 has been processed in 0.0248 minuntes
+2024-10-13 23:57:06,584 - INFO - Histogram uploaded to gs://vgnn/histograms/Wharton/2018/9-10/100/hist.npy
+2024-10-13 23:57:07,111 - INFO - Processed band 3 successfully
+2024-10-13 23:57:07,149 - INFO - Processed band 4 successfully
+2024-10-13 23:57:07,152 - INFO - Processed band 1 successfully
+2024-10-13 23:57:07,158 - INFO - Processed band 2 successfully
+2024-10-13 23:57:07,324 - INFO - Processed band 5 successfully
+2024-10-13 23:57:07,380 - INFO - Processed band 6 successfully
+2024-10-13 23:57:07,411 - INFO - Processed band 7 successfully
+2024-10-13 23:57:07,413 - INFO - Processed band 8 successfully
+2024-10-13 23:57:07,557 - INFO - Processed band 9 successfully
+2024-10-13 23:57:07,584 - INFO - Processed band 10 successfully
+2024-10-13 23:57:07,654 - INFO - Processed band 11 successfully
+2024-10-13 23:57:07,663 - WARNING - image: images/Story_2017_5-6_100_.tif, band: 12, 6457 value is larger than assumed possible values for this band
+2024-10-13 23:57:07,668 - INFO - Processed band 12 successfully
+2024-10-13 23:57:07,744 - WARNING - image: images/Story_2017_5-6_100_.tif, band: 13, 5870 value is larger than assumed possible values for this band
+2024-10-13 23:57:07,749 - INFO - Processed band 13 successfully
+2024-10-13 23:57:07,750 - INFO - Image images/Story_2017_5-6 has been processed in 0.0194 minuntes
+2024-10-13 23:57:08,013 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2017/5-6/100/hist.npy
+2024-10-13 23:57:08,550 - INFO - Processed band 1 successfully
+2024-10-13 23:57:08,597 - INFO - Processed band 2 successfully
+2024-10-13 23:57:08,614 - INFO - Processed band 3 successfully
+2024-10-13 23:57:08,621 - INFO - Processed band 4 successfully
+2024-10-13 23:57:08,772 - INFO - Processed band 5 successfully
+2024-10-13 23:57:08,791 - INFO - Processed band 6 successfully
+2024-10-13 23:57:08,844 - INFO - Processed band 8 successfully
+2024-10-13 23:57:08,858 - INFO - Processed band 7 successfully
+2024-10-13 23:57:08,998 - WARNING - image: images/Story_2017_7-8_100_.tif, band: 9, 6097 value is larger than assumed possible values for this band
+2024-10-13 23:57:09,003 - INFO - Processed band 9 successfully
+2024-10-13 23:57:09,019 - INFO - Processed band 10 successfully
+2024-10-13 23:57:09,054 - INFO - Processed band 11 successfully
+2024-10-13 23:57:09,094 - WARNING - image: images/Story_2017_7-8_100_.tif, band: 12, 6169 value is larger than assumed possible values for this band
+2024-10-13 23:57:09,099 - INFO - Processed band 12 successfully
+2024-10-13 23:57:09,201 - WARNING - image: images/Story_2017_7-8_100_.tif, band: 13, 5817 value is larger than assumed possible values for this band
+2024-10-13 23:57:09,205 - INFO - Processed band 13 successfully
+2024-10-13 23:57:09,206 - INFO - Image images/Story_2017_7-8 has been processed in 0.0199 minuntes
+2024-10-13 23:57:09,469 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2017/7-8/100/hist.npy
+2024-10-13 23:57:10,120 - INFO - Processed band 3 successfully
+2024-10-13 23:57:10,129 - INFO - Processed band 2 successfully
+2024-10-13 23:57:10,132 - INFO - Processed band 1 successfully
+2024-10-13 23:57:10,133 - INFO - Processed band 4 successfully
+2024-10-13 23:57:10,334 - INFO - Processed band 5 successfully
+2024-10-13 23:57:10,410 - INFO - Processed band 7 successfully
+2024-10-13 23:57:10,423 - INFO - Processed band 6 successfully
+2024-10-13 23:57:10,425 - INFO - Processed band 8 successfully
+2024-10-13 23:57:10,569 - INFO - Processed band 9 successfully
+2024-10-13 23:57:10,630 - INFO - Processed band 10 successfully
+2024-10-13 23:57:10,694 - INFO - Processed band 11 successfully
+2024-10-13 23:57:10,694 - INFO - Processed band 12 successfully
+2024-10-13 23:57:10,766 - INFO - Processed band 13 successfully
+2024-10-13 23:57:10,767 - INFO - Image images/Story_2017_9-10 has been processed in 0.0216 minuntes
+2024-10-13 23:57:11,045 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2017/9-10/100/hist.npy
+2024-10-13 23:57:11,622 - INFO - Processed band 4 successfully
+2024-10-13 23:57:11,624 - INFO - Processed band 1 successfully
+2024-10-13 23:57:11,644 - INFO - Processed band 3 successfully
+2024-10-13 23:57:11,644 - INFO - Processed band 2 successfully
+2024-10-13 23:57:11,858 - INFO - Processed band 5 successfully
+2024-10-13 23:57:11,901 - INFO - Processed band 6 successfully
+2024-10-13 23:57:11,936 - INFO - Processed band 7 successfully
+2024-10-13 23:57:11,939 - INFO - Processed band 8 successfully
+2024-10-13 23:57:12,084 - INFO - Processed band 9 successfully
+2024-10-13 23:57:12,109 - INFO - Processed band 10 successfully
+2024-10-13 23:57:12,171 - INFO - Processed band 11 successfully
+2024-10-13 23:57:12,171 - INFO - Processed band 12 successfully
+2024-10-13 23:57:12,283 - INFO - Processed band 13 successfully
+2024-10-13 23:57:12,284 - INFO - Image images/Story_2018_5-6 has been processed in 0.0206 minuntes
+2024-10-13 23:57:12,549 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2018/5-6/100/hist.npy
+2024-10-13 23:57:13,164 - INFO - Processed band 3 successfully
+2024-10-13 23:57:13,170 - INFO - Processed band 2 successfully
+2024-10-13 23:57:13,173 - INFO - Processed band 4 successfully
+2024-10-13 23:57:13,184 - INFO - Processed band 1 successfully
+2024-10-13 23:57:13,367 - INFO - Processed band 5 successfully
+2024-10-13 23:57:13,406 - INFO - Processed band 7 successfully
+2024-10-13 23:57:13,462 - INFO - Processed band 6 successfully
+2024-10-13 23:57:13,464 - INFO - Processed band 8 successfully
+2024-10-13 23:57:13,609 - INFO - Processed band 9 successfully
+2024-10-13 23:57:13,617 - INFO - Processed band 10 successfully
+2024-10-13 23:57:13,699 - INFO - Processed band 12 successfully
+2024-10-13 23:57:13,712 - INFO - Processed band 11 successfully
+2024-10-13 23:57:13,812 - INFO - Processed band 13 successfully
+2024-10-13 23:57:13,813 - INFO - Image images/Story_2018_7-8 has been processed in 0.0211 minuntes
+2024-10-13 23:57:14,094 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2018/7-8/100/hist.npy
+2024-10-13 23:57:14,635 - INFO - Processed band 2 successfully
+2024-10-13 23:57:14,673 - INFO - Processed band 3 successfully
+2024-10-13 23:57:14,690 - INFO - Processed band 4 successfully
+2024-10-13 23:57:14,694 - INFO - Processed band 1 successfully
+2024-10-13 23:57:14,835 - INFO - Processed band 5 successfully
+2024-10-13 23:57:14,910 - INFO - Processed band 6 successfully
+2024-10-13 23:57:14,954 - INFO - Processed band 8 successfully
+2024-10-13 23:57:14,969 - INFO - Processed band 7 successfully
+2024-10-13 23:57:15,045 - INFO - Processed band 9 successfully
+2024-10-13 23:57:15,119 - INFO - Processed band 10 successfully
+2024-10-13 23:57:15,154 - INFO - Processed band 11 successfully
+2024-10-13 23:57:15,176 - INFO - Processed band 12 successfully
+2024-10-13 23:57:15,238 - WARNING - image: images/Story_2018_9-10_100_.tif, band: 13, 4033 value is smaller than assumed possible values for this band
+2024-10-13 23:57:15,243 - INFO - Processed band 13 successfully
+2024-10-13 23:57:15,244 - INFO - Image images/Story_2018_9-10 has been processed in 0.0192 minuntes
+2024-10-13 23:57:15,515 - INFO - Histogram uploaded to gs://vgnn/histograms/Story/2018/9-10/100/hist.npy
+2024-10-13 23:57:15,823 - INFO - Processed band 4 successfully
+2024-10-13 23:57:15,850 - INFO - Processed band 2 successfully
+2024-10-13 23:57:15,864 - INFO - Processed band 3 successfully
+2024-10-13 23:57:15,932 - INFO - Processed band 1 successfully
+2024-10-13 23:57:16,088 - INFO - Processed band 7 successfully
+2024-10-13 23:57:16,119 - INFO - Processed band 5 successfully
+2024-10-13 23:57:16,145 - INFO - Processed band 6 successfully
+2024-10-13 23:57:16,162 - INFO - Processed band 8 successfully
+2024-10-13 23:57:16,302 - WARNING - image: images/Canyon_2017_5-6_100_.tif, band: 9, 6330 value is larger than assumed possible values for this band
+2024-10-13 23:57:16,304 - INFO - Processed band 9 successfully
+2024-10-13 23:57:16,335 - INFO - Processed band 10 successfully
+2024-10-13 23:57:16,356 - INFO - Processed band 11 successfully
+2024-10-13 23:57:16,378 - INFO - Processed band 12 successfully
+2024-10-13 23:57:16,544 - INFO - Processed band 13 successfully
+2024-10-13 23:57:16,544 - INFO - Image images/Canyon_2017_5-6 has been processed in 0.0172 minuntes
+2024-10-13 23:57:16,807 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2017/5-6/100/hist.npy
+2024-10-13 23:57:17,249 - INFO - Processed band 1 successfully
+2024-10-13 23:57:17,269 - INFO - Processed band 2 successfully
+2024-10-13 23:57:17,279 - INFO - Processed band 4 successfully
+2024-10-13 23:57:17,282 - INFO - Processed band 3 successfully
+2024-10-13 23:57:17,475 - INFO - Processed band 6 successfully
+2024-10-13 23:57:17,494 - INFO - Processed band 7 successfully
+2024-10-13 23:57:17,544 - INFO - Processed band 5 successfully
+2024-10-13 23:57:17,582 - INFO - Processed band 8 successfully
+2024-10-13 23:57:17,777 - INFO - Processed band 10 successfully
+2024-10-13 23:57:17,790 - WARNING - image: images/Canyon_2017_7-8_100_.tif, band: 9, 6249 value is larger than assumed possible values for this band
+2024-10-13 23:57:17,792 - INFO - Processed band 9 successfully
+2024-10-13 23:57:17,798 - INFO - Processed band 12 successfully
+2024-10-13 23:57:17,839 - INFO - Processed band 11 successfully
+2024-10-13 23:57:17,978 - INFO - Processed band 13 successfully
+2024-10-13 23:57:17,979 - INFO - Image images/Canyon_2017_7-8 has been processed in 0.0195 minuntes
+2024-10-13 23:57:18,247 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2017/7-8/100/hist.npy
+2024-10-13 23:57:18,614 - INFO - Processed band 2 successfully
+2024-10-13 23:57:18,645 - INFO - Processed band 4 successfully
+2024-10-13 23:57:18,659 - INFO - Processed band 1 successfully
+2024-10-13 23:57:18,665 - INFO - Processed band 3 successfully
+2024-10-13 23:57:18,903 - INFO - Processed band 5 successfully
+2024-10-13 23:57:18,943 - INFO - Processed band 8 successfully
+2024-10-13 23:57:18,944 - INFO - Processed band 6 successfully
+2024-10-13 23:57:18,965 - INFO - Processed band 7 successfully
+2024-10-13 23:57:19,130 - INFO - Processed band 9 successfully
+2024-10-13 23:57:19,183 - INFO - Processed band 11 successfully
+2024-10-13 23:57:19,190 - INFO - Processed band 10 successfully
+2024-10-13 23:57:19,252 - INFO - Processed band 12 successfully
+2024-10-13 23:57:19,342 - INFO - Processed band 13 successfully
+2024-10-13 23:57:19,343 - INFO - Image images/Canyon_2017_9-10 has been processed in 0.0183 minuntes
+2024-10-13 23:57:19,598 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2017/9-10/100/hist.npy
+2024-10-13 23:57:19,988 - INFO - Processed band 4 successfully
+2024-10-13 23:57:20,006 - INFO - Processed band 2 successfully
+2024-10-13 23:57:20,018 - INFO - Processed band 3 successfully
+2024-10-13 23:57:20,028 - INFO - Processed band 1 successfully
+2024-10-13 23:57:20,193 - INFO - Processed band 5 successfully
+2024-10-13 23:57:20,243 - INFO - Processed band 8 successfully
+2024-10-13 23:57:20,284 - INFO - Processed band 6 successfully
+2024-10-13 23:57:20,299 - WARNING - image: images/Canyon_2018_5-6_100_.tif, band: 7, 6090 value is larger than assumed possible values for this band
+2024-10-13 23:57:20,301 - INFO - Processed band 7 successfully
+2024-10-13 23:57:20,501 - WARNING - image: images/Canyon_2018_5-6_100_.tif, band: 9, 6494 value is larger than assumed possible values for this band
+2024-10-13 23:57:20,504 - INFO - Processed band 9 successfully
+2024-10-13 23:57:20,527 - INFO - Processed band 11 successfully
+2024-10-13 23:57:20,540 - INFO - Processed band 12 successfully
+2024-10-13 23:57:20,548 - INFO - Processed band 10 successfully
+2024-10-13 23:57:20,709 - WARNING - image: images/Canyon_2018_5-6_100_.tif, band: 13, 4741 value is smaller than assumed possible values for this band
+2024-10-13 23:57:20,711 - INFO - Processed band 13 successfully
+2024-10-13 23:57:20,711 - INFO - Image images/Canyon_2018_5-6 has been processed in 0.0186 minuntes
+2024-10-13 23:57:20,976 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2018/5-6/100/hist.npy
+2024-10-13 23:57:21,351 - INFO - Processed band 1 successfully
+2024-10-13 23:57:21,366 - INFO - Processed band 4 successfully
+2024-10-13 23:57:21,382 - INFO - Processed band 2 successfully
+2024-10-13 23:57:21,387 - INFO - Processed band 3 successfully
+2024-10-13 23:57:21,626 - INFO - Processed band 7 successfully
+2024-10-13 23:57:21,627 - INFO - Processed band 8 successfully
+2024-10-13 23:57:21,642 - INFO - Processed band 5 successfully
+2024-10-13 23:57:21,661 - INFO - Processed band 6 successfully
+2024-10-13 23:57:21,882 - INFO - Processed band 11 successfully
+2024-10-13 23:57:21,893 - INFO - Processed band 12 successfully
+2024-10-13 23:57:21,918 - WARNING - image: images/Canyon_2018_7-8_100_.tif, band: 9, 6383 value is larger than assumed possible values for this band
+2024-10-13 23:57:21,920 - INFO - Processed band 9 successfully
+2024-10-13 23:57:21,945 - INFO - Processed band 10 successfully
+2024-10-13 23:57:22,099 - INFO - Processed band 13 successfully
+2024-10-13 23:57:22,100 - INFO - Image images/Canyon_2018_7-8 has been processed in 0.0187 minuntes
+2024-10-13 23:57:22,365 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2018/7-8/100/hist.npy
+2024-10-13 23:57:22,838 - INFO - Processed band 1 successfully
+2024-10-13 23:57:22,850 - INFO - Processed band 3 successfully
+2024-10-13 23:57:22,857 - INFO - Processed band 2 successfully
+2024-10-13 23:57:22,863 - INFO - Processed band 4 successfully
+2024-10-13 23:57:23,092 - INFO - Processed band 8 successfully
+2024-10-13 23:57:23,100 - INFO - Processed band 7 successfully
+2024-10-13 23:57:23,117 - INFO - Processed band 5 successfully
+2024-10-13 23:57:23,129 - INFO - Processed band 6 successfully
+2024-10-13 23:57:23,325 - INFO - Processed band 9 successfully
+2024-10-13 23:57:23,354 - INFO - Processed band 10 successfully
+2024-10-13 23:57:23,361 - INFO - Processed band 11 successfully
+2024-10-13 23:57:23,415 - INFO - Processed band 12 successfully
+2024-10-13 23:57:23,530 - INFO - Processed band 13 successfully
+2024-10-13 23:57:23,531 - INFO - Image images/Canyon_2018_9-10 has been processed in 0.0194 minuntes
+2024-10-13 23:57:23,803 - INFO - Histogram uploaded to gs://vgnn/histograms/Canyon/2018/9-10/100/hist.npy
+2024-10-13 23:57:24,533 - INFO - Processed band 3 successfully
+2024-10-13 23:57:24,565 - INFO - Processed band 1 successfully
+2024-10-13 23:57:24,570 - INFO - Processed band 2 successfully
+2024-10-13 23:57:24,585 - INFO - Processed band 4 successfully
+2024-10-13 23:57:24,826 - INFO - Processed band 5 successfully
+2024-10-13 23:57:24,888 - INFO - Processed band 6 successfully
+2024-10-13 23:57:24,931 - INFO - Processed band 7 successfully
+2024-10-13 23:57:24,934 - INFO - Processed band 8 successfully
+2024-10-13 23:57:25,123 - INFO - Processed band 9 successfully
+2024-10-13 23:57:25,176 - INFO - Processed band 10 successfully
+2024-10-13 23:57:25,249 - INFO - Processed band 11 successfully
+2024-10-13 23:57:25,249 - INFO - Processed band 12 successfully
+2024-10-13 23:57:25,417 - INFO - Processed band 13 successfully
+2024-10-13 23:57:25,418 - INFO - Image images/Kit Carson_2017_5-6 has been processed in 0.0269 minuntes
+2024-10-13 23:57:25,675 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2017/5-6/100/hist.npy
+2024-10-13 23:57:26,423 - INFO - Processed band 1 successfully
+2024-10-13 23:57:26,443 - INFO - Processed band 3 successfully
+2024-10-13 23:57:26,461 - INFO - Processed band 2 successfully
+2024-10-13 23:57:26,461 - INFO - Processed band 4 successfully
+2024-10-13 23:57:26,714 - INFO - Processed band 5 successfully
+2024-10-13 23:57:26,740 - INFO - Processed band 6 successfully
+2024-10-13 23:57:26,805 - INFO - Processed band 7 successfully
+2024-10-13 23:57:26,810 - INFO - Processed band 8 successfully
+2024-10-13 23:57:26,997 - INFO - Processed band 9 successfully
+2024-10-13 23:57:27,038 - INFO - Processed band 10 successfully
+2024-10-13 23:57:27,138 - INFO - Processed band 11 successfully
+2024-10-13 23:57:27,140 - INFO - Processed band 12 successfully
+2024-10-13 23:57:27,272 - INFO - Processed band 13 successfully
+2024-10-13 23:57:27,273 - INFO - Image images/Kit Carson_2017_7-8 has been processed in 0.0266 minuntes
+2024-10-13 23:57:27,533 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2017/7-8/100/hist.npy
+2024-10-13 23:57:28,336 - INFO - Processed band 1 successfully
+2024-10-13 23:57:28,340 - INFO - Processed band 3 successfully
+2024-10-13 23:57:28,347 - INFO - Processed band 2 successfully
+2024-10-13 23:57:28,351 - INFO - Processed band 4 successfully
+2024-10-13 23:57:28,764 - INFO - Processed band 6 successfully
+2024-10-13 23:57:28,795 - INFO - Processed band 8 successfully
+2024-10-13 23:57:28,796 - INFO - Processed band 5 successfully
+2024-10-13 23:57:28,800 - INFO - Processed band 7 successfully
+2024-10-13 23:57:29,058 - INFO - Processed band 9 successfully
+2024-10-13 23:57:29,120 - INFO - Processed band 10 successfully
+2024-10-13 23:57:29,161 - INFO - Processed band 11 successfully
+2024-10-13 23:57:29,162 - INFO - Processed band 12 successfully
+2024-10-13 23:57:29,345 - INFO - Processed band 13 successfully
+2024-10-13 23:57:29,346 - INFO - Image images/Kit Carson_2017_9-10 has been processed in 0.0302 minuntes
+2024-10-13 23:57:29,633 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2017/9-10/100/hist.npy
+2024-10-13 23:57:30,477 - INFO - Processed band 4 successfully
+2024-10-13 23:57:30,479 - INFO - Processed band 3 successfully
+2024-10-13 23:57:30,502 - INFO - Processed band 1 successfully
+2024-10-13 23:57:30,503 - INFO - Processed band 2 successfully
+2024-10-13 23:57:30,871 - INFO - Processed band 6 successfully
+2024-10-13 23:57:30,909 - INFO - Processed band 5 successfully
+2024-10-13 23:57:30,942 - INFO - Processed band 7 successfully
+2024-10-13 23:57:30,952 - INFO - Processed band 8 successfully
+2024-10-13 23:57:31,188 - INFO - Processed band 9 successfully
+2024-10-13 23:57:31,218 - INFO - Processed band 10 successfully
+2024-10-13 23:57:31,306 - INFO - Processed band 12 successfully
+2024-10-13 23:57:31,311 - INFO - Processed band 11 successfully
+2024-10-13 23:57:31,477 - INFO - Processed band 13 successfully
+2024-10-13 23:57:31,478 - INFO - Image images/Kit Carson_2018_5-6 has been processed in 0.0307 minuntes
+2024-10-13 23:57:31,766 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2018/5-6/100/hist.npy
+2024-10-13 23:57:32,588 - INFO - Processed band 1 successfully
+2024-10-13 23:57:32,618 - INFO - Processed band 4 successfully
+2024-10-13 23:57:32,629 - INFO - Processed band 3 successfully
+2024-10-13 23:57:32,629 - INFO - Processed band 2 successfully
+2024-10-13 23:57:33,017 - INFO - Processed band 6 successfully
+2024-10-13 23:57:33,083 - INFO - Processed band 7 successfully
+2024-10-13 23:57:33,093 - INFO - Processed band 8 successfully
+2024-10-13 23:57:33,131 - INFO - Processed band 5 successfully
+2024-10-13 23:57:33,337 - INFO - Processed band 9 successfully
+2024-10-13 23:57:33,434 - INFO - Processed band 10 successfully
+2024-10-13 23:57:33,457 - INFO - Processed band 11 successfully
+2024-10-13 23:57:33,464 - INFO - Processed band 12 successfully
+2024-10-13 23:57:33,624 - INFO - Processed band 13 successfully
+2024-10-13 23:57:33,625 - INFO - Image images/Kit Carson_2018_7-8 has been processed in 0.0310 minuntes
+2024-10-13 23:57:33,884 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2018/7-8/100/hist.npy
+2024-10-13 23:57:34,732 - INFO - Processed band 2 successfully
+2024-10-13 23:57:34,749 - INFO - Processed band 4 successfully
+2024-10-13 23:57:34,757 - INFO - Processed band 3 successfully
+2024-10-13 23:57:34,763 - INFO - Processed band 1 successfully
+2024-10-13 23:57:35,076 - INFO - Processed band 5 successfully
+2024-10-13 23:57:35,154 - INFO - Processed band 6 successfully
+2024-10-13 23:57:35,184 - INFO - Processed band 7 successfully
+2024-10-13 23:57:35,202 - INFO - Processed band 8 successfully
+2024-10-13 23:57:35,426 - INFO - Processed band 9 successfully
+2024-10-13 23:57:35,483 - INFO - Processed band 10 successfully
+2024-10-13 23:57:35,505 - INFO - Processed band 11 successfully
+2024-10-13 23:57:35,532 - INFO - Processed band 12 successfully
+2024-10-13 23:57:35,728 - INFO - Processed band 13 successfully
+2024-10-13 23:57:35,729 - INFO - Image images/Kit Carson_2018_9-10 has been processed in 0.0307 minuntes
+2024-10-13 23:57:36,007 - INFO - Histogram uploaded to gs://vgnn/histograms/Kit Carson/2018/9-10/100/hist.npy
+2024-10-13 23:57:36,016 - ERROR - No such comm target registered: jupyter.widget.control
+2024-10-13 23:57:36,018 - WARNING - No such comm: 9ba2c8fa-8683-4cc7-be92-4414cf4476b5
+2024-10-14 00:03:48,735 - ERROR - No such comm target registered: jupyter.widget.control
+2024-10-14 00:03:48,738 - WARNING - No such comm: 0369b249-10e6-4d99-8bfd-7d997e6f60a7
