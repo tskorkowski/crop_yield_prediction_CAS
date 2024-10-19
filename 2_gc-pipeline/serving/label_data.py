@@ -35,6 +35,7 @@ def combine_crop_data(path, save=False):
     combined_df.rename(columns={"YIELD, MEASURED IN BU / ACRE": "target"}, inplace=True)
 
     combined_df["state_ansi"] = combined_df["state_ansi"].astype(str).str.zfill(2)
+    combined_df["county_ansi"] = combined_df["county_ansi"].astype(str).str.zfill(3)
 
     # Perform any necessary data cleaning or transformation here
     # For example:
