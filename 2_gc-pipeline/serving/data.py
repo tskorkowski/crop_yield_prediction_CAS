@@ -52,7 +52,7 @@ def check_blob_exists(blob_name):
     # Verify if the blob exists
     return blob.exists()
 
-def get_input_image_ee(county: str, state_fips: str, crop: int, year: int, month: int) -> ee.Image:
+def get_input_image_ee(county: str, county_fips: str, state_fips: str, crop: int, year: int, month: int) -> ee.Image:
     """Get a Sentinel-2 Earth Engine image.
 
     This filters clouds and returns the median for the selected time range and mask.
@@ -83,7 +83,7 @@ def get_input_image_ee(county: str, state_fips: str, crop: int, year: int, month
     county = county.capitalize()
     county_geom = (
         ee.FeatureCollection("TIGER/2018/Counties")
-        .filter(ee.Filter.eq("NAME", county))
+        .filter(ee.Filter.eq("COUNTYFP", county_fips))
         .filter(ee.Filter.eq("STATEFP", state_fips))
     )
     
@@ -120,7 +120,7 @@ def get_input_image_ee(county: str, state_fips: str, crop: int, year: int, month
             .filter(ee.Filter.calendarRange(year,year,"year"))
             .filter(ee.Filter.calendarRange(month,month+1,"month"))
             .filterBounds(county_geom)
-            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 30))
+            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 35))
             .map(mask_sentinel2_clouds)
             .select("B.*")
             .median()
