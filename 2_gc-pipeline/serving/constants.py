@@ -7,7 +7,7 @@ import numpy as np
 # GCS
 PROJECT = "supple-nature-370421"
 BUCKET = "vgnn"
-SCALE = 100
+SCALE = 60
 CROP = 1
 
 # Histograms

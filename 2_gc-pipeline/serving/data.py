@@ -14,6 +14,7 @@ import io
 import ee
 from google.api_core import exceptions, retry
 import google.auth
+from google.cloud import storage
 import numpy as np
 import pandas as pd
 from numpy.lib.recfunctions import structured_to_unstructured
@@ -38,8 +39,20 @@ def ee_init() -> None:
         opt_url="https://earthengine-highvolume.googleapis.com",
     )
 
+def check_blob_exists(blob_name):
+    # Initialize a storage client
+    client = storage.Client()
 
-def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Image:
+    # Get the bucket object
+    bucket = client.bucket(BUCKET)
+
+    # Check if the blob exists in the bucket
+    blob = bucket.blob(blob_name)
+
+    # Verify if the blob exists
+    return blob.exists()
+
+def get_input_image_ee(county: str, state_fips: str, crop: int, year: int, month: int) -> ee.Image:
     """Get a Sentinel-2 Earth Engine image.
 
     This filters clouds and returns the median for the selected time range and mask.
@@ -67,11 +80,13 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
         return image.updateMask(mask)    
    
     # Filter county
+    county = county.capitalize()
     county_geom = (
         ee.FeatureCollection("TIGER/2018/Counties")
         .filter(ee.Filter.eq("NAME", county))
+        .filter(ee.Filter.eq("STATEFP", state_fips))
     )
-
+    
     # Cropland data - image collection with specific crops masked
     cdl_county_masked = (
         ee.ImageCollection("USDA/NASS/CDL")
@@ -114,11 +129,11 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
             .float() 
         )
     s2_img = s2_img_unbounded.clip(county_geom)
-    img_name = f"{county}_{year}_{month}-{month+1}"
+    image_name = f"{county}_{state_fips}/{year}/{month}-{month+1}"
     
     return {
             "image": s2_img,
-            "image_name": img_name
+            "image_name": image_name
     }
 
 def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd.DataFrame:
@@ -131,3 +146,25 @@ def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd
     label_df["target"] = pd.to_numeric(label_df["target"])
     
     return label_df
+
+def get_varied_labels(count=150):
+    """
+    Create training set using counties with highest min-max spread over the years
+    """
+    
+    labels_df = get_labels()
+    
+    
+    df_var = labels_df.groupby(by=["county_name","state_name"]).agg(
+                    count=('target', 'count'),
+                    min_value=('target', 'min'),
+                    max_value=('target', 'max'),
+                    median=('target', 'median'))
+    
+    df_var["range"]=df_var["max_value"] - df_var["min_value"]
+    df_var = df_var.sort_values(by="range", ascending=False)
+    
+    get_data = df_var.iloc[:count].reset_index()
+    data_to_grab = pd.merge(labels_df, get_data, how="right", on=["county_name", "state_name"])
+    
+    return data_to_grab[["year", "state_ansi", "county_name"]]
