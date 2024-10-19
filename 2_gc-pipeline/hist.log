@@ -1402,3 +1402,7 @@
 2024-10-13 23:57:36,018 - WARNING - No such comm: 9ba2c8fa-8683-4cc7-be92-4414cf4476b5
 2024-10-14 00:03:48,735 - ERROR - No such comm target registered: jupyter.widget.control
 2024-10-14 00:03:48,738 - WARNING - No such comm: 0369b249-10e6-4d99-8bfd-7d997e6f60a7
+2024-10-17 22:45:34,128 - ERROR - No such comm target registered: jupyter.widget.control
+2024-10-17 22:45:34,167 - WARNING - No such comm: 79cf8f04-7b15-467e-93ae-73dfe1819118
+2024-10-17 22:45:38,791 - ERROR - No such comm target registered: jupyter.widget.control
+2024-10-17 22:45:38,794 - WARNING - No such comm: bc2b3e5f-b742-4c8e-9e9c-b2fcaf02da78

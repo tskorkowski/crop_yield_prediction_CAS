@@ -1,16 +1,5 @@
-# Copyright 2022 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Based on:
+# https://github.com/GoogleCloudPlatform/python-docs-samples/tree/main/people-and-planet-ai/land-cover-classification
 
 """Data utilities to grab data from Earth Engine.
 
@@ -26,12 +15,11 @@ import ee
 from google.api_core import exceptions, retry
 import google.auth
 import numpy as np
+import pandas as pd
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
-
-
-SCALE = 10  # meters per pixel
+from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
 
 
 def ee_init() -> None:
@@ -51,7 +39,7 @@ def ee_init() -> None:
     )
 
 
-def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
+def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Image:
     """Get a Sentinel-2 Earth Engine image.
 
     This filters clouds and returns the median for the selected time range and mask.
@@ -133,99 +121,13 @@ def get_input_image(county: str, crop: int, year: int, month: int) -> ee.Image:
             "image_name": img_name
     }
 
-def get_label_image() -> ee.Image:
-    """Get the European Space Agency WorldCover image.
-
-    This remaps the ESA classifications with the Dynamic World classifications.
-    Any missing value is filled with 0 (water).
-
-    For more information, see:
-        https://developers.google.com/earth-engine/datasets/catalog/ESA_WorldCover_v100
-        https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1
-
-    Returns: An Earth Engine image with land cover classification as indices.
-    """
-    # Remap the ESA classifications into the Dynamic World classifications
-    fromValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100]
-    toValues = [1, 5, 2, 4, 6, 7, 8, 0, 3, 3, 7]
-    return (
-        ee.Image("ESA/WorldCover/v100/2020")
-        .select("Map")
-        .remap(fromValues, toValues)
-        .rename("landcover")
-        .unmask(0)
-        .byte()  # as unsinged 8-bit integer
-    )
-
-
-def get_input_patch(
-    year: int, lonlat: tuple[float, float], patch_size: int
-) -> np.ndarray:
-    """Gets the inputs patch of pixels for the given point and year.
-
-    args:
-        year: Year of interest, a median composite is used.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of an inputs patch as a NumPy array.
-    """
-    image = get_input_image(year)
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
-
-
-def get_label_patch(lonlat: tuple[float, float], patch_size: int) -> np.ndarray:
-    """Gets the labels patch of pixels for the given point.
-
-    Labels land cover data is only available for 2020, so any training example
-    must use inputs from the year 2020 as well.
-
-    args:
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of a labels patch as a NumPy array.
-    """
-    image = get_label_image()
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
-
-
-@retry.Retry(deadline=10 * 60)  # seconds
-def get_patch(
-    image: ee.Image, lonlat: tuple[float, float], patch_size: int, scale: int
-) -> np.ndarray:
-    """Fetches a patch of pixels from Earth Engine.
-
-    It retries if we get error "429: Too Many Requests".
-
-    Args:
-        image: Image to get the patch from.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-        scale: Number of meters per pixel.
-
-    Raises:
-        requests.exceptions.RequestException
-
-    Returns: The requested patch of pixels as a NumPy array with shape (width, height, bands).
-    """
-    point = ee.Geometry.Point(lonlat)
-    url = image.getDownloadURL(
-        {
-            "region": point.buffer(scale * patch_size / 2, 1).bounds(1),
-            "dimensions": [patch_size, patch_size],
-            "format": "NPY",
-        }
-    )
-
-    # If we get "429: Too Many Requests" errors, it's safe to retry the request.
-    # The Retry library only works with `google.api_core` exceptions.
-    response = requests.get(url)
-    if response.status_code == 429:
-        raise exceptions.TooManyRequests(response.text)
-
-    # Still raise any other exceptions to make sure we got valid data.
-    response.raise_for_status()
-    return np.load(io.BytesIO(response.content), allow_pickle=True)
+def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd.DataFrame:
+    '''
+    Load crop yield information into a df
+    '''
+    label_data = np.load(labels_path, allow_pickle=True)
+    label_header = np.load(header_path, allow_pickle=True)
+    label_df = pd.DataFrame(label_data, columns=label_header)
+    label_df["target"] = pd.to_numeric(label_df["target"])
+    
+    return label_df

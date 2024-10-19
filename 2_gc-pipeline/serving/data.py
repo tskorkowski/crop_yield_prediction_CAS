@@ -15,10 +15,11 @@ import ee
 from google.api_core import exceptions, retry
 import google.auth
 import numpy as np
+import pandas as pd
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
-from serving.constants import SCALE # meters per pixel
+from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
 
 
 def ee_init() -> None:
@@ -119,3 +120,14 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
             "image": s2_img,
             "image_name": img_name
     }
+
+def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd.DataFrame:
+    '''
+    Load crop yield information into a df
+    '''
+    label_data = np.load(labels_path, allow_pickle=True)
+    label_header = np.load(header_path, allow_pickle=True)
+    label_df = pd.DataFrame(label_data, columns=label_header)
+    label_df["target"] = pd.to_numeric(label_df["target"])
+    
+    return label_df
