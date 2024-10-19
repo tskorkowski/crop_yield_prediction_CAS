@@ -18,9 +18,8 @@ import numpy as np
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
+from serving.constants import SCALE # meters per pixel
 
-
-SCALE = 100  # meters per pixel
 
 def ee_init() -> None:
     """Authenticate and initialize Earth Engine with the default credentials."""
@@ -120,75 +119,3 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
             "image": s2_img,
             "image_name": img_name
     }
-
-def get_input_patch(
-    year: int, lonlat: tuple[float, float], patch_size: int
-) -> np.ndarray:
-    """Gets the inputs patch of pixels for the given point and year.
-
-    args:
-        year: Year of interest, a median composite is used.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of an inputs patch as a NumPy array.
-    """
-    image = get_input_image(year)
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
-
-
-def get_label_patch(lonlat: tuple[float, float], patch_size: int) -> np.ndarray:
-    """Gets the labels patch of pixels for the given point.
-
-    Labels land cover data is only available for 2020, so any training example
-    must use inputs from the year 2020 as well.
-
-    args:
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of a labels patch as a NumPy array.
-    """
-    image = get_label_image()
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
-
-
-@retry.Retry(deadline=10 * 60)  # seconds
-def get_patch(
-    image: ee.Image, lonlat: tuple[float, float], patch_size: int, scale: int
-) -> np.ndarray:
-    """Fetches a patch of pixels from Earth Engine.
-
-    It retries if we get error "429: Too Many Requests".
-
-    Args:
-        image: Image to get the patch from.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-        scale: Number of meters per pixel.
-
-    Raises:
-        requests.exceptions.RequestException
-
-    Returns: The requested patch of pixels as a NumPy array with shape (width, height, bands).
-    """
-    point = ee.Geometry.Point(lonlat)
-    url = image.getDownloadURL(
-        {
-            "region": point.buffer(scale * patch_size / 2, 1).bounds(1),
-            "dimensions": [patch_size, patch_size],
-            "format": "NPY",
-        }
-    )
-
-    # If we get "429: Too Many Requests" errors, it's safe to retry the request.
-    # The Retry library only works with `google.api_core` exceptions.
-    response = requests.get(url)
-    if response.status_code == 429:
-        raise exceptions.TooManyRequests(response.text)
-
-    # Still raise any other exceptions to make sure we got valid data.
-    response.raise_for_status()
-    return np.load(io.BytesIO(response.content), allow_pickle=True)

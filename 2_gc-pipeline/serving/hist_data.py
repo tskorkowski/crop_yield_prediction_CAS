@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
 import requests
-from constants import (
+from serving.constants import (
     BUCKET,
     HIST_BINS_LIST,
     HIST_DEST_PREFIX,
@@ -33,6 +33,7 @@ from google.cloud import storage
 from numpy.lib.recfunctions import structured_to_unstructured
 from osgeo import gdal
 from rasterio.io import MemoryFile
+from serving.common import list_blobs_with_prefix
 
 logging.basicConfig(
     filename="hist.log",
@@ -46,82 +47,6 @@ def hist_init():
     # Use the Earth Engine High Volume endpoint.
     #   https://developers.google.com/earth-engine/cloud/highvolume
     credentials, project = google.auth.default()
-
-
-def list_blobs_with_prefix(bucket_name, prefix):
-    """Lists all the blobs in the bucket that begin with the prefix."""
-    storage_client = storage.Client()
-    return storage_client.list_blobs(bucket_name, prefix=prefix)
-
-
-def load_tiff_from_gcs_temp(bucket_name, blob_name):
-    # Create a temporary file
-    with tempfile.NamedTemporaryFile(suffix=".tif", delete=False) as temp_file:
-        temp_filename = temp_file.name
-
-    # Download the file from GCS
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-    blob.download_to_filename(temp_filename)
-
-    # Read the TIFF file
-    with rasterio.open(temp_filename) as src:
-        # Read all bands
-        tiff_array = src.read()
-
-    # Clean up the temporary file
-    os.remove(temp_filename)
-
-    return tiff_array
-
-
-def load_tiff_from_gcs_mem(bucket_name, blob_name):
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-
-    byte_stream = io.BytesIO()
-    blob.download_to_file(byte_stream)
-    byte_stream.seek(0)
-
-    with MemoryFile(byte_stream) as memfile:
-        with memfile.open() as src:
-            array = src.read()
-
-    return array
-
-
-def download_and_process_tiff(bucket_name, blob_name):
-    """Downloads a TIFF blob into memory and processes it."""
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-
-    # Download the blob contents
-    contents = blob.download_as_bytes()
-
-    # Process the TIFF data
-    with MemoryFile(contents) as memfile:
-        with memfile.open() as src:
-            # Read all bands
-            array = src.read()
-
-    return array
-
-
-# Function using GDAL library directly to read image data
-def read_tiff_gdal(bucket_name, blob_name):
-    gdal.UseExceptions()  # Enable exceptions
-    file_path = f"/vsigs/{bucket_name}/{blob_name}"
-    ds = gdal.Open(file_path)
-    if ds is None:
-        print("Failed to open the file")
-        return None
-    band = ds.GetRasterBand(1)
-    data = band.ReadAsArray()
-    return data
-
 
 def create_histogram_skip_nan(image, bins=256):
     # Flatten the image and remove NaN values
@@ -150,11 +75,11 @@ def process_band(bucket, blob_name, band, bins):
 
             if valid_max > bins[-1]:
                 logging.warning(
-                    f"image: {image_name}, band: {band}, {valid_max} value is larger than assumed possible values for this band"
+                    f"image: {blob_name}, band: {band}, {valid_max} value is larger than assumed possible values for this band"
                 )
             elif valid_min < bins[0]:
                 logging.warning(
-                    f"image: {image_name}, band: {band}, {valid_max} value is smaller than assumed possible values for this band"
+                    f"image: {blob_name}, band: {band}, {valid_max} value is smaller than assumed possible values for this band"
                 )
             if valid_data.size > 0:
                 total_sum = np.sum(valid_data)
@@ -193,11 +118,11 @@ def process_tiff(bucket, blob_name, bin_list, numb_bands, max_workers=4):
     return np.array(sorted_results).flatten()  # one long array instead of bands
 
 
-def recombine_image(bucket, blob_name, bin_list, num_bands):
+def recombine_image(bucket, core_image_name, bin_list, num_bands):
     start_time = time.time()
 
     hist_per_blob = []
-    blobs = list_blobs_with_prefix(bucket, blob_name)
+    blobs = list_blobs_with_prefix(core_image_name)
 
     for blob in blobs:
         results = process_tiff(bucket, blob.name, bin_list, num_bands)
@@ -208,16 +133,51 @@ def recombine_image(bucket, blob_name, bin_list, num_bands):
     end_time = time.time()
     execution_time = end_time - start_time
     logging.info(
-        f"Image {blob_name} has been processed in {execution_time/60:.4f} minuntes"
+        f"Image {core_image_name} has been processed in {execution_time/60:.4f} minuntes"
     )
 
     return combined_hist
+
+def write_histogram_to_gcs(histogram, bucket_name, blob_name):
+    """
+    Write a NumPy array (histogram) to Google Cloud Storage.
+
+    Args:
+    histogram (np.array): The histogram to save.
+    bucket_name (str): The name of the GCS bucket.
+    blob_name (str): The name to give the file in GCS (including any 'path').
+
+    Returns:
+    str: The public URL of the uploaded file.
+    """
+    # Ensure the blob_name ends with .npy
+    if not blob_name.endswith('.npy'):
+        blob_name += '.npy'
+
+    # Create a GCS client
+    client = storage.Client()
+
+    # Get the bucket
+    bucket = client.bucket(bucket_name)
+
+    # Create a blob
+    blob = bucket.blob(blob_name)
+
+    # Convert the numpy array to bytes
+    array_bytes = io.BytesIO()
+    np.save(array_bytes, histogram)
+    array_bytes.seek(0)
+
+    # Upload the bytes to GCS
+    blob.upload_from_file(array_bytes, content_type='application/octet-stream')
+
+    logging.info(f"Histogram uploaded to gs://{bucket_name}/{blob_name}")
 
 
 if __name__ == "__main__":
     image_name = r"images/Canyon_2017_5-6_100"
     # image_name = r"images/Story_2018_9-10_100_.tif"
-    blobs = list_blobs_with_prefix(BUCKET, image_name)
+    blobs = list_blobs_with_prefix(image_name)
 
     # Usage
     start_time = time.time()
