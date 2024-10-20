@@ -9,3 +9,4 @@ rasterio
 geopandas
 google-cloud-storage
 matplotlib
+earthengine-api

@@ -21,6 +21,7 @@ from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
 from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def ee_init() -> None:
@@ -167,4 +168,28 @@ def get_varied_labels(count=150):
     get_data = df_var.iloc[:count].reset_index()
     data_to_grab = pd.merge(labels_df, get_data, how="right", on=["county_name", "state_name"])
     
-    return data_to_grab[["year", "state_ansi", "county_name"]]
+    return data_to_grab[["year", "state_ansi", "county_ansi", "county_name"]]
+
+def check_blob_prefix_exists(bucket_name, prefix):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    
+    blobs = bucket.list_blobs(prefix=prefix, max_results=1)
+    return any(blobs)
+
+def batch_check_blobs(bucket_name, prefixes):
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_prefix = {executor.submit(check_blob_prefix_exists, bucket_name, prefix): prefix for prefix in prefixes}
+        results = {}
+        for future in as_completed(future_to_prefix):
+            prefix = future_to_prefix[future]
+            results[prefix] = future.result()
+    return results
+
+def img_name_composer(county, state_fips, year, month):
+    image_name = f"{IMG_SOURCE_PREFIX}/{SCALE}/{county.capitalize()}_{state_fips}/{year}/{month}-{month+1}"
+    return image_name
+
+def blob_name_composer(county, state_fips, year, month):
+    blob_name = f"{HIST_DEST_PREFIX}/{SCALE}/{county.capitalize()}_{state_fips}/{year}"
+    return blob_name

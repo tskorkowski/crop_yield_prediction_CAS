@@ -7,3 +7,5 @@ google-cloud-aiplatform==1.47.0
 imageio==2.34.2
 plotly==5.15.0
 mlflow
+randomname
+earthengine-api

@@ -3,13 +3,12 @@ import os
 import io
 import numpy as np
 import pandas as pd
-from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
+from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH, MONTHS # meters per pixel, number of bins in the histogram, number of bands in the satellite image
 from serving.data import get_labels
 import tensorflow as tf
 import itertools
 from google.cloud import storage
 import google.auth
-import logging
 import logging
 import os
 import random
@@ -71,10 +70,20 @@ class LstmModel(keras.Model):
 
 # Main training loop
 def train_and_evaluate(
-    model, dataset, validation_split=0.1, epochs=10, learning_rate=0.001, patience=10
+    model, dataset, validation_split=0.1, epochs=10, initial_learning_rate=0.001, patience=10
 ):
-    optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
-    model.compile(optimizer=optimizer, loss="mse", run_eagerly=True)
+    
+    # Define the learning rate schedule
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+        initial_learning_rate,
+        decay_steps=100,
+        decay_rate=0.96,
+        staircase=True
+    )
+    
+    # Use the schedule in the Adam optimizer
+    optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
+    model.compile(optimizer=optimizer, loss="mse")
 
     early_stopping = keras.callbacks.EarlyStopping(
         monitor="val_loss",
@@ -149,9 +158,14 @@ def combine_crop_data(path, save=False):
 
     return combined_df
 
-def create_hist_dataset(counties: list, years: list, months: list, labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> tf.data.Dataset:
+def create_hist_dataset(hist_list: list, labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> tf.data.Dataset:
     
-    logging.basicConfig(filename=f"{__name__}" ,level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(filename=f"crate_dataset.log" ,level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    
+    def combine_lists(a: list, b: list):
+        for array in b:
+            assert isinstance(array, np.ndarray), f"type of histogram is not numpy nd array: {type(list)}"
+        return a + b
     
     client = storage.Client()
     bucket = client.get_bucket(BUCKET) 
@@ -159,55 +173,68 @@ def create_hist_dataset(counties: list, years: list, months: list, labels_path: 
     hist_name_base = f"{HIST_DEST_PREFIX}"
     histograms = []
     labels = []
-    combinations = list(itertools.product(counties, years, months))
+
     filtered_combinations = []
     processed_county_year = set()
     
     label_df = get_labels(labels_path, header_path)
     
-    for combination in combinations:
-        county, year, month = combination
+    zeros = 0
+    skip = 0
+    for combination in hist_list:
+        county, fips, year = combination
+        
         try:
-            label = float(label_df.loc[(label_df["county_name"] == county.upper()) & (label_df["year"] == year), "target"].iloc[0])
-            filtered_combinations.append(combination)
-            
-            if f"{county}/{year}" not in processed_county_year:
-                processed_county_year.add(f"{county}/{year}")
-                labels.append(label)
-            
+            label = float(label_df.loc[(label_df["county_name"] == county.upper()) &
+                                       (label_df["year"] == year) &
+                                       (label_df["state_ansi"] == fips), "target"].iloc[0])
         except IndexError:
             logging.info(f"County {county.upper()} in {year} does not exist in ground truth data. This histogram will be ignored")
+            skip += 1
             continue
-                
-    for combination in filtered_combinations:
-        county, year, month = combination
-        file_name = f"{hist_name_base}/{county}/{year}/{month}-{month+1}/{SCALE}/hist.npy"
-        hist_blob = bucket.blob(file_name) 
-    
-        if hist_blob.name.endswith('.npy'):
-            content = hist_blob.download_as_bytes()
-            binary_data = io.BytesIO(content)
-            array = np.load(binary_data)
-        else:
-            array = np.zeros(NUM_BINS * NUM_BANDS) 
+
+        zero_count = 0
+        hist_by_year = []
+        for month in MONTHS:
+            file_name = f"{hist_name_base}/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
+            hist_blob = bucket.blob(file_name)
+
+            if hist_blob.exists():
+                content = hist_blob.download_as_bytes()
+                binary_data = io.BytesIO(content)
+                array = np.load(binary_data)
+            else:
+                logging.info(f"County {county.upper()}_{fips} in {year} and month {month} does not exist in the histogram set. Zero will be used insted")
+                array = np.zeros(NUM_BINS * NUM_BANDS)
+                zero_count += 1
+
+
+            hist_by_year.append(array)
         
-        histograms.append(array)
-    
+        if zero_count > 1:
+            skip += 1
+            continue
+        
+        zeros += zero_count
+        histograms = combine_lists(histograms, hist_by_year)
+        labels.append(label)
+            
     # Convert lists to numpy arrays
     histograms_np = np.array(histograms, dtype=np.float32)
     labels_np = np.array(labels, dtype=np.float32)
     
     # Reshape the histograms array
-    reshaped_histograms = histograms_np.reshape(-1, len(months), NUM_BINS * NUM_BANDS)
+    reshaped_histograms = histograms_np.reshape(-1, len(MONTHS), NUM_BINS * NUM_BANDS)
     
     # Ensure labels are 2D
     labels_np = labels_np.reshape(-1, 1)
     
     print(f"Reshaped histograms shape: {reshaped_histograms.shape}")
     print(f"Labels shape: {labels_np.shape}")
-    print(f"Number of filtered combinations: {len(filtered_combinations)}")
+    print(f"Number of filtered combinations: {skip}")
+    print(f"Number of missing histograms replaced by zeros: {zeros}")
     
-    assert reshaped_histograms.shape[0] == len(processed_county_year), "Something went wrong when aggregating training data"
+    assert reshaped_histograms.shape[0] == len(hist_list) - skip, "Something went wrong when aggregating training data"
     
     # Create TensorFlow tensors
     histogram_tensor = tf.convert_to_tensor(reshaped_histograms, dtype=tf.float32)
@@ -257,4 +284,9 @@ if __name__ == "__main__":
     trained_model.save("lstm_model.keras")
 
     plot_loss(history)
+    
+if __name__ == "__main__":
+    dataset, input_shape = create_hist_dataset([('Blair','47',2016)], "labels_combined.npy", "labels_header.npy")
+    print(dataset)
+    print(input_shape)
     
