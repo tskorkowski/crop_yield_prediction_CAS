@@ -4,11 +4,21 @@ Project level constants
 
 import numpy as np
 
+# Sentinel 2 Params
+MONTHS = [5,7,9]
+
+IMAGE_COUNT = 150
+VARIED_START = 150
+
+IMAGE_BATCH = [VARIED_START, IMAGE_COUNT]
+
+SCALE = 60
+CROP = 1
+
 # GCS
 PROJECT = "supple-nature-370421"
 BUCKET = "vgnn"
-SCALE = 60
-CROP = 1
+
 
 # Histograms
 IMG_SOURCE_PREFIX = "images"
@@ -36,4 +46,3 @@ HIST_BINS_LIST = [
 LABELS_PATH = "labels_combined.npy"
 HEADER_PATH = "labels_header.npy"
 
-MONTHS = [5,7,9]

@@ -35,45 +35,52 @@ def set_seeds(seed=42):
   
 # Define the LSTM model
 class LstmModel(keras.Model):
-    def __init__(
-        self, input_shape, lstm_layers=3, no_units=3, output_units=1, dropout_rate=0.2
-    ):
+    def __init__(self, input_shape, lstm_layers=3, no_units=3, output_units=1, dropout_rate=0.2):
         super(LstmModel, self).__init__()
         
-        self.normalizer = tf.keras.layers.Normalization(axis=-1)  # Add the normalizer to your model        
-        self.lstm_layers = []
+        inputs = Input(shape=input_shape)
+        x = inputs
         
-
-        self.input_layer = Input(shape=(None, input_shape[0], input_shape[1]))
         for i in range(lstm_layers):
-            if i == 0:
-                self.lstm_layers.append(
-                    LSTM(no_units, return_sequences=(lstm_layers > 1))
-                )
-            else:
-                self.lstm_layers.append(
-                    LSTM(no_units, return_sequences=(i < lstm_layers - 1))
-                )
-            self.lstm_layers.append(Dropout(dropout_rate))
+            return_sequences = (i < lstm_layers - 1)
+            x = LSTM(no_units, return_sequences=return_sequences)(x)
+            x = Dropout(dropout_rate)(x)
 
-        self.output_layer = Dense(output_units)
-
+        outputs = Dense(output_units)(x)
+        
+        self.model = keras.Model(inputs=inputs, outputs=outputs)
+    
+    @tf.function
     def call(self, inputs, training=False):
-        x = self.normalizer(inputs)
-        # Apply LSTM and Dropout layers sequentially
-        for layer in self.lstm_layers:
-            x = layer(x, training=training) if isinstance(layer, Dropout) else layer(x)
-
-        # Final output layer
-        return self.output_layer(x)
+        return self.model(inputs, training=training)
 
 
 # Main training loop
 def train_and_evaluate(
-    model, dataset, validation_split=0.1, epochs=10, initial_learning_rate=0.001, patience=10
+    model, dataset, validation_split=0.2, epochs=10, initial_learning_rate=0.001, patience=10, batch_size=32
 ):
+
+    # Ensure the dataset is properly shaped
+    dataset = dataset.map(lambda x, y: (tf.ensure_shape(x, (3, 416)), y))    
     
-    # Define the learning rate schedule
+    # Shuffle and batch the dataset
+    dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
+
+    # Calculate the number of batches for validation
+    dataset_size = sum(1 for _ in dataset)
+    val_size = int(dataset_size * validation_split)
+    
+    
+
+    # Split the dataset
+    val_dataset = dataset.take(val_size)
+    train_dataset = dataset.skip(val_size)
+
+    # Prepare the datasets for training
+    train_dataset = train_dataset.prefetch(tf.data.AUTOTUNE)
+    val_dataset = val_dataset.prefetch(tf.data.AUTOTUNE)
+
+    # Learning rate schedule
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate,
         decay_steps=100,
@@ -81,7 +88,6 @@ def train_and_evaluate(
         staircase=True
     )
     
-    # Use the schedule in the Adam optimizer
     optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
     model.compile(optimizer=optimizer, loss="mse")
 
@@ -93,16 +99,9 @@ def train_and_evaluate(
         verbose=1,
     )
 
-    # Create MLflow callback to log metrics during training
     class MLflowCallback(keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs=None):
             mlflow.log_metrics(logs, step=epoch)
-            
-    
-    dataset_size = tf.data.experimental.cardinality(dataset).numpy()
-    train_size = int(0.8 * dataset_size)
-    train_dataset = dataset.take(train_size)
-    val_dataset = dataset.skip(train_size)            
 
     history = model.fit(
         train_dataset,
@@ -285,8 +284,85 @@ if __name__ == "__main__":
 
     plot_loss(history)
     
-if __name__ == "__main__":
-    dataset, input_shape = create_hist_dataset([('Blair','47',2016)], "labels_combined.npy", "labels_header.npy")
-    print(dataset)
-    print(input_shape)
     
+def _bytes_feature(value):
+    """Returns a bytes_list from a string / byte."""
+    if isinstance(value, type(tf.constant(0))):
+        value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
+def _float_feature(value):
+    """Returns a float_list from a float / double."""
+    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
+
+def _int64_feature(value):
+    """Returns an int64_list from a bool / enum / int / uint."""
+    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
+
+def serialize_example(feature, label):
+    """
+    Creates a tf.train.Example message ready to be written to a file.
+    """
+    # Create a dictionary mapping the feature name to the tf.train.Example-compatible
+    # data type.
+    feature = {
+        'feature': _bytes_feature(tf.io.serialize_tensor(feature)),
+        'label': _float_feature(label),
+    }
+    # Create a Features message using tf.train.Example.
+    example_proto = tf.train.Example(features=tf.train.Features(feature=feature))
+    return example_proto.SerializeToString()
+
+def save_dataset_to_gcp(dataset, bucket_name='vgnn', file_name='hist_dataset_medium.tfrecords'):
+    # Initialize GCP client
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+
+    # Create a local temporary file
+    local_file_name = 'temp_' + file_name
+    
+    # Write the dataset to the local file
+    with tf.io.TFRecordWriter(local_file_name) as writer:
+        for features, label in dataset:
+            example = serialize_example(features, label)
+            writer.write(example)
+    
+    # Upload the local file to GCS
+    blob = bucket.blob(f"dataset/{file_name}")
+    blob.upload_from_filename(local_file_name)
+
+    # Remove the local temporary file
+    os.remove(local_file_name)
+
+    print(f"Dataset saved to gs://{bucket_name}/dataset/{file_name}")
+    
+def parse_tfrecord_fn(example_proto):
+    # Define the features dictionary that matches the structure used when saving
+    feature_description = {
+        'feature': tf.io.FixedLenFeature([], tf.string),
+        'label': tf.io.FixedLenFeature([], tf.float32)
+    }
+    
+    # Parse the input tf.Example proto using the feature description
+    parsed_features = tf.io.parse_single_example(example_proto, feature_description)
+    
+    # Decode the feature from the parsed example
+    feature = tf.io.parse_tensor(parsed_features['feature'], out_type=tf.float32)
+    label = parsed_features['label']
+    
+    return feature, label
+
+def load_dataset_from_gcp(bucket_name='vgnn', file_name='hist_dataset_medium.tfrecords'):
+    # Construct the full GCS path
+    gcs_path = f"gs://{bucket_name}/dataset/{file_name}"
+    
+    # Create a TFRecordDataset
+    dataset = tf.data.TFRecordDataset(gcs_path)
+    
+    # Parse the TFRecords
+    parsed_dataset = dataset.map(parse_tfrecord_fn)
+    
+    return parsed_dataset     
+    
+if __name__ == "__main__":
+    dataset = load_dataset_from_gcp()
