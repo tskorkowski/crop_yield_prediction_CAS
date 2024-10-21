@@ -83,8 +83,8 @@ def train_and_evaluate(
     # Learning rate schedule
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate,
-        decay_steps=100,
-        decay_rate=0.96,
+        decay_steps=20,
+        decay_rate=0.50,
         staircase=True
     )
     
