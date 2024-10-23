@@ -69,17 +69,18 @@ def process_band(bucket, blob_name, band, bins):
         with rasterio.open(f) as src:
 
             data = src.read(band)
-            valid_data = data[~np.isnan(data)].astype(np.uint16)
+            data[np.isnan(data)] = 0.0
+            valid_data = data.astype(np.uint16)
             valid_max = np.max(valid_data)
             valid_min = np.min(valid_data)
 
             if valid_max > bins[-1]:
                 logging.warning(
-                    f"image: {blob_name}, band: {band}, {valid_max} value is larger than assumed possible values for this band"
+                    f"image: {blob_name}, band: {band}, {valid_max} value is larger than assumed possible values for this band: {bins[-1]}"
                 )
             elif valid_min < bins[0]:
                 logging.warning(
-                    f"image: {blob_name}, band: {band}, {valid_max} value is smaller than assumed possible values for this band"
+                    f"image: {blob_name}, band: {band}, {valid_min} value is smaller than assumed possible values for this band {bins[0]}"
                 )
             if valid_data.size > 0:
                 total_sum = np.sum(valid_data)

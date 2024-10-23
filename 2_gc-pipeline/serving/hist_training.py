@@ -20,7 +20,13 @@ import mlflow
 import mlflow.tensorflow
 import numpy as np
 from keras.layers import LSTM, Dense, Dropout, Input
+from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
 
+from tensorflow.keras.models import Model
+from tensorflow.keras.callbacks import EarlyStopping
+import mlflow
+import mlflow.keras
+import matplotlib.pyplot as plt
 
 def set_seeds(seed=42):
     # Set seeds for Python's random module
@@ -35,21 +41,108 @@ def set_seeds(seed=42):
   
 # Define the LSTM model
 class LstmModel(keras.Model):
-    def __init__(self, input_shape, lstm_layers=3, no_units=3, output_units=1, dropout_rate=0.2):
+    def __init__(self, input_shape, lstm_layers=3, no_units=3, output_units=1, dropout_rate=0.2, mean_response=0):
         super(LstmModel, self).__init__()
-        
-        inputs = Input(shape=input_shape)
-        x = inputs
-        
-        for i in range(lstm_layers):
-            return_sequences = (i < lstm_layers - 1)
-            x = LSTM(no_units, return_sequences=return_sequences)(x)
-            x = Dropout(dropout_rate)(x)
 
-        outputs = Dense(output_units)(x)
+        self.inputs = Input(shape=input_shape)
+        self.lstm_layers = lstm_layers
+
+        self.model = self.build_model(no_units)
         
-        self.model = keras.Model(inputs=inputs, outputs=outputs)
+    def build_model(self, no_lstm_units):
+        
+        #LSTM layers
+        x = self.inputs
+        for i in range(self.lstm_layers):
+            return_sequences = (i < self.lstm_layers - 1)
+            x = LSTM(units=no_lstm_units, return_sequences=return_sequences, kernel_initializer='zeros', recurrent_initializer='zeros', bias_initializer='zeros')(x)
+        
+        outputs = Dense(units=output_units, kernel_initializer='zeros', bias_initializer=tf.keras.initializers.Constant(mean_response))(x)
+        
+        # Create the model
+        model = Model(inputs=inputs, outputs=outputs)        
+        return model
+
+    def summary(self):
+        self.model.summary()
     
+    def compile(self, optimizer='adam', loss='mse', metrics=['accuracy'], learning_rate=0.001):
+        self.learning_rate = learning_rate
+        if optimizer == 'nadam':
+            optimizer = Nadam(learning_rate)
+        elif optimizer == 'rms':
+            optimizer = RMSprop(learning_rate)
+        else:
+            optimizer = Adam(learning_rate)
+            
+        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+        
+    def fit(self, dataset, epochs=10, batch_size=32):
+        # Set up MLflow experiment
+        mlflow.set_experiment('LSTM_Experiment')
+        
+        # Shuffle and batch the dataset
+        dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
+
+        # Split the dataset
+        val_dataset = dataset.take(5)
+        train_dataset = dataset.skip(val_size)        
+
+        # Start MLflow run
+        with mlflow.start_run():
+            # Early stopping callback
+            early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
+            # Create a history callback
+            history_callback = tf.keras.callbacks.History()
+           
+            # Train the model
+            history = self.model.fit(train_dataset, epochs=epochs, batch_size=batch_size,
+                           validation_data=val_dataset, callbacks=[early_stopping, history_callback])
+
+            # Log model and parameters to MLflow
+            mlflow.keras.log_model(self.model, 'model')
+            mlflow.log_param('epochs', epochs)
+            mlflow.log_param('batch_size', batch_size)
+            mlflow.log_param('lstm_layers', self.lstm_layers)
+            mlflow.log_param('learning_rate', self.learning_rate)
+            
+            # Plot training progress
+            self.plot_training_progress(history)            
+
+            # Evaluate the model
+            loss, accuracy = self.model.evaluate(val_dataset)
+            mlflow.log_metric('val_loss', loss)
+            mlflow.log_metric('val_accuracy', accuracy)
+
+    def evaluate(self, dataset_test):
+        loss, accuracy = self.model.evaluate(dataset_test)
+        print(f'Test Loss: {loss:.4f}')
+        print(f'Test Accuracy: {accuracy:.4f}')
+
+    def plot_training_progress(self, history):
+        # Plot training and validation loss
+        plt.figure(figsize=(12, 4))
+        plt.subplot(1, 2, 1)
+        plt.plot(history.history['loss'], label='Training Loss')
+        plt.plot(history.history['val_loss'], label='Validation Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend()
+        plt.title('Training and Validation Loss')
+
+        # Plot training and validation accuracy
+        plt.subplot(1, 2, 2)
+        plt.plot(history.history['accuracy'], label='Training Accuracy')
+        plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.legend()
+        plt.title('Training and Validation Accuracy')
+
+        plt.tight_layout()
+        plt.show()        
+
     @tf.function
     def call(self, inputs, training=False):
         return self.model(inputs, training=training)
@@ -60,20 +153,17 @@ def train_and_evaluate(
     model, dataset, validation_split=0.2, epochs=10, initial_learning_rate=0.001, patience=10, batch_size=32
 ):
 
-    # Ensure the dataset is properly shaped
-    dataset = dataset.map(lambda x, y: (tf.ensure_shape(x, (3, 416)), y))    
-    
     # Shuffle and batch the dataset
     dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
 
     # Calculate the number of batches for validation
-    dataset_size = sum(1 for _ in dataset)
-    val_size = int(dataset_size * validation_split)
+    # dataset_size = sum(1 for _ in dataset)
+    # val_size = int(dataset_size * validation_split)
     
     
 
     # Split the dataset
-    val_dataset = dataset.take(val_size)
+    val_dataset = dataset.take(5)
     train_dataset = dataset.skip(val_size)
 
     # Prepare the datasets for training
@@ -195,7 +285,7 @@ def create_hist_dataset(hist_list: list, labels_path: str=LABELS_PATH, header_pa
         zero_count = 0
         hist_by_year = []
         for month in MONTHS:
-            file_name = f"{hist_name_base}/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
+            file_name = f"{hist_name_base}/{NUM_BINS}_bcukets/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
             hist_blob = bucket.blob(file_name)
 
             if hist_blob.exists():
@@ -299,17 +389,16 @@ def _int64_feature(value):
     """Returns an int64_list from a bool / enum / int / uint."""
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
-def serialize_example(feature, label):
+def serialize_example(features, label):
     """
     Creates a tf.train.Example message ready to be written to a file.
     """
     # Create a dictionary mapping the feature name to the tf.train.Example-compatible
     # data type.
     feature = {
-        'feature': _bytes_feature(tf.io.serialize_tensor(feature)),
-        'label': _float_feature(label),
+        'feature': tf.train.Feature(bytes_list=tf.train.BytesList(value=[tf.io.serialize_tensor(features).numpy()])),
+        'label': tf.train.Feature(float_list=tf.train.FloatList(value=[label.numpy()]))
     }
-    # Create a Features message using tf.train.Example.
     example_proto = tf.train.Example(features=tf.train.Features(feature=feature))
     return example_proto.SerializeToString()
 
