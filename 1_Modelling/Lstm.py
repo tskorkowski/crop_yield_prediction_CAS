@@ -66,6 +66,9 @@ def create_dataset(X, y, batch_size=32, shuffle=True):
     bin - number of bins in each histogram
     t - number of timesteps
     band - spectral bands in the sattelitte photo
+
+    Output:
+    dataset shape (n,t,bin*band)
     """
     X = X.reshape(X.shape[0], X.shape[2], X.shape[1] * X.shape[3])
     dataset = tf.data.Dataset.from_tensor_slices((X, y))

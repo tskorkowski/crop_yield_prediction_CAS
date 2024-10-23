@@ -14,13 +14,15 @@ import io
 import ee
 from google.api_core import exceptions, retry
 import google.auth
+from google.cloud import storage
 import numpy as np
+import pandas as pd
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
+from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
-SCALE = 100  # meters per pixel
 
 def ee_init() -> None:
     """Authenticate and initialize Earth Engine with the default credentials."""
@@ -38,8 +40,20 @@ def ee_init() -> None:
         opt_url="https://earthengine-highvolume.googleapis.com",
     )
 
+def check_blob_exists(blob_name):
+    # Initialize a storage client
+    client = storage.Client()
 
-def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Image:
+    # Get the bucket object
+    bucket = client.bucket(BUCKET)
+
+    # Check if the blob exists in the bucket
+    blob = bucket.blob(blob_name)
+
+    # Verify if the blob exists
+    return blob.exists()
+
+def get_input_image_ee(county: str, county_fips: str, state_fips: str, crop: int, year: int, month: int) -> ee.Image:
     """Get a Sentinel-2 Earth Engine image.
 
     This filters clouds and returns the median for the selected time range and mask.
@@ -67,11 +81,13 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
         return image.updateMask(mask)    
    
     # Filter county
+    county = county.capitalize()
     county_geom = (
         ee.FeatureCollection("TIGER/2018/Counties")
-        .filter(ee.Filter.eq("NAME", county))
+        .filter(ee.Filter.eq("COUNTYFP", county_fips))
+        .filter(ee.Filter.eq("STATEFP", state_fips))
     )
-
+    
     # Cropland data - image collection with specific crops masked
     cdl_county_masked = (
         ee.ImageCollection("USDA/NASS/CDL")
@@ -105,7 +121,7 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
             .filter(ee.Filter.calendarRange(year,year,"year"))
             .filter(ee.Filter.calendarRange(month,month+1,"month"))
             .filterBounds(county_geom)
-            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 30))
+            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 35))
             .map(mask_sentinel2_clouds)
             .select("B.*")
             .median()
@@ -114,81 +130,66 @@ def get_input_image_ee(county: str, crop: int, year: int, month: int) -> ee.Imag
             .float() 
         )
     s2_img = s2_img_unbounded.clip(county_geom)
-    img_name = f"{county}_{year}_{month}-{month+1}"
+    image_name = f"{county}_{state_fips}/{year}/{month}-{month+1}"
     
     return {
             "image": s2_img,
-            "image_name": img_name
+            "image_name": image_name
     }
 
-def get_input_patch(
-    year: int, lonlat: tuple[float, float], patch_size: int
-) -> np.ndarray:
-    """Gets the inputs patch of pixels for the given point and year.
+def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd.DataFrame:
+    '''
+    Load crop yield information into a df
+    '''
+    label_data = np.load(labels_path, allow_pickle=True)
+    label_header = np.load(header_path, allow_pickle=True)
+    label_df = pd.DataFrame(label_data, columns=label_header)
+    label_df["target"] = pd.to_numeric(label_df["target"])
+    
+    return label_df
 
-    args:
-        year: Year of interest, a median composite is used.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of an inputs patch as a NumPy array.
+def get_varied_labels(count_start=0, no_records=150, ascending=False):
     """
-    image = get_input_image(year)
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
-
-
-def get_label_patch(lonlat: tuple[float, float], patch_size: int) -> np.ndarray:
-    """Gets the labels patch of pixels for the given point.
-
-    Labels land cover data is only available for 2020, so any training example
-    must use inputs from the year 2020 as well.
-
-    args:
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-
-    Returns: The pixel values of a labels patch as a NumPy array.
+    Create training set using counties with highest min-max spread over the years
     """
-    image = get_label_image()
-    patch = get_patch(image, lonlat, patch_size, SCALE)
-    return structured_to_unstructured(patch)
+    
+    labels_df = get_labels()
+    
+    
+    df_var = labels_df.groupby(by=["county_name","state_name"]).agg(
+                    count=('target', 'count'),
+                    min_value=('target', 'min'),
+                    max_value=('target', 'max'),
+                    median=('target', 'median'))
+    
+    df_var["range"]=df_var["max_value"] - df_var["min_value"]
+    df_var = df_var.sort_values(by="range", ascending=ascending)
+    
+    get_data = df_var.iloc[count_start:count_start + no_records].reset_index()
+    data_to_grab = pd.merge(labels_df, get_data, how="right", on=["county_name", "state_name"])
+    
+    return data_to_grab[["year", "state_ansi", "county_ansi", "county_name"]]
 
+def check_blob_prefix_exists(bucket_name, prefix):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    
+    blobs = bucket.list_blobs(prefix=prefix, max_results=1)
+    return any(blobs)
 
-@retry.Retry(deadline=10 * 60)  # seconds
-def get_patch(
-    image: ee.Image, lonlat: tuple[float, float], patch_size: int, scale: int
-) -> np.ndarray:
-    """Fetches a patch of pixels from Earth Engine.
+def batch_check_blobs(bucket_name, prefixes):
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_prefix = {executor.submit(check_blob_prefix_exists, bucket_name, prefix): prefix for prefix in prefixes}
+        results = {}
+        for future in as_completed(future_to_prefix):
+            prefix = future_to_prefix[future]
+            results[prefix] = future.result()
+    return results
 
-    It retries if we get error "429: Too Many Requests".
+def img_name_composer(county, state_fips, year, month):
+    image_name = f"{IMG_SOURCE_PREFIX}/{SCALE}/{county.capitalize()}_{state_fips}/{year}/{month}-{month+1}"
+    return image_name
 
-    Args:
-        image: Image to get the patch from.
-        lonlat: A (longitude, latitude) pair for the point of interest.
-        patch_size: Size in pixels of the surrounding square patch.
-        scale: Number of meters per pixel.
-
-    Raises:
-        requests.exceptions.RequestException
-
-    Returns: The requested patch of pixels as a NumPy array with shape (width, height, bands).
-    """
-    point = ee.Geometry.Point(lonlat)
-    url = image.getDownloadURL(
-        {
-            "region": point.buffer(scale * patch_size / 2, 1).bounds(1),
-            "dimensions": [patch_size, patch_size],
-            "format": "NPY",
-        }
-    )
-
-    # If we get "429: Too Many Requests" errors, it's safe to retry the request.
-    # The Retry library only works with `google.api_core` exceptions.
-    response = requests.get(url)
-    if response.status_code == 429:
-        raise exceptions.TooManyRequests(response.text)
-
-    # Still raise any other exceptions to make sure we got valid data.
-    response.raise_for_status()
-    return np.load(io.BytesIO(response.content), allow_pickle=True)
+def blob_name_composer(county, state_fips, year, month):
+    blob_name = f"{HIST_DEST_PREFIX}/{SCALE}/{county.capitalize()}_{state_fips}/{year}"
+    return blob_name
