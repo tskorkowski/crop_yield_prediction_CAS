@@ -3,7 +3,7 @@ import os
 import io
 import numpy as np
 import pandas as pd
-from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH, MONTHS # meters per pixel, number of bins in the histogram, number of bands in the satellite image
+from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH, MONTHS, PIX_COUNT # meters per pixel, number of bins in the histogram, number of bands in the satellite image
 from serving.data import get_labels
 import tensorflow as tf
 import itertools
@@ -291,7 +291,7 @@ def create_hist_dataset(hist_list: list, labels_path: str=LABELS_PATH, header_pa
             if hist_blob.exists():
                 content = hist_blob.download_as_bytes()
                 binary_data = io.BytesIO(content)
-                array = np.load(binary_data) // 
+                array = np.load(binary_data) // PIX_COUNT
             else:
                 logging.info(f"County {county.upper()}_{fips} in {year} and month {month} does not exist in the histogram set. Zero will be used insted")
                 array = np.zeros(NUM_BINS * NUM_BANDS)

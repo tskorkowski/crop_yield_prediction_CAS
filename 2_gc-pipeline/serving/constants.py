@@ -4,10 +4,6 @@ Project level constants
 
 import numpy as np
 
-# Sentinel 2 Params
-MONTHS = [5,7,9]
-
-
 VARIED_START = 400
 VARIED_END = 200
 
@@ -20,14 +16,18 @@ CROP = 1
 PROJECT = "supple-nature-370421"
 BUCKET = "vgnn"
 
-
-# Histograms
+# Sentinel 2 Params
+MONTHS = [5,7,9]
 IMG_SOURCE_PREFIX = "images"
 HIST_DEST_PREFIX = "histograms"
 
+PIX_COUNT = 8192**2
 REFLECTANCE_CONST = 1e4
 
 NUM_BANDS = 13
+
+
+# Histograms
 NUM_BINS = 128
 
 HIST_BINS_LIST = [
