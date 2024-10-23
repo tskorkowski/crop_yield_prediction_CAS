@@ -148,7 +148,7 @@ def get_labels(labels_path: str=LABELS_PATH, header_path: str=HEADER_PATH) -> pd
     
     return label_df
 
-def get_varied_labels(count_start=0, no_records=150):
+def get_varied_labels(count_start=0, no_records=150, ascending=False):
     """
     Create training set using counties with highest min-max spread over the years
     """
@@ -163,7 +163,7 @@ def get_varied_labels(count_start=0, no_records=150):
                     median=('target', 'median'))
     
     df_var["range"]=df_var["max_value"] - df_var["min_value"]
-    df_var = df_var.sort_values(by="range", ascending=False)
+    df_var = df_var.sort_values(by="range", ascending=ascending)
     
     get_data = df_var.iloc[count_start:count_start + no_records].reset_index()
     data_to_grab = pd.merge(labels_df, get_data, how="right", on=["county_name", "state_name"])

@@ -28,7 +28,7 @@ NUM_BANDS = 13
 
 
 # Histograms
-NUM_BINS = 128
+NUM_BINS = 256
 
 HIST_BINS_LIST = [
     np.linspace(0, 15000, NUM_BINS + 1), #1
