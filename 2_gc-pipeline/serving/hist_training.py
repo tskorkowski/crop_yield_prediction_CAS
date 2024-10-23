@@ -285,13 +285,13 @@ def create_hist_dataset(hist_list: list, labels_path: str=LABELS_PATH, header_pa
         zero_count = 0
         hist_by_year = []
         for month in MONTHS:
-            file_name = f"{hist_name_base}/{NUM_BINS}_bcukets/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
+            file_name = f"{hist_name_base}/{NUM_BINS}_buckets/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
             hist_blob = bucket.blob(file_name)
 
             if hist_blob.exists():
                 content = hist_blob.download_as_bytes()
                 binary_data = io.BytesIO(content)
-                array = np.load(binary_data)
+                array = np.load(binary_data) // 
             else:
                 logging.info(f"County {county.upper()}_{fips} in {year} and month {month} does not exist in the histogram set. Zero will be used insted")
                 array = np.zeros(NUM_BINS * NUM_BANDS)
