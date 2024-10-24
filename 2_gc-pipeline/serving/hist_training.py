@@ -9,15 +9,11 @@ import sys
 import google.auth
 import keras
 import matplotlib.pyplot as plt
-import mlflow
-import mlflow.keras
-import mlflow.tensorflow
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 from google.cloud import storage
-from keras.layers import LSTM, Dense, Dropout, Input
-from mlflow.models import infer_signature
+from keras.layers import LSTM, Dense, Dropout, Input, TimeDistributed
 from serving.constants import (
     BUCKET,
     HEADER_PATH,
@@ -33,7 +29,9 @@ from serving.data import get_labels
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
-
+import randomname
+import tensorboard
+import datetime
 
 def set_seeds(seed=42):
     # Set seeds for Python's random module
@@ -64,26 +62,27 @@ class LstmModel(keras.Model):
         self.dropout_rate = dropout_rate
         self.mean_response = mean_response
 
+        self.input_layer = Input(shape=input_shape)
+        
         # Define LSTM and Dense layers
         self.lstm_layers_list = [
             LSTM(
                 units=no_units,
                 return_sequences=(i < lstm_layers - 1),
-                kernel_initializer="zeros",
-                recurrent_initializer="zeros",
-                bias_initializer="zeros",
             )
             for i in range(lstm_layers)
         ]
         self.dense = Dense(
             units=output_units,
-            kernel_initializer="zeros",
             bias_initializer=tf.keras.initializers.Constant(mean_response),
         )
+        
+        self.job_name = randomname.get_name(adj=('emotions',), noun=('food'))
 
     @tf.function
     def call(self, inputs, training=False):
         # LSTM layers
+
         x = inputs
 
         for lstm_layer in self.lstm_layers_list:
@@ -112,18 +111,12 @@ class LstmModel(keras.Model):
 
         # Compile the model with the chosen optimizer, loss, and metrics
         tf.config.run_functions_eagerly(True)
+        
         super(LstmModel, self).compile(
             optimizer=optimizer_instance, loss=loss, metrics=metrics
         )
 
     def fit(self, dataset, epochs=10, batch_size=32):
-
-        class MyModel(mlflow.pyfunc.PythonModel):
-            def predict(self, ctx, model_input, params):
-                return list(params.values())
-
-        # Set up MLflow experiment
-        mlflow.set_experiment("LSTM_Experiment")
 
         # Shuffle and batch the dataset
         dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
@@ -145,44 +138,34 @@ class LstmModel(keras.Model):
             (responses_val - mean_response_train) ** 2
         )  # Mean Squared Error
 
-        # Start MLflow run
-        with mlflow.start_run():
-            # Early stopping callback
-            early_stopping = EarlyStopping(
-                monitor="val_loss", patience=3, restore_best_weights=True
-            )
+        # Setup tensorboard
+        log_dir = "gs://vgnn/tensorboard-artifacts/logs/fit/" + self.job_name +'-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        if not os.path.exists(os.path.dirname(log_dir)):
+            os.makedirs(os.path.dirname(log_dir))
+            
+        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+        
+        # Early stopping callback
+        early_stopping = EarlyStopping(
+            monitor="val_loss", patience=10, restore_best_weights=True
+        )
 
-            # Create a history callback
-            history_callback = tf.keras.callbacks.History()
+        # Create a history callback
+        history_callback = tf.keras.callbacks.History()
 
-            # Train the model
-            history = super(LstmModel, self).fit(
-                train_dataset,
-                epochs=epochs,
-                batch_size=batch_size,
-                validation_data=val_dataset,
-            )  # callbacks=[early_stopping, history_callback]
+        # Train the model
+        history = super(LstmModel, self).fit(
+            train_dataset,
+            epochs=epochs,
+            batch_size=batch_size,
+            validation_data=val_dataset,
+            callbacks=[early_stopping, tensorboard_callback] )
 
-            # Log model and parameters to MLflow
-            # Create an example input
-            for features, _ in dataset.take(1):
-                example_input = features.numpy()
-            signature = infer_signature(["input"], ["output"])
-            model_info = mlflow.pyfunc.log_model(
-                python_model=MyModel(), artifact_path="my_model", signature=signature
-            )
-            loaded_model = mlflow.pyfunc.load_model(model_info.model_uri)
-            mlflow.log_param("epochs", epochs)
-            mlflow.log_param("batch_size", batch_size)
-            mlflow.log_param("lstm_layers", self.lstm_layers)
-            mlflow.log_param("learning_rate", self.learning_rate)
-            mlflow.log_metric("naive_loss", self.naive_loss)
-            # Plot training progress
-            plot_training_progress(history, self.naive_loss)
+        # Plot training progress
+        plot_training_progress(history, self.naive_loss)
 
-            # Evaluate the model
-            loss = super(LstmModel, self).evaluate(val_dataset)
-            mlflow.log_metric("val_loss", loss)
+        # Evaluate the model
+        loss = super(LstmModel, self).evaluate(val_dataset)
 
         return history
 
@@ -207,30 +190,25 @@ class TimeDependentDenseLstmModel(LstmModel):
             mean_response,
         )
 
-        # Add dense layers to process each time step before LSTM
-        self.dense_layers_per_time_step = []
-        for _ in range(input_shape[1]):
-            dense_layers = []
-            units = input_shape[-1] // 4
-            for _ in range(dense_layers_per_step):
-                dense_layers.append(Dense(units=units, activation="relu"))
-                units //= 4
-            self.dense_layers_per_time_step.append(dense_layers)
+        # Dense layer to process each time step using TimeDistributed
+        self.time_distributed_dense = []
+
+        # Create the dense layers that will be applied to each time step
+        units = input_shape[-1] // 2
+        for _ in range(dense_layers_per_step):
+            self.time_distributed_dense.append(
+                TimeDistributed(Dense(units=units, activation="relu"))
+            )
+            units //= 2  # Halve units for each subsequent dense layer
 
     @tf.function
     def call(self, inputs, training=False):
         # Process each time step with a corresponding dense layer
-        x = tf.unstack(inputs, axis=1)  # Unstack time steps
-        processed_time_steps = []
 
-        for t, dense_layers in zip(x, self.dense_layers_per_time_step):
-            for dense_layer in dense_layers:
-                t = dense_layer(t)
-            processed_time_steps.append(t)
-
-        # Stack back the time steps
-        x = tf.stack(processed_time_steps, axis=1)
-
+        x =inputs
+        for dense_layer in self.time_distributed_dense:
+            x = dense_layer(x)
+        
         # Feed into LSTM layers
         for lstm_layer in self.lstm_layers_list:
             x = lstm_layer(x)
@@ -248,12 +226,11 @@ def plot_training_progress(history, naive_loss=None):
 
     if naive_loss is not None:
         epochs = len(history.history["loss"])
-        plt.hlines(naive_loss, label="Naive Loss", xmin=0, xmax=epochs - 1)
+        plt.hlines(naive_loss, label="Naive Loss", xmin=0, xmax=epochs - 1, colors="r", linestyles="dashed")
 
     plt.plot(history.history["loss"], label="Training Loss")
     plt.plot(
-        history.history["val_loss"], label="Validation Loss", c="r", linestyles="dashed"
-    )
+        history.history["val_loss"], label="Validation Loss"    )
 
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
