@@ -25,8 +25,11 @@ from serving.constants import (
     HIST_BINS_LIST,
     HIST_DEST_PREFIX,
     IMG_SOURCE_PREFIX,
-    NUM_BANDS,
+    SELECTED_BANDS,
     PROJECT,
+    PIX_COUNT,
+    REFLECTANCE_CONST,
+    NUM_BINS
 )
 from google.api_core import exceptions, retry
 from google.cloud import storage
@@ -48,19 +51,7 @@ def hist_init():
     #   https://developers.google.com/earth-engine/cloud/highvolume
     credentials, project = google.auth.default()
 
-def create_histogram_skip_nan(image, bins=256):
-    # Flatten the image and remove NaN values
-    flat_image = image.flatten()
-
-    non_nan_values = flat_image[~np.isnan(flat_image)].astype(np.uint16)
-
-    # Create histogram
-    hist, bin_edges = np.histogram(non_nan_values, bins=bins, density=False)
-
-    return hist, bin_edges
-
-
-def process_band(bucket, blob_name, band, bins):
+def process_band(bucket, blob_name, band, bins, skip_nan, normalise):
 
     storage_client = storage.Client()
     blob = storage_client.bucket(bucket).blob(blob_name)
@@ -68,9 +59,19 @@ def process_band(bucket, blob_name, band, bins):
     with blob.open("rb") as f:
         with rasterio.open(f) as src:
 
-            data = src.read(band)
-            data[np.isnan(data)] = 0.0
-            valid_data = data.astype(np.uint16)
+            data = src.read(band).flatten()
+            na_mask = np.isnan(data)
+            
+            if skip_nan == False:
+                data[na_mask] = 0.0
+                valid_data = data
+            else:
+                valid_data = data[~na_mask]
+                
+            if normalise:
+                valid_data = valid_data / REFLECTANCE_CONST
+                bins = bins / REFLECTANCE_CONST
+                
             valid_max = np.max(valid_data)
             valid_min = np.min(valid_data)
 
@@ -82,12 +83,14 @@ def process_band(bucket, blob_name, band, bins):
                 logging.warning(
                     f"image: {blob_name}, band: {band}, {valid_min} value is smaller than assumed possible values for this band {bins[0]}"
                 )
+            
             if valid_data.size > 0:
                 total_sum = np.sum(valid_data)
                 total_count = valid_data.size
                 mean = total_sum / total_count
-                hist, _ = create_histogram_skip_nan(valid_data, bins)
+                hist, _ = np.histogram(valid_data, bins=bins, density=False)
             else:
+                logging.error(f"image: {blob_name}, band: {band} has 0 valid pixels. Investigate")
                 mean = np.nan
                 hist = np.zeros_like(
                     bins[:-1]
@@ -96,13 +99,13 @@ def process_band(bucket, blob_name, band, bins):
     return hist
 
 
-def process_tiff(bucket, blob_name, bin_list, numb_bands, max_workers=4):
+def process_tiff(bucket, blob_name, bin_list, selected_bands, skip_nan, normalise, max_workers=6):
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_band = {
             executor.submit(
-                process_band, bucket, blob_name, band, bin_list[band - 1]
+                process_band, bucket, blob_name, band, bins, skip_nan, normalise
             ): band
-            for band in range(1, numb_bands + 1)
+            for band, bins in zip(selected_bands, bin_list)
         }
         results = []
 
@@ -119,14 +122,13 @@ def process_tiff(bucket, blob_name, bin_list, numb_bands, max_workers=4):
     return np.array(sorted_results).flatten()  # one long array instead of bands
 
 
-def recombine_image(bucket, core_image_name, bin_list, num_bands):
+def recombine_image(bucket, core_image_name, bin_list, selected_bands, skip_nan=False, normalise=False):
     start_time = time.time()
 
     hist_per_blob = []
     blobs = list_blobs_with_prefix(core_image_name)
-
     for blob in blobs:
-        results = process_tiff(bucket, blob.name, bin_list, num_bands)
+        results = process_tiff(bucket, blob.name, bin_list, selected_bands, skip_nan, normalise)
         hist_per_blob.append(results)
 
     combined_hist = np.sum(np.array(hist_per_blob), axis=0)

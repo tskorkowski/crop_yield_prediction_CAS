@@ -20,10 +20,13 @@ from serving.constants import (
     HIST_DEST_PREFIX,
     LABELS_PATH,
     MONTHS,
-    NUM_BANDS,
+    SELECTED_BANDS,
     NUM_BINS,
     PIX_COUNT,
     SCALE,
+    MAP_NAN,
+    NORMALIZE,
+    HIST_BINS_LIST
 )
 from serving.data import get_labels
 from tensorflow.keras.callbacks import EarlyStopping
@@ -32,16 +35,18 @@ from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
 import randomname
 import tensorboard
 import datetime
+from tensorflow.keras.callbacks import ModelCheckpoint
+import tempfile
 
-def set_seeds(seed=42):
-    # Set seeds for Python's random module
-    random.seed(seed)
+# def set_seeds(seed=42):
+#     # Set seeds for Python's random module
+#     random.seed(seed)
 
-    # Set seed for NumPy
-    np.random.seed(seed)
+#     # Set seed for NumPy
+#     np.random.seed(seed)
 
-    # Set seed for TensorFlow
-    tf.random.set_seed(seed)
+#     # Set seed for TensorFlow
+#     tf.random.set_seed(seed)
 
 
 # Define the LSTM model
@@ -53,14 +58,14 @@ class LstmModel(keras.Model):
         no_units=3,
         output_units=1,
         dropout_rate=0.2,
-        mean_response=0,
+        val_size=10
     ):
         super(LstmModel, self).__init__()
         self.lstm_layers = lstm_layers
         self.no_units = no_units
         self.output_units = output_units
         self.dropout_rate = dropout_rate
-        self.mean_response = mean_response
+        self.val_size = val_size
 
         self.input_layer = Input(shape=input_shape)
         
@@ -74,7 +79,6 @@ class LstmModel(keras.Model):
         ]
         self.dense = Dense(
             units=output_units,
-            bias_initializer=tf.keras.initializers.Constant(mean_response),
         )
         
         self.job_name = randomname.get_name(adj=('emotions',), noun=('food'))
@@ -116,13 +120,13 @@ class LstmModel(keras.Model):
             optimizer=optimizer_instance, loss=loss, metrics=metrics
         )
 
-    def fit(self, dataset, epochs=10, batch_size=32):
+    def fit(self, dataset, epochs=10):
 
         # Shuffle and batch the dataset
-        dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
+        # dataset = dataset.shuffle(buffer_size=10000).batch(batch_size)
 
         # Split the dataset
-        val_size = 7
+        val_size = self.val_size
         val_dataset = dataset.take(val_size)
         train_dataset = dataset.skip(val_size)
 
@@ -130,16 +134,21 @@ class LstmModel(keras.Model):
             [response.numpy() for _, response in train_dataset], axis=0
         )
         mean_response_train = np.mean(responses_train)
-
-        responses_val = np.concatenate(
-            [response.numpy() for _, response in val_dataset], axis=0
-        )
-        self.naive_loss = np.mean(
-            (responses_val - mean_response_train) ** 2
-        )  # Mean Squared Error
-
+        
+        if val_size > 0:
+            responses_val = np.concatenate(
+                [response.numpy() for _, response in val_dataset], axis=0
+            )
+            
+            self.naive_loss = np.mean(
+                (responses_val - mean_response_train) ** 2
+            )  # Mean Squared Error
+        else:
+            self.naive_loss = mean_response_train
+        
         # Setup tensorboard
-        log_dir = "gs://vgnn/tensorboard-artifacts/logs/fit/" + self.job_name +'-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        model_name = self.job_name +'-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        log_dir = "gs://vgnn/tensorboard-artifacts/logs/fit/" + model_name
         if not os.path.exists(os.path.dirname(log_dir)):
             os.makedirs(os.path.dirname(log_dir))
             
@@ -150,22 +159,22 @@ class LstmModel(keras.Model):
             monitor="val_loss", patience=10, restore_best_weights=True
         )
 
-        # Create a history callback
-        history_callback = tf.keras.callbacks.History()
-
+        
         # Train the model
         history = super(LstmModel, self).fit(
             train_dataset,
             epochs=epochs,
-            batch_size=batch_size,
+            # batch_size=batch_size,
             validation_data=val_dataset,
-            callbacks=[early_stopping, tensorboard_callback] )
+            callbacks=[tensorboard_callback] ) #early_stopping,
 
         # Plot training progress
         plot_training_progress(history, self.naive_loss)
 
         # Evaluate the model
         loss = super(LstmModel, self).evaluate(val_dataset)
+        
+        self.save(f'gs://vgnn/models/{model_name}.tf')
 
         return history
 
@@ -179,7 +188,7 @@ class TimeDependentDenseLstmModel(LstmModel):
         dense_layers_per_step=3,
         output_units=1,
         dropout_rate=0.2,
-        mean_response=0,
+        val_size=10
     ):
         super(TimeDependentDenseLstmModel, self).__init__(
             input_shape,
@@ -187,7 +196,7 @@ class TimeDependentDenseLstmModel(LstmModel):
             no_units,
             output_units,
             dropout_rate,
-            mean_response,
+            val_size
         )
 
         # Dense layer to process each time step using TimeDistributed
@@ -199,7 +208,7 @@ class TimeDependentDenseLstmModel(LstmModel):
             self.time_distributed_dense.append(
                 TimeDistributed(Dense(units=units, activation="relu"))
             )
-            units //= 2  # Halve units for each subsequent dense layer
+            # units //= 2  # Halve units for each subsequent dense layer
 
     @tf.function
     def call(self, inputs, training=False):
@@ -229,8 +238,8 @@ def plot_training_progress(history, naive_loss=None):
         plt.hlines(naive_loss, label="Naive Loss", xmin=0, xmax=epochs - 1, colors="r", linestyles="dashed")
 
     plt.plot(history.history["loss"], label="Training Loss")
-    plt.plot(
-        history.history["val_loss"], label="Validation Loss"    )
+    # plt.plot(
+    #     history.history["val_loss"], label="Validation Loss"    )
 
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
@@ -291,6 +300,8 @@ def create_hist_dataset(
     labels_path: str = LABELS_PATH,
     header_path: str = HEADER_PATH,
     num_bins=NUM_BINS,
+    map_nan=MAP_NAN,
+    normalize=NORMALIZE
 ) -> tf.data.Dataset:
 
     logging.basicConfig(
@@ -312,7 +323,8 @@ def create_hist_dataset(
     hist_name_base = f"{HIST_DEST_PREFIX}"
     histograms = []
     labels = []
-
+    num_bands = len(SELECTED_BANDS)
+    
     label_df = get_labels(labels_path, header_path)
 
     zeros = 0
@@ -341,20 +353,20 @@ def create_hist_dataset(
         zero_count = 0
         hist_by_year = []
         for month in MONTHS:
-            file_name = f"{hist_name_base}/{num_bins}_buckets/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
+            file_name = f"{hist_name_base}/nan_map_{map_nan}/norm_{normalize}/{num_bins}_buckets_{len(HIST_BINS_LIST)}_bands/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
             hist_blob = bucket.blob(file_name)
 
             if hist_blob.exists():
                 content = hist_blob.download_as_bytes()
                 binary_data = io.BytesIO(content)
-                array = np.load(binary_data) // PIX_COUNT
+                array = np.load(binary_data) #/ PIX_COUNT
             else:
                 logging.info(
                     "County {}_{} in {} and month {} does not exist in the histogram set. Zero will be used instead".format(
                         county.upper(), fips, year, month
                     )
                 )
-                array = np.zeros(num_bins * NUM_BANDS)
+                array = np.zeros(num_bins * num_bands)
                 zero_count += 1
 
             hist_by_year.append(array)
@@ -372,7 +384,7 @@ def create_hist_dataset(
     labels_np = np.array(labels, dtype=np.float32)
 
     # Reshape the histograms array
-    reshaped_histograms = histograms_np.reshape(-1, len(MONTHS), num_bins * NUM_BANDS)
+    reshaped_histograms = histograms_np.reshape(-1, len(MONTHS), num_bins * num_bands)
 
     # Ensure labels are 2D
     labels_np = labels_np.reshape(-1, 1)
@@ -425,7 +437,7 @@ def create_data_sample():
 
 
 def save_dataset_to_gcp(
-    dataset, bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords"
+    dataset, bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords", directory="dataset"
 ):
     # Initialize GCP client
     client = storage.Client()
@@ -440,21 +452,19 @@ def save_dataset_to_gcp(
             example = serialize_example(features, label)
             writer.write(example)
 
-    # Upload the local file to GCS
-    blob = bucket.blob(f"dataset/{file_name}")
-    blob.upload_from_filename(local_file_name)
+        # Upload to GCS
+        full_name = "/".join([directory,file_name])
+        blob = bucket.blob(f"{full_name}")
+        blob.upload_from_filename(local_file_name)
 
-    # Remove the local temporary file
-    os.remove(local_file_name)
-
-    print(f"Dataset saved to gs://{bucket_name}/dataset/{file_name}")
+    print(f"Dataset saved to gs://{bucket_name}/{full_name}")
 
 
 def parse_tfrecord_fn(example_proto):
     # Define the features dictionary that matches the structure used when saving
     feature_description = {
         "feature": tf.io.FixedLenFeature([], tf.string),
-        "label": tf.io.FixedLenFeature([], tf.float32),
+        "label": tf.io.FixedLenFeature([1], tf.float32),
     }
 
     # Parse the input tf.Example proto using the feature description
@@ -468,11 +478,12 @@ def parse_tfrecord_fn(example_proto):
 
 
 def load_dataset_from_gcp(
-    bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords"
+    bucket_name="vgnn", file_name="dataset.tfrecords", directory="dataset"
 ):
     # Construct the full GCS path
-    gcs_path = f"gs://{bucket_name}/dataset/{file_name}"
-
+    full_file_name = "/".join([directory,file_name])
+    gcs_path = f"gs://{bucket_name}/{full_file_name}"
+    print(f"path: {gcs_path}")
     # Create a TFRecordDataset
     dataset = tf.data.TFRecordDataset(gcs_path)
 
@@ -513,62 +524,14 @@ def serialize_example(features, label):
     return example_proto.SerializeToString()
 
 
-def save_dataset_to_gcp(
-    dataset, bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords"
-):
-    # Initialize GCP client
-    client = storage.Client()
-    bucket = client.bucket(bucket_name)
+def load_model_from_gcs(model_name, bucket_name="vgnn"):
+    # Construct the GCS path
+    gcs_model_path = f"gs://{bucket_name}/models/{model_name}"
 
-    # Create a local temporary file
-    local_file_name = "temp_" + file_name
+    # Load the model directly from the GCS path
+    model = tf.keras.models.load_model(gcs_model_path)
 
-    # Write the dataset to the local file
-    with tf.io.TFRecordWriter(local_file_name) as writer:
-        for features, label in dataset:
-            example = serialize_example(features, label)
-            writer.write(example)
-
-    # Upload the local file to GCS
-    blob = bucket.blob(f"dataset/{file_name}")
-    blob.upload_from_filename(local_file_name)
-
-    # Remove the local temporary file
-    os.remove(local_file_name)
-
-    print(f"Dataset saved to gs://{bucket_name}/dataset/{file_name}")
-
-
-def parse_tfrecord_fn(example_proto):
-    # Define the features dictionary that matches the structure used when saving
-    feature_description = {
-        "feature": tf.io.FixedLenFeature([], tf.string),
-        "label": tf.io.FixedLenFeature([1], tf.float32),
-    }
-
-    # Parse the input tf.Example proto using the feature description
-    parsed_features = tf.io.parse_single_example(example_proto, feature_description)
-
-    # Decode the feature from the parsed example
-    feature = tf.io.parse_tensor(parsed_features["feature"], out_type=tf.float32)
-    label = parsed_features["label"]
-
-    return feature, label
-
-
-def load_dataset_from_gcp(
-    bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords"
-):
-    # Construct the full GCS path
-    gcs_path = f"gs://{bucket_name}/dataset/{file_name}"
-
-    # Create a TFRecordDataset
-    dataset = tf.data.TFRecordDataset(gcs_path)
-
-    # Parse the TFRecords
-    parsed_dataset = dataset.map(parse_tfrecord_fn)
-
-    return parsed_dataset
+    return model
 
 
 # Function to check shapes

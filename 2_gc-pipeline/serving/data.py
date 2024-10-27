@@ -20,7 +20,7 @@ import pandas as pd
 from numpy.lib.recfunctions import structured_to_unstructured
 import requests
 from typing import Dict
-from serving.constants import SCALE, NUM_BINS, NUM_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
+from serving.constants import SCALE, NUM_BINS, SELECTED_BANDS, HIST_DEST_PREFIX, BUCKET, LABELS_PATH, HEADER_PATH # meters per pixel, number of bins in the histogram, number of bands in the satellite image
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
