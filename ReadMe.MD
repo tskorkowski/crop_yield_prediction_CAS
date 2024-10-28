@@ -10,5 +10,8 @@ training.ipynb - models and training.
 
 A lot of the code is in the serving folder.
 
+Experiment tracking:
+https://wandb.ai/t-skorkowski/blue-marble?nw=nwusertskorkowski
+
 
 
