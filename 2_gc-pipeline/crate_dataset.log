@@ -7786,3 +7786,91 @@ Use `tf.data.Dataset.save(...)` instead.
 2024-10-26 20:31:34,779 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss,mae
 2024-10-26 20:31:36,392 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss,mae
 2024-10-26 20:31:38,019 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss,mae
+2024-10-27 15:26:55,710 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 15:27:01,466 - INFO - Assets written to: gs://vgnn/models/seething-wok-20241027-152525.tf/assets
+2024-10-27 15:30:30,216 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 15:30:36,023 - INFO - Assets written to: gs://vgnn/models/tranquil-ice-20241027-152902.tf/assets
+2024-10-27 15:32:16,507 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 15:32:22,140 - INFO - Assets written to: gs://vgnn/models/scared-chocolate-20241027-153045.tf/assets
+2024-10-27 15:33:50,714 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 15:33:56,528 - INFO - Assets written to: gs://vgnn/models/calm-queso-20241027-153224.tf/assets
+2024-10-27 15:36:35,565 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 15:36:41,256 - INFO - Assets written to: gs://vgnn/models/ornery-queso-20241027-153406.tf/assets
+2024-10-27 15:40:11,697 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_8_layer_call_fn, lstm_cell_8_layer_call_and_return_conditional_losses, lstm_cell_9_layer_call_fn while saving (showing 5 of 10). These functions will not be directly callable after loading.
+2024-10-27 15:40:19,014 - INFO - Assets written to: gs://vgnn/models/sunny-bread-20241027-153842.tf/assets
+2024-10-27 15:45:42,983 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_14_layer_call_fn, lstm_cell_14_layer_call_and_return_conditional_losses, lstm_cell_15_layer_call_fn while saving (showing 5 of 10). These functions will not be directly callable after loading.
+2024-10-27 15:45:50,201 - INFO - Assets written to: gs://vgnn/models/livid-taquito-20241027-154219.tf/assets
+2024-10-27 15:54:21,063 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_8_layer_call_fn, lstm_cell_8_layer_call_and_return_conditional_losses, lstm_cell_9_layer_call_fn while saving (showing 5 of 10). These functions will not be directly callable after loading.
+2024-10-27 15:54:28,432 - INFO - Assets written to: gs://vgnn/models/cheerful-paste-20241027-155102.tf/assets
+2024-10-27 16:14:37,340 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 16:14:43,160 - INFO - Assets written to: gs://vgnn/models/rosy-paste-20241027-161222.tf/assets
+2024-10-27 16:29:11,966 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 16:32:24,790 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 16:32:30,313 - INFO - Assets written to: gs://vgnn/models/mad-recipe-20241027-162954.tf/assets
+2024-10-27 16:42:22,825 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-27 16:42:28,730 - INFO - Assets written to: gs://vgnn/models/crazy-queso-20241027-164005.tf/assets
+2024-10-27 16:45:39,031 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_14_layer_call_fn, lstm_cell_14_layer_call_and_return_conditional_losses while saving (showing 4 of 4). These functions will not be directly callable after loading.
+2024-10-27 16:45:45,248 - INFO - Assets written to: gs://vgnn/models/furious-mousse-20241027-164309.tf/assets
+2024-10-27 16:52:47,202 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_14_layer_call_fn, lstm_cell_14_layer_call_and_return_conditional_losses while saving (showing 4 of 4). These functions will not be directly callable after loading.
+2024-10-27 16:52:53,377 - INFO - Assets written to: gs://vgnn/models/furious-mousse-20241027-164547.tf/assets
+2024-10-27 17:01:14,678 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_15_layer_call_fn, lstm_cell_15_layer_call_and_return_conditional_losses while saving (showing 4 of 4). These functions will not be directly callable after loading.
+2024-10-27 17:01:20,900 - INFO - Assets written to: gs://vgnn/models/crabby-margarine-20241027-165854.tf/assets
+2024-10-27 17:07:18,207 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 17:12:38,970 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_layer_call_fn, lstm_cell_layer_call_and_return_conditional_losses, lstm_cell_1_layer_call_fn while saving (showing 5 of 6). These functions will not be directly callable after loading.
+2024-10-27 17:12:45,800 - INFO - Assets written to: gs://vgnn/models/cross-caviar-20241027-170802.tf/assets
+2024-10-27 19:48:59,421 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 20:00:37,341 - WARNING - From /var/tmp/ipykernel_617434/2127064045.py:30: experimental_run_functions_eagerly (from tensorflow.python.eager.polymorphic_function.quarantine) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.config.run_functions_eagerly` instead of the experimental version.
+2024-10-27 20:04:10,201 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 20:18:17,589 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 20:22:40,749 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 21:13:30,540 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 21:25:15,648 - INFO - County HARDY_54 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-27 22:39:00,631 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-27 22:39:34,808 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-27 22:39:43,946 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-27 22:40:09,341 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-27 22:40:09,511 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 00:40:50,602 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 00:41:17,970 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 00:41:25,150 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 00:41:46,833 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 00:41:46,992 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 01:00:15,665 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_layer_call_fn, lstm_cell_layer_call_and_return_conditional_losses, lstm_cell_1_layer_call_fn while saving (showing 5 of 12). These functions will not be directly callable after loading.
+2024-10-28 01:00:24,738 - INFO - Assets written to: gs://vgnn/models/12_buckets_9-lively-toast-20241028-004441.tf/assets
+2024-10-28 02:08:53,165 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-28 02:08:59,727 - INFO - Assets written to: gs://vgnn/models/12_buckets_9-jolly-noodle-20241028-015405.tf/assets
+2024-10-28 02:43:36,219 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 02:44:03,567 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 02:44:10,750 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 02:44:32,454 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 02:44:32,626 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 03:23:57,046 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-28 03:24:03,542 - INFO - Assets written to: gs://vgnn/models/12_buckets_3-jovial-butter-20241028-031202.tf/assets
+2024-10-28 03:34:47,241 - WARNING - Found untraced functions such as call, _update_step_xla, lstm_cell_16_layer_call_fn, lstm_cell_16_layer_call_and_return_conditional_losses, lstm_cell_17_layer_call_fn while saving (showing 5 of 12). These functions will not be directly callable after loading.
+2024-10-28 03:34:55,092 - INFO - Assets written to: gs://vgnn/models/12_buckets_3-weary-juice-20241028-032615.tf/assets
+2024-10-28 07:16:59,096 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:17:26,976 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:17:34,363 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:17:56,220 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:17:56,395 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:26:18,423 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:26:37,750 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:26:42,766 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:26:58,152 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:26:58,284 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:34:29,868 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:34:49,105 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:34:54,127 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:35:09,243 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:35:09,379 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 07:45:34,729 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-28 07:45:41,402 - INFO - Assets written to: gs://vgnn/models/12_buckets_9-calm-crumble-20241028-074200.tf/assets
+2024-10-28 08:05:05,769 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 08:05:40,328 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 08:05:49,460 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 08:06:16,637 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-28 08:06:16,839 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
+2024-10-28 08:20:17,806 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
+2024-10-28 08:20:25,104 - INFO - Assets written to: gs://vgnn/models/32_buckets_9-worried-margarine-20241028-081522.tf/assets

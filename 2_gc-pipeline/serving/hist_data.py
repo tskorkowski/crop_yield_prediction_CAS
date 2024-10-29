@@ -138,7 +138,7 @@ def recombine_image(bucket, core_image_name, bin_list, selected_bands, skip_nan=
     logging.info(
         f"Image {core_image_name} has been processed in {execution_time/60:.4f} minuntes"
     )
-
+    
     return combined_hist
 
 def write_histogram_to_gcs(histogram, bucket_name, blob_name):
@@ -180,11 +180,11 @@ def write_histogram_to_gcs(histogram, bucket_name, blob_name):
 if __name__ == "__main__":
     image_name = r"images/Canyon_2017_5-6_100"
     # image_name = r"images/Story_2018_9-10_100_.tif"
-    blobs = list_blobs_with_prefix(image_name)
+#     blobs = list_blobs_with_prefix(image_name)
 
-    # Usage
-    start_time = time.time()
+#     # Usage
+#     start_time = time.time()
 
-    recombine_image_hist = recombine_image(
-        BUCKET, image_name, HIST_BINS_LIST, NUM_BANDS
-    )
+#     recombine_image_hist = recombine_image(
+#         BUCKET, image_name, HIST_BINS_LIST, NUM_BANDS
+#     )
