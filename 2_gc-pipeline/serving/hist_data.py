@@ -99,7 +99,7 @@ def process_band(bucket, blob_name, band, bins, skip_nan, normalise):
     return hist
 
 
-def process_tiff(bucket, blob_name, bin_list, selected_bands, skip_nan, normalise, max_workers=6):
+def process_tiff(bucket, blob_name, bin_list, selected_bands, skip_nan, normalise, max_workers=12):
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_band = {
             executor.submit(

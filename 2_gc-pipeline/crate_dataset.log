@@ -7874,3 +7874,8 @@ Use `tf.config.run_functions_eagerly` instead of the experimental version.
 2024-10-28 08:06:16,839 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead
 2024-10-28 08:20:17,806 - WARNING - Found untraced functions such as call, _update_step_xla while saving (showing 2 of 2). These functions will not be directly callable after loading.
 2024-10-28 08:20:25,104 - INFO - Assets written to: gs://vgnn/models/32_buckets_9-worried-margarine-20241028-081522.tf/assets
+2024-10-29 21:21:58,158 - INFO - County BEDFORD_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-29 21:22:27,883 - INFO - County HUNTINGDON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-29 21:22:35,589 - INFO - County BLAIR_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-29 21:22:58,607 - INFO - County FULTON_42 in 2016 and month 5 does not exist in the histogram set. Zero will be used instead
+2024-10-29 21:22:58,756 - INFO - County FULTON_42 in 2016 and month 9 does not exist in the histogram set. Zero will be used instead

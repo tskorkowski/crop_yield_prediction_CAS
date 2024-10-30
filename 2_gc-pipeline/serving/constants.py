@@ -31,7 +31,7 @@ MAP_NAN = True
 NORMALIZE = True
 
 
-BANDS = {"Coastal_aerosol": False,
+BANDS = {"Coastal_aerosol": True,
          "Blue": True,
          "Green": True,
          "Red": True,
@@ -41,9 +41,9 @@ BANDS = {"Coastal_aerosol": False,
          "NIR": True,
          "Narrow_NIR": True,
          "Water_vapor": True,
-         "SWIR": False,
-         "SWIR_1": False,
-         "SWIR_2": False}
+         "Cirrus": False,
+         "SWIR_1": True,
+         "SWIR_2": True}
 
 SELECTED_BANDS = [band for band, m in zip(range(1, len(BANDS) +1) , BANDS.values()) if m]
 
