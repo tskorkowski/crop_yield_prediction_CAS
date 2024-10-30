@@ -7,13 +7,19 @@ import random
 import sys
 
 import google.auth
-import keras
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 from google.cloud import storage
-from keras.layers import LSTM, Dense, Dropout, Input, TimeDistributed
+import keras
+from keras.layers import LSTM, Dense, Dropout, Input, TimeDistributed, BatchNormalization
+from tensorflow.keras.regularizers import l2
+from serving.data import get_labels
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
 from serving.constants import (
     BUCKET,
     HEADER_PATH,
@@ -28,15 +34,13 @@ from serving.constants import (
     NORMALIZE,
     HIST_BINS_LIST
 )
-from serving.data import get_labels
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
+
 import randomname
-import tensorboard
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tempfile
+import wandb
+from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 
 # def set_seeds(seed=42):
 #     # Set seeds for Python's random module
@@ -58,7 +62,8 @@ class LstmModel(keras.Model):
         no_units=3,
         output_units=1,
         dropout_rate=0.2,
-        val_size=10
+        val_size=10,
+        kernel_initializer=tf.keras.initializers.RandomNormal()
     ):
         super(LstmModel, self).__init__()
         self.lstm_layers = lstm_layers
@@ -66,28 +71,55 @@ class LstmModel(keras.Model):
         self.output_units = output_units
         self.dropout_rate = dropout_rate
         self.val_size = val_size
+        self.norm = normalizer
 
         self.input_layer = Input(shape=input_shape)
+        self.batch_norm = BatchNormalization()
         
         # Define LSTM and Dense layers
-        self.lstm_layers_list = [
-            LSTM(
-                units=no_units,
-                return_sequences=(i < lstm_layers - 1),
+        self.lstm_layers_list = []
+        for i in range(lstm_layers):
+            self.lstm_layers_list.append(
+                LSTM(
+                    units=no_units,
+                    return_sequences=(i < lstm_layers - 1),
+                    kernel_initializer=kernel_initializer
+                )
             )
-            for i in range(lstm_layers)
-        ]
+            
+            if i < lstm_layers - 1:
+                self.lstm_layers_list.append(Dropout(rate=dropout_rate))
+        
         self.dense = Dense(
-            units=output_units,
+            units=output_units, use_bias=False
         )
         
         self.job_name = randomname.get_name(adj=('emotions',), noun=('food'))
-
+    
+    def get_config(self):
+        return {
+           "lstm_layers": self.lstm_layers,
+           "no_units": self.no_units,
+           "val_size": self.val_size,
+           "ouput_units": self.output_units,
+           "dropout_rate": self.dropout_rate,
+           "kernel_initializer": self.kernel_initializer
+        }
+    
+    @classmethod
+    def from_config(cls, config):
+        # Convert the serialized initializer back to a TF initializer
+        config['kernel_initializer'] = tf.keras.initializers.deserialize(
+            config['kernel_initializer']
+        )
+        return cls(**config)
+    
     @tf.function
     def call(self, inputs, training=False):
         # LSTM layers
 
         x = inputs
+        #x = self.batch_norm(x, training=training)
 
         for lstm_layer in self.lstm_layers_list:
             x = lstm_layer(x)
@@ -111,14 +143,19 @@ class LstmModel(keras.Model):
         optimizer_class = optimizers.get(optimizer.lower(), Adam)
 
         # Instantiate the optimizer with the specified learning rate
-        optimizer_instance = optimizer_class(learning_rate=learning_rate)
+        optimizer_instance = optimizer_class(learning_rate=learning_rate, clipnorm=1.0)
 
         # Compile the model with the chosen optimizer, loss, and metrics
         tf.config.run_functions_eagerly(True)
         
+        if loss != "mse" and "mse" not in metrics:
+            metrics.append("mse")
+        
         super(LstmModel, self).compile(
             optimizer=optimizer_instance, loss=loss, metrics=metrics
         )
+        
+    
 
     def fit(self, dataset, epochs=10):
 
@@ -130,33 +167,16 @@ class LstmModel(keras.Model):
         val_dataset = dataset.take(val_size)
         train_dataset = dataset.skip(val_size)
 
-        responses_train = np.concatenate(
-            [response.numpy() for _, response in train_dataset], axis=0
-        )
-        mean_response_train = np.mean(responses_train)
-        
-        if val_size > 0:
-            responses_val = np.concatenate(
-                [response.numpy() for _, response in val_dataset], axis=0
-            )
-            
-            self.naive_loss = np.mean(
-                (responses_val - mean_response_train) ** 2
-            )  # Mean Squared Error
-        else:
-            self.naive_loss = mean_response_train
-        
         # Setup tensorboard
-        model_name = self.job_name +'-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        model_name = f"{NUM_BINS}_buckets_{len(HIST_BINS_LIST)}" + '-' + self.job_name + '-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         log_dir = "gs://vgnn/tensorboard-artifacts/logs/fit/" + model_name
         if not os.path.exists(os.path.dirname(log_dir)):
             os.makedirs(os.path.dirname(log_dir))
             
-        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
         
         # Early stopping callback
         early_stopping = EarlyStopping(
-            monitor="val_loss", patience=10, restore_best_weights=True
+            monitor="val_loss", patience=15, restore_best_weights=True
         )
 
         
@@ -166,15 +186,30 @@ class LstmModel(keras.Model):
             epochs=epochs,
             # batch_size=batch_size,
             validation_data=val_dataset,
-            callbacks=[tensorboard_callback] ) #early_stopping,
+            callbacks=[early_stopping, WandbMetricsLogger()]
+        )
+        
+        responses_train = np.concatenate(
+            [response.numpy() for _, response in train_dataset], axis=0
+        )
+        mean_response_train = np.mean(responses_train)
 
+        responses_val = np.concatenate(
+            [response.numpy() for _, response in val_dataset], axis=0
+            )        
+
+        if val_size == 0:
+            self.naive_loss = np.nan
+        else:
+            self.naive_loss = pen_low_lenient_high_loss(responses_val, mean_response_train)        
+        
         # Plot training progress
         plot_training_progress(history, self.naive_loss)
 
         # Evaluate the model
-        loss = super(LstmModel, self).evaluate(val_dataset)
-        
-        self.save(f'gs://vgnn/models/{model_name}.tf')
+        loss = self.evaluate(val_dataset)
+
+        self.save(f'gs://vgnn/models/{model_name}.h5')
 
         return history
 
@@ -183,38 +218,56 @@ class TimeDependentDenseLstmModel(LstmModel):
     def __init__(
         self,
         input_shape,
+        normalizer,
         lstm_layers=3,
         no_units=3,
         dense_layers_per_step=3,
         output_units=1,
         dropout_rate=0.2,
-        val_size=10
+        val_size=10,
+        kernel_initializer=tf.keras.initializers.RandomNormal()
     ):
         super(TimeDependentDenseLstmModel, self).__init__(
             input_shape,
+            normalizer,
             lstm_layers,
             no_units,
             output_units,
             dropout_rate,
-            val_size
+            val_size,
+            kernel_initializer
         )
-
+        
+        self.lstm_layers = lstm_layers
+        self.dense_layers_per_step = dense_layers_per_step
+        self.no_units = no_units
+        self.val_size = val_size
+        self.dropout_rate = dropout_rate
+        self.kernel_initializer = kernel_initializer
+        
         # Dense layer to process each time step using TimeDistributed
         self.time_distributed_dense = []
-
         # Create the dense layers that will be applied to each time step
         units = input_shape[-1] // 2
         for _ in range(dense_layers_per_step):
             self.time_distributed_dense.append(
-                TimeDistributed(Dense(units=units, activation="relu"))
+                TimeDistributed(Dense(units=units, activation="relu", bias_regularizer=l2(0.01) ))
             )
             # units //= 2  # Halve units for each subsequent dense layer
 
+    def get_config(self):
+        config = super(TimeDependentDenseLstmModel, self).get_config()
+        config.update({
+            'dense_layers_per_step': self.dense_layers_per_step,
+        })
+        return config
+    
     @tf.function
     def call(self, inputs, training=False):
         # Process each time step with a corresponding dense layer
 
-        x =inputs
+        x = inputs
+        # x = self.batch_norm(x, training=training)
         for dense_layer in self.time_distributed_dense:
             x = dense_layer(x)
         
@@ -294,12 +347,139 @@ def combine_crop_data(path, save=False):
 
     return combined_df
 
+    
+def load_model_from_gcs(model_name, bucket_name="vgnn"):
+    # Construct the GCS path
+    gcs_model_path = f"gs://{bucket_name}/models/{model_name}"
+
+    # Load the model directly from the GCS path
+    model = tf.keras.models.load_model(gcs_model_path)
+
+    return model
+
+
+
+def pen_low_lenient_high_loss(y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=200.0):
+    """
+    Custom loss function that focuses on recognizing low crop yield.
+    
+    Args:
+        y_true: Tensor of true crop yield values.
+        y_pred: Tensor of predicted crop yield values.
+        low_yield_threshold: Threshold below which yields are considered low.
+        
+    Returns:
+        loss: Computed loss value.
+    """
+    # Calculate the absolute error
+    squared_error = tf.square(y_true - y_pred)
+
+    # Define weights based on whether the true yield is below the threshold
+    weights = tf.where(y_true < low_yield_threshold, 5.0, 1.0)  # Heavier penalty for low yields
+    weights = tf.where(y_true > high_yield_threshold, 0.5, weights)  # Lenient penalty for high yields
+    
+    # Compute weighted absolute error
+    weighted_squared_error = weights * squared_error
+
+    # You can choose to use Mean Absolute Error (MAE) or Mean Squared Error (MSE)
+    loss = tf.reduce_mean(weighted_squared_error)
+
+    return loss                
+             
+    
+def pen_low_loss(y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=200.0):
+    """
+    Custom loss function that focuses on recognizing low crop yield.
+    
+    Args:
+        y_true: Tensor of true crop yield values.
+        y_pred: Tensor of predicted crop yield values.
+        low_yield_threshold: Threshold below which yields are considered low.
+        
+    Returns:
+        loss: Computed loss value.
+    """
+    # Calculate the absolute error
+    squared_error = tf.square(y_true - y_pred)
+
+    # Define weights based on whether the true yield is below the threshold
+    weights = tf.where(y_true < low_yield_threshold/2, 8.0, 5.0)  # Heavier penalty for low yields
+    weights = tf.where(y_true >= low_yield_threshold, 1, weights)  # Heavier penalty for low yields
+    weights = tf.where(y_true > high_yield_threshold, 0.9, weights)  # Lenient penalty for high yields
+    
+    # Compute weighted absolute error
+    weighted_squared_error = weights * squared_error
+
+    # You can choose to use Mean Absolute Error (MAE) or Mean Squared Error (MSE)
+    loss = tf.reduce_mean(weighted_squared_error)
+
+    return loss    
+
+def save_dataset_to_gcp(
+    dataset, labels, bucket_name="vgnn", directory="dataset"
+):
+    # Initialize GCP client
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+
+    buffer = io.BytesIO()
+    np.save(buffer, labels)
+    buffer.seek(0)
+    
+    destination_blob_name = f"{directory}/labels.npy"
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_file(buffer, content_type="application/octet-stream")
+    print("Labels uploaded to GCS successfully!")
+    
+    buffer = io.BytesIO()
+    np.save(buffer, dataset)
+    buffer.seek(0)
+    
+    destination_blob_name = f"{directory}/dataset.npy"
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_file(buffer, content_type="application/octet-stream")
+    print("Dataset uploaded to GCS successfully!")    
+
+    print(f"Dataset saved to gs://{bucket_name}/{directory}")    
+    
+def load_dataset_from_gcp(bucket_name="vgnn", directory="dataset"
+):
+    # Initialize GCP client
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)    
+    blob_name = f"{directory}/labels.npy"
+    blob = bucket.blob(blob_name)
+    
+    buffer = io.BytesIO()
+    blob.download_to_file(buffer)
+    buffer.seek(0)
+
+    labels = np.load(buffer)
+    
+    blob_name = f"{directory}/dataset.npy"
+    blob = bucket.blob(blob_name)
+    
+    buffer = io.BytesIO()
+    blob.download_to_file(buffer)
+    buffer.seek(0)
+
+    histogram = np.load(buffer)
+    
+    # Create TensorFlow tensors
+    histogram_tensor = tf.convert_to_tensor(histogram, dtype=tf.float32)
+    label_tensor = tf.convert_to_tensor(labels, dtype=tf.float32)
+
+    # Create a TensorFlow dataset
+    dataset = tf.data.Dataset.from_tensor_slices((histogram_tensor, label_tensor))    
+
+    return dataset, histogram.shape
 
 def create_hist_dataset(
     hist_list: list,
     labels_path: str = LABELS_PATH,
     header_path: str = HEADER_PATH,
     num_bins=NUM_BINS,
+    num_bands=len(HIST_BINS_LIST),
     map_nan=MAP_NAN,
     normalize=NORMALIZE
 ) -> tf.data.Dataset:
@@ -323,7 +503,6 @@ def create_hist_dataset(
     hist_name_base = f"{HIST_DEST_PREFIX}"
     histograms = []
     labels = []
-    num_bands = len(SELECTED_BANDS)
     
     label_df = get_labels(labels_path, header_path)
 
@@ -353,13 +532,13 @@ def create_hist_dataset(
         zero_count = 0
         hist_by_year = []
         for month in MONTHS:
-            file_name = f"{hist_name_base}/nan_map_{map_nan}/norm_{normalize}/{num_bins}_buckets_{len(HIST_BINS_LIST)}_bands/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
+            file_name = f"{hist_name_base}/nan_map_{map_nan}/norm_{normalize}/{num_bins}_buckets_{num_bands}_bands/{SCALE}/{county.capitalize()}_{fips}/{year}/{month}-{month+1}.npy"
             hist_blob = bucket.blob(file_name)
 
             if hist_blob.exists():
                 content = hist_blob.download_as_bytes()
                 binary_data = io.BytesIO(content)
-                array = np.load(binary_data) #/ PIX_COUNT
+                array = np.load(binary_data)
             else:
                 logging.info(
                     "County {}_{} in {} and month {} does not exist in the histogram set. Zero will be used instead".format(
@@ -405,148 +584,87 @@ def create_hist_dataset(
     # Create a TensorFlow dataset
     dataset = tf.data.Dataset.from_tensor_slices((histogram_tensor, label_tensor))
 
-    return dataset, reshaped_histograms.shape[1:]
+    return dataset, reshaped_histograms.shape, reshaped_histograms, labels_np
 
 
-def create_data_sample():
-    # Example: X is a list of NumPy arrays, y is a list of corresponding labels
-    X = [
-        np.random.rand(3, 416),
-        np.random.rand(3, 416),
-        np.random.rand(3, 416),
-    ]  # Input features (e.g., 3 timesteps, 416 features)
-    y = [165.5, 179.7, 172.5]  # Corresponding labels
+def train_wandb():
+    try:
+        wandb.init()
 
-    # Step 1: Convert the lists to NumPy arrays (optional but recommended for consistency)
-    X = np.array(X)
-    y = np.array(y)
+        map_nan = True
+        normalize = True
+        # Get dataset for testing
+        num_bins, num_bands = wandb.config.num_bins_num_bands
+        directory = f"dataset/nan_map_{map_nan}/norm_{normalize}/{num_bins}_buckets_{num_bands}_bands/{SCALE}"
+        dataset, dataset_shape = load_dataset_from_gcp(directory=directory)
+        input_shape = dataset_shape[1:]
 
-    # Step 2: Create a TensorFlow dataset
-    dataset = tf.data.Dataset.from_tensor_slices((X, y))
+        print(f"Dataset shape: {dataset_shape}", f"Input_shpae: {input_shape}", sep="\n")
 
-    # Step 3: Shuffle and batch the dataset
-    batch_size = 2  # Set the batch size
-    dataset = dataset.shuffle(buffer_size=len(X)).batch(batch_size)
+        # Train test split
+        test_train_split = 0.8
+        train_size = int(dataset_shape[0] * test_train_split / wandb.config.batch_size)
+        val_size = int(train_size * (1-test_train_split))
 
-    # Step 4: Inspect the dataset
-    for data_point, label in dataset.take(1):
-        print("Data point shape (after batching):", data_point.shape)
-        print("Label shape (after batching):", label.shape)
+        dataset_batched = dataset.batch(wandb.config.batch_size, drop_remainder=True)
+        test_dataset = dataset_batched.skip(train_size)
+        train_dataset = dataset_batched.take(train_size)
 
-    return dataset
+        train_dataset = train_dataset.shuffle(buffer_size=10000)
+        print(f"Train size: {train_size} [batches]\nValidation size: {val_size} [batches]")
+        print("Data sets have been setup")
+        
+        lstm_layers, lstm_units = wandb.config.lstm_layers_units
 
+        model = TimeDependentDenseLstmModel(input_shape = input_shape,
+                                        lstm_layers = lstm_layers,
+                                        dense_layers_per_step = wandb.config.dense_layers_per_step,
+                                        no_units = lstm_units,
+                                        val_size = val_size,
+                                        dropout_rate = wandb.config.dropout_rate,
+                                        kernel_initializer = initializers[wandb.config.kernel_initializer])
+        print("Model has been defined")
 
-def save_dataset_to_gcp(
-    dataset, bucket_name="vgnn", file_name="hist_dataset_medium.tfrecords", directory="dataset"
-):
-    # Initialize GCP client
-    client = storage.Client()
-    bucket = client.bucket(bucket_name)
+        model.compile(optimizer= wandb.config.optimizer,
+                      learning_rate = wandb.config.lr,
+                      loss=pen_low_lenient_high_loss)
 
-    # Create a local temporary file
-    local_file_name = "temp_" + file_name
+        print("Model compiled")
 
-    # Write the dataset to the local file
-    with tf.io.TFRecordWriter(local_file_name) as writer:
-        for features, label in dataset:
-            example = serialize_example(features, label)
-            writer.write(example)
+        history = model.fit(train_dataset, epochs=wandb.config.epochs)
 
-        # Upload to GCS
-        full_name = "/".join([directory,file_name])
-        blob = bucket.blob(f"{full_name}")
-        blob.upload_from_filename(local_file_name)
+    except ValueError as e:
+        print(f"Value error in configuration or dataset: {e}")
+    except tf.errors.InvalidArgumentError as e:
+        print(f"TensorFlow-specific error: {e}")
+    except Exception as e:
+        print(f"Unexpected error occurred: {e}")    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        wandb.alert(title="Training Error", text=str(e))
+    finally:
+        wandb.finish()  
 
-    print(f"Dataset saved to gs://{bucket_name}/{full_name}")
+def train_model_data(model_name: str, data_dir: str, epochs: int=20, batch_size: int=16,  test_train_split: float=.8):
+    
+    model = load_model_from_gcs(model_name=model_name)
+    data, hist_shape = load_dataset_from_gcp(data_dir)
+    
+    train_size = int(hist_shape[0] * test_train_split / batch_size)
+    val_size = int(train_size * (1-test_train_split))
 
+    dataset_batched = dataset.batch(batch_size, drop_remainder=True)
+    test_dataset = dataset_batched.skip(train_size)
+    train_dataset = dataset_batched.take(train_size)
+    
+    history = model.fit(train_dataset, epochs=epochs)
+    
+    Print("## Test set evaluation ##")
+    model.evaluate(test_dataset)
+    
+    return history
 
-def parse_tfrecord_fn(example_proto):
-    # Define the features dictionary that matches the structure used when saving
-    feature_description = {
-        "feature": tf.io.FixedLenFeature([], tf.string),
-        "label": tf.io.FixedLenFeature([1], tf.float32),
-    }
-
-    # Parse the input tf.Example proto using the feature description
-    parsed_features = tf.io.parse_single_example(example_proto, feature_description)
-
-    # Decode the feature from the parsed example
-    feature = tf.io.parse_tensor(parsed_features["feature"], out_type=tf.float32)
-    label = parsed_features["label"]
-
-    return feature, label
-
-
-def load_dataset_from_gcp(
-    bucket_name="vgnn", file_name="dataset.tfrecords", directory="dataset"
-):
-    # Construct the full GCS path
-    full_file_name = "/".join([directory,file_name])
-    gcs_path = f"gs://{bucket_name}/{full_file_name}"
-    print(f"path: {gcs_path}")
-    # Create a TFRecordDataset
-    dataset = tf.data.TFRecordDataset(gcs_path)
-
-    # Parse the TFRecords
-    parsed_dataset = dataset.map(parse_tfrecord_fn)
-
-    return parsed_dataset
-
-
-def _bytes_feature(value):
-    """Returns a bytes_list from a string / byte."""
-    if isinstance(value, type(tf.constant(0))):
-        value = value.numpy()  # BytesList won't unpack a string from an EagerTensor.
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
-
-
-def _float_feature(value):
-    """Returns a float_list from a float / double."""
-    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
-
-
-def _int64_feature(value):
-    """Returns an int64_list from a bool / enum / int / uint."""
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
-
-
-def serialize_example(features, label):
-    """
-    Creates a tf.train.Example message ready to be written to a file.
-    """
-    # Create a dictionary mapping the feature name to the tf.train.Example-compatible
-    # data type.
-    feature = {
-        "feature": _bytes_feature(tf.io.serialize_tensor(features)),
-        "label": _float_feature(label),
-    }
-    example_proto = tf.train.Example(features=tf.train.Features(feature=feature))
-    return example_proto.SerializeToString()
-
-
-def load_model_from_gcs(model_name, bucket_name="vgnn"):
-    # Construct the GCS path
-    gcs_model_path = f"gs://{bucket_name}/models/{model_name}"
-
-    # Load the model directly from the GCS path
-    model = tf.keras.models.load_model(gcs_model_path)
-
-    return model
-
-
-# Function to check shapes
-def check_dataset_shapes(dataset, num_samples_to_check=3):
-    for i, (features, label) in enumerate(dataset.take(num_samples_to_check)):
-        print(f"Sample {i+1}:")
-        print(f"  Features shape: {features.shape}")
-        print(f"  Label shape: {label.shape}")
-        if i == 0:
-            first_shape = features.shape
-        else:
-            if features.shape != first_shape:
-                print("Warning: Inconsistent feature shape detected!")
-                break
-
+    
 
 if __name__ == "__main__":
     dataset = load_dataset_from_gcp()
