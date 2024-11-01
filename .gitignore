@@ -12,3 +12,5 @@ ee_tutorial.ipynb
 supple-nature-370421-a54ffabf0bfe.json
 temp.py
 2_gc-pipeline/test_data/*
+2_gc-pipeline/wandb/*
+2_gc-pipeline/models/saved/*

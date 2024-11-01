@@ -1,3 +1,4 @@
+import datetime
 import glob
 import io
 import itertools
@@ -5,41 +6,44 @@ import logging
 import os
 import random
 import sys
+import tempfile
 
 import google.auth
-
+import keras
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import randomname
 import tensorflow as tf
+import wandb
 from google.cloud import storage
-import keras
-from keras.layers import LSTM, Dense, Dropout, Input, TimeDistributed, BatchNormalization
-from tensorflow.keras.regularizers import l2
-from serving.data import get_labels
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
+from keras.layers import (
+    LSTM,
+    BatchNormalization,
+    Dense,
+    Dropout,
+    Input,
+    TimeDistributed,
+)
 from serving.constants import (
     BUCKET,
     HEADER_PATH,
+    HIST_BINS_LIST,
     HIST_DEST_PREFIX,
     LABELS_PATH,
+    MAP_NAN,
     MONTHS,
-    SELECTED_BANDS,
+    NORMALIZE,
     NUM_BINS,
     PIX_COUNT,
     SCALE,
-    MAP_NAN,
-    NORMALIZE,
-    HIST_BINS_LIST
+    SELECTED_BANDS,
 )
-
-import randomname
-import datetime
-from tensorflow.keras.callbacks import ModelCheckpoint
-import tempfile
-import wandb
+from serving.data import get_labels
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam, Nadam, RMSprop
+from tensorflow.keras.regularizers import l2
 from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 
 # def set_seeds(seed=42):
@@ -63,7 +67,7 @@ class LstmModel(keras.Model):
         output_units=1,
         dropout_rate=0.2,
         val_size=10,
-        kernel_initializer=tf.keras.initializers.RandomNormal()
+        kernel_initializer=tf.keras.initializers.RandomNormal(),
     ):
         super(LstmModel, self).__init__()
         self.lstm_layers = lstm_layers
@@ -75,7 +79,7 @@ class LstmModel(keras.Model):
 
         self.input_layer = Input(shape=input_shape)
         self.batch_norm = BatchNormalization()
-        
+
         # Define LSTM and Dense layers
         self.lstm_layers_list = []
         for i in range(lstm_layers):
@@ -83,43 +87,41 @@ class LstmModel(keras.Model):
                 LSTM(
                     units=no_units,
                     return_sequences=(i < lstm_layers - 1),
-                    kernel_initializer=kernel_initializer
+                    kernel_initializer=kernel_initializer,
                 )
             )
-            
+
             if i < lstm_layers - 1:
                 self.lstm_layers_list.append(Dropout(rate=dropout_rate))
-        
-        self.dense = Dense(
-            units=output_units, use_bias=False
-        )
-        
-        self.job_name = randomname.get_name(adj=('emotions',), noun=('food'))
-    
+
+        self.dense = Dense(units=output_units, use_bias=False)
+
+        self.job_name = randomname.get_name(adj=("emotions",), noun=("food"))
+
     def get_config(self):
         return {
-           "lstm_layers": self.lstm_layers,
-           "no_units": self.no_units,
-           "val_size": self.val_size,
-           "ouput_units": self.output_units,
-           "dropout_rate": self.dropout_rate,
-           "kernel_initializer": self.kernel_initializer
+            "lstm_layers": self.lstm_layers,
+            "no_units": self.no_units,
+            "val_size": self.val_size,
+            "ouput_units": self.output_units,
+            "dropout_rate": self.dropout_rate,
+            "kernel_initializer": self.kernel_initializer,
         }
-    
+
     @classmethod
     def from_config(cls, config):
         # Convert the serialized initializer back to a TF initializer
-        config['kernel_initializer'] = tf.keras.initializers.deserialize(
-            config['kernel_initializer']
+        config["kernel_initializer"] = tf.keras.initializers.deserialize(
+            config["kernel_initializer"]
         )
         return cls(**config)
-    
+
     @tf.function
     def call(self, inputs, training=False):
         # LSTM layers
 
         x = inputs
-        #x = self.batch_norm(x, training=training)
+        # x = self.batch_norm(x, training=training)
 
         for lstm_layer in self.lstm_layers_list:
             x = lstm_layer(x)
@@ -147,15 +149,13 @@ class LstmModel(keras.Model):
 
         # Compile the model with the chosen optimizer, loss, and metrics
         tf.config.run_functions_eagerly(True)
-        
+
         if loss != "mse" and "mse" not in metrics:
             metrics.append("mse")
-        
+
         super(LstmModel, self).compile(
             optimizer=optimizer_instance, loss=loss, metrics=metrics
         )
-        
-    
 
     def fit(self, dataset, epochs=10):
 
@@ -168,27 +168,31 @@ class LstmModel(keras.Model):
         train_dataset = dataset.skip(val_size)
 
         # Setup tensorboard
-        model_name = f"{NUM_BINS}_buckets_{len(HIST_BINS_LIST)}" + '-' + self.job_name + '-' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        model_name = (
+            f"{NUM_BINS}_buckets_{len(HIST_BINS_LIST)}"
+            + "-"
+            + self.job_name
+            + "-"
+            + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        )
         log_dir = "gs://vgnn/tensorboard-artifacts/logs/fit/" + model_name
         if not os.path.exists(os.path.dirname(log_dir)):
             os.makedirs(os.path.dirname(log_dir))
-            
-        
+
         # Early stopping callback
         early_stopping = EarlyStopping(
             monitor="val_loss", patience=15, restore_best_weights=True
         )
 
-        
         # Train the model
         history = super(LstmModel, self).fit(
             train_dataset,
             epochs=epochs,
             # batch_size=batch_size,
             validation_data=val_dataset,
-            callbacks=[early_stopping, WandbMetricsLogger()]
+            callbacks=[early_stopping, WandbMetricsLogger()],
         )
-        
+
         responses_train = np.concatenate(
             [response.numpy() for _, response in train_dataset], axis=0
         )
@@ -196,20 +200,22 @@ class LstmModel(keras.Model):
 
         responses_val = np.concatenate(
             [response.numpy() for _, response in val_dataset], axis=0
-            )        
+        )
 
         if val_size == 0:
             self.naive_loss = np.nan
         else:
-            self.naive_loss = pen_low_lenient_high_loss(responses_val, mean_response_train)        
-        
+            self.naive_loss = pen_low_lenient_high_loss(
+                responses_val, mean_response_train
+            )
+
         # Plot training progress
         plot_training_progress(history, self.naive_loss)
 
         # Evaluate the model
         loss = self.evaluate(val_dataset)
 
-        self.save(f'gs://vgnn/models/{model_name}.h5')
+        self.save(f"gs://vgnn/models/{model_name}.h5")
 
         return history
 
@@ -225,7 +231,7 @@ class TimeDependentDenseLstmModel(LstmModel):
         output_units=1,
         dropout_rate=0.2,
         val_size=10,
-        kernel_initializer=tf.keras.initializers.RandomNormal()
+        kernel_initializer=tf.keras.initializers.RandomNormal(),
     ):
         super(TimeDependentDenseLstmModel, self).__init__(
             input_shape,
@@ -235,33 +241,37 @@ class TimeDependentDenseLstmModel(LstmModel):
             output_units,
             dropout_rate,
             val_size,
-            kernel_initializer
+            kernel_initializer,
         )
-        
+
         self.lstm_layers = lstm_layers
         self.dense_layers_per_step = dense_layers_per_step
         self.no_units = no_units
         self.val_size = val_size
         self.dropout_rate = dropout_rate
         self.kernel_initializer = kernel_initializer
-        
+
         # Dense layer to process each time step using TimeDistributed
         self.time_distributed_dense = []
         # Create the dense layers that will be applied to each time step
         units = input_shape[-1] // 2
         for _ in range(dense_layers_per_step):
             self.time_distributed_dense.append(
-                TimeDistributed(Dense(units=units, activation="relu", bias_regularizer=l2(0.01) ))
+                TimeDistributed(
+                    Dense(units=units, activation="relu", bias_regularizer=l2(0.01))
+                )
             )
             # units //= 2  # Halve units for each subsequent dense layer
 
     def get_config(self):
         config = super(TimeDependentDenseLstmModel, self).get_config()
-        config.update({
-            'dense_layers_per_step': self.dense_layers_per_step,
-        })
+        config.update(
+            {
+                "dense_layers_per_step": self.dense_layers_per_step,
+            }
+        )
         return config
-    
+
     @tf.function
     def call(self, inputs, training=False):
         # Process each time step with a corresponding dense layer
@@ -270,7 +280,7 @@ class TimeDependentDenseLstmModel(LstmModel):
         # x = self.batch_norm(x, training=training)
         for dense_layer in self.time_distributed_dense:
             x = dense_layer(x)
-        
+
         # Feed into LSTM layers
         for lstm_layer in self.lstm_layers_list:
             x = lstm_layer(x)
@@ -288,7 +298,14 @@ def plot_training_progress(history, naive_loss=None):
 
     if naive_loss is not None:
         epochs = len(history.history["loss"])
-        plt.hlines(naive_loss, label="Naive Loss", xmin=0, xmax=epochs - 1, colors="r", linestyles="dashed")
+        plt.hlines(
+            naive_loss,
+            label="Naive Loss",
+            xmin=0,
+            xmax=epochs - 1,
+            colors="r",
+            linestyles="dashed",
+        )
 
     plt.plot(history.history["loss"], label="Training Loss")
     # plt.plot(
@@ -347,7 +364,7 @@ def combine_crop_data(path, save=False):
 
     return combined_df
 
-    
+
 def load_model_from_gcs(model_name, bucket_name="vgnn"):
     # Construct the GCS path
     gcs_model_path = f"gs://{bucket_name}/models/{model_name}"
@@ -358,16 +375,17 @@ def load_model_from_gcs(model_name, bucket_name="vgnn"):
     return model
 
 
-
-def pen_low_lenient_high_loss(y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=200.0):
+def pen_low_lenient_high_loss(
+    y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=200.0
+):
     """
     Custom loss function that focuses on recognizing low crop yield.
-    
+
     Args:
         y_true: Tensor of true crop yield values.
         y_pred: Tensor of predicted crop yield values.
         low_yield_threshold: Threshold below which yields are considered low.
-        
+
     Returns:
         loss: Computed loss value.
     """
@@ -375,27 +393,31 @@ def pen_low_lenient_high_loss(y_true, y_pred, low_yield_threshold=80.0, high_yie
     squared_error = tf.square(y_true - y_pred)
 
     # Define weights based on whether the true yield is below the threshold
-    weights = tf.where(y_true < low_yield_threshold, 5.0, 1.0)  # Heavier penalty for low yields
-    weights = tf.where(y_true > high_yield_threshold, 0.5, weights)  # Lenient penalty for high yields
-    
+    weights = tf.where(
+        y_true < low_yield_threshold, 5.0, 1.0
+    )  # Heavier penalty for low yields
+    weights = tf.where(
+        y_true > high_yield_threshold, 0.5, weights
+    )  # Lenient penalty for high yields
+
     # Compute weighted absolute error
     weighted_squared_error = weights * squared_error
 
     # You can choose to use Mean Absolute Error (MAE) or Mean Squared Error (MSE)
     loss = tf.reduce_mean(weighted_squared_error)
 
-    return loss                
-             
-    
+    return loss
+
+
 def pen_low_loss(y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=200.0):
     """
     Custom loss function that focuses on recognizing low crop yield.
-    
+
     Args:
         y_true: Tensor of true crop yield values.
         y_pred: Tensor of predicted crop yield values.
         low_yield_threshold: Threshold below which yields are considered low.
-        
+
     Returns:
         loss: Computed loss value.
     """
@@ -403,21 +425,26 @@ def pen_low_loss(y_true, y_pred, low_yield_threshold=80.0, high_yield_threshold=
     squared_error = tf.square(y_true - y_pred)
 
     # Define weights based on whether the true yield is below the threshold
-    weights = tf.where(y_true < low_yield_threshold/2, 8.0, 5.0)  # Heavier penalty for low yields
-    weights = tf.where(y_true >= low_yield_threshold, 1, weights)  # Heavier penalty for low yields
-    weights = tf.where(y_true > high_yield_threshold, 0.9, weights)  # Lenient penalty for high yields
-    
+    weights = tf.where(
+        y_true < low_yield_threshold / 2, 8.0, 5.0
+    )  # Heavier penalty for low yields
+    weights = tf.where(
+        y_true >= low_yield_threshold, 1, weights
+    )  # Heavier penalty for low yields
+    weights = tf.where(
+        y_true > high_yield_threshold, 0.9, weights
+    )  # Lenient penalty for high yields
+
     # Compute weighted absolute error
     weighted_squared_error = weights * squared_error
 
     # You can choose to use Mean Absolute Error (MAE) or Mean Squared Error (MSE)
     loss = tf.reduce_mean(weighted_squared_error)
 
-    return loss    
+    return loss
 
-def save_dataset_to_gcp(
-    dataset, labels, bucket_name="vgnn", directory="dataset"
-):
+
+def save_dataset_to_gcp(dataset, labels, bucket_name="vgnn", directory="dataset"):
     # Initialize GCP client
     client = storage.Client()
     bucket = client.bucket(bucket_name)
@@ -425,54 +452,55 @@ def save_dataset_to_gcp(
     buffer = io.BytesIO()
     np.save(buffer, labels)
     buffer.seek(0)
-    
+
     destination_blob_name = f"{directory}/labels.npy"
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_file(buffer, content_type="application/octet-stream")
     print("Labels uploaded to GCS successfully!")
-    
+
     buffer = io.BytesIO()
     np.save(buffer, dataset)
     buffer.seek(0)
-    
+
     destination_blob_name = f"{directory}/dataset.npy"
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_file(buffer, content_type="application/octet-stream")
-    print("Dataset uploaded to GCS successfully!")    
+    print("Dataset uploaded to GCS successfully!")
 
-    print(f"Dataset saved to gs://{bucket_name}/{directory}")    
-    
-def load_dataset_from_gcp(bucket_name="vgnn", directory="dataset"
-):
+    print(f"Dataset saved to gs://{bucket_name}/{directory}")
+
+
+def load_dataset_from_gcp(bucket_name="vgnn", directory="dataset"):
     # Initialize GCP client
     client = storage.Client()
-    bucket = client.bucket(bucket_name)    
+    bucket = client.bucket(bucket_name)
     blob_name = f"{directory}/labels.npy"
     blob = bucket.blob(blob_name)
-    
+
     buffer = io.BytesIO()
     blob.download_to_file(buffer)
     buffer.seek(0)
 
     labels = np.load(buffer)
-    
+
     blob_name = f"{directory}/dataset.npy"
     blob = bucket.blob(blob_name)
-    
+
     buffer = io.BytesIO()
     blob.download_to_file(buffer)
     buffer.seek(0)
 
     histogram = np.load(buffer)
-    
+
     # Create TensorFlow tensors
     histogram_tensor = tf.convert_to_tensor(histogram, dtype=tf.float32)
     label_tensor = tf.convert_to_tensor(labels, dtype=tf.float32)
 
     # Create a TensorFlow dataset
-    dataset = tf.data.Dataset.from_tensor_slices((histogram_tensor, label_tensor))    
+    dataset = tf.data.Dataset.from_tensor_slices((histogram_tensor, label_tensor))
 
     return dataset, histogram.shape
+
 
 def create_hist_dataset(
     hist_list: list,
@@ -481,7 +509,7 @@ def create_hist_dataset(
     num_bins=NUM_BINS,
     num_bands=len(HIST_BINS_LIST),
     map_nan=MAP_NAN,
-    normalize=NORMALIZE
+    normalize=NORMALIZE,
 ) -> tf.data.Dataset:
 
     logging.basicConfig(
@@ -503,7 +531,7 @@ def create_hist_dataset(
     hist_name_base = f"{HIST_DEST_PREFIX}"
     histograms = []
     labels = []
-    
+
     label_df = get_labels(labels_path, header_path)
 
     zeros = 0
@@ -599,35 +627,43 @@ def train_wandb():
         dataset, dataset_shape = load_dataset_from_gcp(directory=directory)
         input_shape = dataset_shape[1:]
 
-        print(f"Dataset shape: {dataset_shape}", f"Input_shpae: {input_shape}", sep="\n")
+        print(
+            f"Dataset shape: {dataset_shape}", f"Input_shpae: {input_shape}", sep="\n"
+        )
 
         # Train test split
         test_train_split = 0.8
         train_size = int(dataset_shape[0] * test_train_split / wandb.config.batch_size)
-        val_size = int(train_size * (1-test_train_split))
+        val_size = int(train_size * (1 - test_train_split))
 
         dataset_batched = dataset.batch(wandb.config.batch_size, drop_remainder=True)
         test_dataset = dataset_batched.skip(train_size)
         train_dataset = dataset_batched.take(train_size)
 
         train_dataset = train_dataset.shuffle(buffer_size=10000)
-        print(f"Train size: {train_size} [batches]\nValidation size: {val_size} [batches]")
+        print(
+            f"Train size: {train_size} [batches]\nValidation size: {val_size} [batches]"
+        )
         print("Data sets have been setup")
-        
+
         lstm_layers, lstm_units = wandb.config.lstm_layers_units
 
-        model = TimeDependentDenseLstmModel(input_shape = input_shape,
-                                        lstm_layers = lstm_layers,
-                                        dense_layers_per_step = wandb.config.dense_layers_per_step,
-                                        no_units = lstm_units,
-                                        val_size = val_size,
-                                        dropout_rate = wandb.config.dropout_rate,
-                                        kernel_initializer = initializers[wandb.config.kernel_initializer])
+        model = TimeDependentDenseLstmModel(
+            input_shape=input_shape,
+            lstm_layers=lstm_layers,
+            dense_layers_per_step=wandb.config.dense_layers_per_step,
+            no_units=lstm_units,
+            val_size=val_size,
+            dropout_rate=wandb.config.dropout_rate,
+            kernel_initializer=initializers[wandb.config.kernel_initializer],
+        )
         print("Model has been defined")
 
-        model.compile(optimizer= wandb.config.optimizer,
-                      learning_rate = wandb.config.lr,
-                      loss=pen_low_lenient_high_loss)
+        model.compile(
+            optimizer=wandb.config.optimizer,
+            learning_rate=wandb.config.lr,
+            loss=pen_low_lenient_high_loss,
+        )
 
         print("Model compiled")
 
@@ -638,33 +674,39 @@ def train_wandb():
     except tf.errors.InvalidArgumentError as e:
         print(f"TensorFlow-specific error: {e}")
     except Exception as e:
-        print(f"Unexpected error occurred: {e}")    
+        print(f"Unexpected error occurred: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
         wandb.alert(title="Training Error", text=str(e))
     finally:
-        wandb.finish()  
+        wandb.finish()
 
-def train_model_data(model_name: str, data_dir: str, epochs: int=20, batch_size: int=16,  test_train_split: float=.8):
-    
+
+def train_model_data(
+    model_name: str,
+    data_dir: str,
+    epochs: int = 20,
+    batch_size: int = 16,
+    test_train_split: float = 0.8,
+):
+
     model = load_model_from_gcs(model_name=model_name)
     data, hist_shape = load_dataset_from_gcp(data_dir)
-    
+
     train_size = int(hist_shape[0] * test_train_split / batch_size)
-    val_size = int(train_size * (1-test_train_split))
+    val_size = int(train_size * (1 - test_train_split))
 
     dataset_batched = dataset.batch(batch_size, drop_remainder=True)
     test_dataset = dataset_batched.skip(train_size)
     train_dataset = dataset_batched.take(train_size)
-    
+
     history = model.fit(train_dataset, epochs=epochs)
-    
+
     Print("## Test set evaluation ##")
     model.evaluate(test_dataset)
-    
+
     return history
 
-    
 
 if __name__ == "__main__":
-    dataset = load_dataset_from_gcp()
+    pass
