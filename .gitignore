@@ -14,3 +14,5 @@ temp.py
 2_gc-pipeline/test_data/*
 2_gc-pipeline/wandb/*
 2_gc-pipeline/models/saved/*
+report/logo/*
+
