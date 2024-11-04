@@ -12,6 +12,7 @@ import numpy as np
 import randomname
 import tensorflow as tf
 import wandb
+from models.utils import model_save
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (
     LSTM,
@@ -92,9 +93,7 @@ class Lstm(keras.Sequential):
             callbacks=[early_stopping, wandb_callback],
         )
 
-        save_dir = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\models\saved"
-        os.makedirs(save_dir, exist_ok=True)
-        self.save(f"{save_dir}\\{self.model_name}.keras")
+        model_save(self)
 
         plot_training_progress(history)
 
@@ -233,9 +232,7 @@ class LstmWithAttention(keras.Model):
             callbacks=[early_stopping, wandb_callback],
         )
 
-        save_dir = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\models\saved"
-        os.makedirs(save_dir, exist_ok=True)
-        self.save(f"{save_dir}\\{self.model_name}.keras")
+        model_save(self)
 
         plot_training_progress(history)
 

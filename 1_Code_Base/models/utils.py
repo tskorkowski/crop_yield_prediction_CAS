@@ -166,3 +166,12 @@ def pen_low_loss(y_true, y_pred, low_yield_threshold=100.0, high_yield_threshold
     loss = tf.reduce_mean(weighted_squared_error)
 
     return loss
+
+
+def model_save(model):
+
+    save_dir = os.path.join("models", "saved")
+    os.makedirs(save_dir, exist_ok=True)
+    model.save(os.path.join(save_dir, f"{model.model_name}.keras"))
+
+    return None
