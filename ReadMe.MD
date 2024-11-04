@@ -9,6 +9,7 @@ Blue Marble is an Impact InsurTech with a mission to bring insurance to the unde
 
 ### Directories
 **0_Literature**
+
 All technical papers referenced in the project.
 
 **1_Code_Base**
