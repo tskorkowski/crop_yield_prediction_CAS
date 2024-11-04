@@ -8,5 +8,6 @@ temp.py
 1_Code_Base/test_data/*
 1_Code_Base/wandb/*
 1_Code_Base/models/saved/*
-report/images/*
+3_Report/images/*
 2_Data/*
+3_Report/Crop_Yield_Prediction_Report.pdf
