@@ -8,14 +8,18 @@ The primary aim of this project is to apply machine learning models to satellite
 Blue Marble is an Impact InsurTech with a mission to bring insurance to the underserved, farming communities. They are present in Latin America, South and South-East Asia and Africa.
 
 ### Directories
-0_Literature - All technical papers referenced in the project.
+0_Literature
+All technical papers referenced in the project.
 
-1_Code_Base - All of the code necessary to run and train models. Main reference for interactions with the code:
+1_Code_Base
+All of the code necessary to run and train models. Main reference for interactions with the code:
 * 1_Code_Base/notebooks/training.ipynb
 
-2_Data - Folder for the trainign set - data available on google drive. Link below
+2_Data 
+Folder for the trainign set - data available on google drive. Link below
 
-Report - Project proposal and final version of report will be stored here
+3_Report
+Project proposal and final version of report will be stored here
 
 ##### Experiment tracking:
 https://wandb.ai/t-skorkowski/blue-marble?nw=nwusertskorkowski
