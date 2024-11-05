@@ -1,4 +1,6 @@
-# Crop Yield Prediction - Project for the ETH CAS Machine Learning in Fiance and Insurance
+# Crop Yield Prediction
+
+ETH CAS Machine Learning in Fiance and Insurance
 
 ### Problem description
 
