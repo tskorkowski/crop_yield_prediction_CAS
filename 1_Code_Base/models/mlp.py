@@ -59,6 +59,7 @@ class Mlp(keras.Sequential):
 
         self.dense_layer_list = no_units
         self.activation = activation
+        self.model_name = name
 
         for units in no_units:
             self.add(Dense(units, activation=activation))
