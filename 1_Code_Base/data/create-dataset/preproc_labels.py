@@ -1,14 +1,62 @@
-"""Combine them into one
-   each row represnets  a month (3x(no_buckets*no_bands))
-   and a year and state code
-   
-   think how to get correct labels fo rhistograms """
-
-import os
 import re
 
 import numpy as np
 import pandas as pd
+
+# Dictionary of states with their numeric codes
+fips_state = {
+    "Alabama": 1,
+    "Alaska": 2,
+    "Arizona": 4,
+    "Arkansas": 5,
+    "California": 6,
+    "Colorado": 8,
+    "Connecticut": 9,
+    "Delaware": 10,
+    "District of Columbia": 11,
+    "Florida": 12,
+    "Georgia": 13,
+    "Hawaii": 15,
+    "Idaho": 16,
+    "Illinois": 17,
+    "Indiana": 18,
+    "Iowa": 19,
+    "Kansas": 20,
+    "Kentucky": 21,
+    "Louisiana": 22,
+    "Maine": 23,
+    "Maryland": 24,
+    "Massachusetts": 25,
+    "Michigan": 26,
+    "Minnesota": 27,
+    "Mississippi": 28,
+    "Missouri": 29,
+    "Montana": 30,
+    "Nebraska": 31,
+    "Nevada": 32,
+    "New Hampshire": 33,
+    "New Jersey": 34,
+    "New Mexico": 35,
+    "New York": 36,
+    "North Carolina": 37,
+    "North Dakota": 38,
+    "Ohio": 39,
+    "Oklahoma": 40,
+    "Oregon": 41,
+    "Pennsylvania": 42,
+    "Rhode Island": 44,
+    "South Carolina": 45,
+    "South Dakota": 46,
+    "Tennessee": 47,
+    "Texas": 48,
+    "Utah": 49,
+    "Vermont": 50,
+    "Virginia": 51,
+    "Washington": 53,
+    "West Virginia": 54,
+    "Wisconsin": 55,
+    "Wyoming": 56,
+}
 
 fips_county = {
     "01000": "Alabama",
@@ -3208,83 +3256,41 @@ fips_county = {
     "56045": "Weston County",
 }
 
-test_name = "Uinta_56"
 
-name_pattern = r"(\w+)_(\d+)"
-compile_name = re.compile(name_pattern)
-
-match = compile_name.match(test_name)
-
-test_path = r"C:\Users\tskor\Documents\data\histograms\60_buckets_9_bands_60_res\60"
-output_path = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year"
+labels = pd.DataFrame(
+    np.load(
+        r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels.npy",
+        allow_pickle=True,
+    )
+)
 
 
-def try_numpy_load(file_path, i):
-    try:
-        data = np.load(file_path)
-        return np.concatenate([data, np.array([i])])
-    except Exception as e:
-        return np.concatenate([np.zeros(60 * 9), np.array([i])])
+labels[3] = labels[3].str.title()
+labels[4] = labels[4].str.title()
+
+labels["state_fips"] = labels[3].map(lambda x: str(fips_state[x]).zfill(2))
 
 
-# Create a structured array with proper dtypes
-dtype = [
-    *[("histogram_" + str(i), np.uint32) for i in range(541)],  # 540 histogram columns
-    ("year", np.int16),
-    ("month", np.int8),
-    ("fips", "U5"),
-]
+fips_county_str = ",".join(f"{k}:{v}" for k, v in fips_county.items())
 
-histograms = np.empty(0, dtype=dtype)
-for file in os.listdir(test_path):
-    county, state = compile_name.match(file).groups()
-    for key, value in fips_county.items():
-        if (key[0:2] == state) & (county in value):
-            county_fips = key
-    yearly_data_dir = os.path.join(test_path, file)
-    for year in os.listdir(yearly_data_dir):
-        monthly_data_dir = os.path.join(yearly_data_dir, year)
-        combined_data = np.array([])
-        histogram_files = os.listdir(monthly_data_dir)
-        if len(histogram_files) >= 2:
-            combined_data = [
-                try_numpy_load(os.path.join(monthly_data_dir, f"{i}-{i+1}.npy"), i)
-                for i in range(5, 10, 2)
-            ]
-            combined_data_stacked = np.vstack(combined_data)
 
-            # Add year and fips columns directly to the numpy array
+def get_fips_from_name_and_state_fips(county_name: str, state_fips_code: str):
+    pattern = rf"{state_fips_code}(\d+):{county_name}.+,"
+    match = re.search(pattern, fips_county_str)
+    if match:
+        return state_fips_code + match.group(1)
+    else:
+        return None
 
-            year_column = np.full((combined_data_stacked.shape[0], 1), np.int16(year))
-            fips_column = np.full(
-                (combined_data_stacked.shape[0], 1), str(county_fips).zfill(5)
-            )
 
-            # Ensure histogram data is float
-            combined_data_stacked = combined_data_stacked.astype(np.uint32)
+labels["fips_code"] = labels[[4, "state_fips"]].apply(
+    lambda x: get_fips_from_name_and_state_fips(x.iloc[0], x.iloc[1]), axis=1
+)
 
-            output_array = np.empty(combined_data_stacked.shape[0], dtype=dtype)
-            # Fill histogram columns
-            for i in range(540):
-                output_array[f"histogram_{i}"] = combined_data_stacked[:, i]
-            output_array["year"] = year_column.ravel()
-            output_array["month"] = combined_data_stacked[:, -1]
-            output_array["fips"] = fips_column.ravel()
-            # Concatenate horizontally
+labels_output = labels[["fips_code", 2, 5]]
+labels_npy = labels_output.to_numpy()
 
-            np.save(
-                os.path.join(output_path, f"histogram-{county_fips}-{year}.npy"),
-                output_array,
-            )
-            histograms = np.concatenate([histograms, output_array])
-        else:
-            print(f"Not enough histograms found for {county_fips} {year}")
-
-np.save(os.path.join(output_path, "histograms-combined.npy"), histograms)
-
-# TODO: keep month even when there is no histofram information for a given month
-# TODO: chek if numbers are correct: here values look suspicious: histogram-31035-2016
-# TODO: prepare combined labels
-# TODO: combine histograms - weather  and labels for the dataset
-# TODO: do train test split
-# TODO: build NN and LSTM models for combined dataset
+np.save(
+    r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy",
+    labels_npy,
+)

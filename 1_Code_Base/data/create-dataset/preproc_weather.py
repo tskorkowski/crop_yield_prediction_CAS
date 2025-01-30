@@ -165,12 +165,15 @@ def preproc_weather_aggregation(
             pl.col("Vapor Pressure Deficit (kPa)")
             .median()
             .alias("Vapor_Pressure_Deficit_Median"),
-            pl.col("FIPS Code").first().alias("FIPS"),
         ]
     )
     key = try_convert_to_int(key)
     aggregated_weather_data = aggregated_weather_data.with_columns(
         pl.lit(key).alias(key_id)
+    )
+
+    aggregated_weather_data = aggregated_weather_data.with_columns(
+        pl.col("FIPS Code").cast(pl.Utf8).str.zfill(5)
     )
 
     return aggregated_weather_data
@@ -200,7 +203,7 @@ def save_groups_to_csv(
     for group in unique_groups:
         # Filter for this group
         group_df = df.filter(pl.col(group_column) == group)
-        fips = group_df.get_column("FIPS").unique().to_list()[0]
+        fips = group_df.get_column("FIPS Code").unique().to_list()[0]
         # Create filename (clean group name if needed)
 
         filename = f"weather_data-{group}"
@@ -262,7 +265,7 @@ if __name__ == "__main__":
 
     # Compile a regex pattern to match files ending with 05, 06, 07, 08, 09, or 10
     file_pattern = re.compile(r".*-(05|06|07|08|09|10)\.csv$")
-
+    aggregated_weather_data = pl.DataFrame()
     for year, state, counties in data_generator:
         aggregated_monthly_data = pl.DataFrame()
         weather_files_dir = os.path.join(weather_data_path, year, state)
@@ -299,6 +302,10 @@ if __name__ == "__main__":
                 [aggregated_monthly_data, post_proc_weather_data]
             )
 
+        aggregated_monthly_data = aggregated_monthly_data.with_columns(
+            pl.lit(year).alias("Year")
+        )
+
         save_groups_to_csv(
             aggregated_monthly_data,
             "County",
@@ -307,4 +314,22 @@ if __name__ == "__main__":
             f"{year}-{state}",
         )
 
+        aggregated_monthly_data = aggregated_monthly_data.with_columns(
+            pl.col("County").str.to_lowercase()
+        )
+        group_filter_lower = [
+            value.lower() for value in weather_information[year][state]
+        ]
+
+        aggregated_monthly_data = aggregated_monthly_data.filter(
+            pl.col("County").is_in(group_filter_lower)
+        )
+
+        aggregated_weather_data = pl.concat(
+            [aggregated_weather_data, aggregated_monthly_data]
+        )
+
+    aggregated_weather_data.write_csv(
+        os.path.join(OUTPUT_DIR + r"\weather-combined.csv")
+    )
 # TO DO: create function to fetch polars data frames from the specific folders

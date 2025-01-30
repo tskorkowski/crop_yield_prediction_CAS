@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+import polars as pl
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Normalization
@@ -99,3 +101,48 @@ if __name__ == "__main__":
     train_dataset, val_dataset, test_dataset = test_train_split(
         dataset, labels, **config
     )
+
+
+def test_train_split_multi_modal(
+    weather_dataset: str,
+    histograms_dataset: str,
+    labels: str,
+    required_shape: tuple,
+    training_range: tuple[int, int] = (2017, 2022),
+):
+
+    # weather only cover 2017-2022 while sattelite images olso cover 2016
+    # For test purpose years 2016 and 2022 are used - since not all modatlities are present models will ber evaluated on 2016 and 2022 separately
+    # Training and validation covers the remainding period
+
+    # Sattekite images histgrams are taken to be the main modality
+
+    # hist_df = pl.DataFrame({
+    #     'histogram': histograms_dataset[:, :-2].tolist(),  # Store features as list
+    #     'year': histograms_dataset[:, -2].astype(int),
+    #     'fips': histograms_dataset[:, -1],
+    #     'source': 'histogram'
+    # })
+
+    # weather_df = pl.DataFrame({
+    #     'weather': weather_dataset[:, :-2].tolist(),  # Store features as list
+    #     'year': weather_dataset[:, -2].astype(int),
+    #     'fips': weather_dataset[:, -1],
+    #     'source': 'weather'
+    # })
+
+    # # Join on fips and year
+    # joined_df = hist_df.join(
+    #     weather_df,
+    #     on=['fips', 'year'],
+    #     how='inner'  # or 'outer', 'left', 'right' depending on your needs
+    # )
+
+    # Convert to pandas for easier joining
+
+    hist_df = pd.DataFrame(np.load(histograms_dataset))
+    weather_data = pd.read_csv(weather_dataset)
+
+    # Join using multiple keys
+    joined_data = hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
+    return train_dataset, val_dataset, test_dataset
