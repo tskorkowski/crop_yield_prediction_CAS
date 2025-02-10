@@ -83,7 +83,7 @@ class Mlp(keras.Sequential):
 
         # Early stopping callback
         early_stopping = EarlyStopping(
-            monitor="val_loss", patience=15, restore_best_weights=True
+            monitor="val_loss", patience=100, restore_best_weights=True
         )
 
         wandb_callback = WandbMetricsLogger()

@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import polars as pl
@@ -85,21 +87,14 @@ def test_train_split(
     return train_dataset, val_dataset, test_dataset
 
 
-if __name__ == "__main__":
-    dataset_path = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\test_data\dataset_nan_map_True_norm_True_60_buckets_12_bands_60_dataset.npy"
-    labels_path = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\test_data\dataset_nan_map_True_norm_True_60_buckets_12_bands_60_labels.npy"
-    dataset = np.load(dataset_path)
-    labels = np.load(labels_path)
-    config = {
-        "months": 3,
-        "num_bands": 12,
-        "num_buckets": 60,
-    }
-    dataset = np.concatenate(
-        [dataset[:, 0, :], dataset[:, 1, :], dataset[:, 2, :]], axis=-1
-    )
-    train_dataset, val_dataset, test_dataset = test_train_split(
-        dataset, labels, **config
+def convert_np_array_to_tf_dataset(np_dataset: Tuple[np.ndarray]) -> tf.data.Dataset:
+    """Convert a list of numpy arrays to a list of tf.data.Dataset objects"""
+
+    return tf.data.Dataset.from_tensor_slices(
+        (
+            tf.convert_to_tensor(np_dataset[0], dtype=tf.float32),
+            tf.convert_to_tensor(np_dataset[1], dtype=tf.float32),
+        )
     )
 
 
@@ -107,42 +102,148 @@ def test_train_split_multi_modal(
     weather_dataset: str,
     histograms_dataset: str,
     labels: str,
-    required_shape: tuple,
     training_range: tuple[int, int] = (2017, 2022),
+    batch_size: int = 32,
+    include_weather_data: bool = True,
 ):
 
     # weather only cover 2017-2022 while sattelite images olso cover 2016
     # For test purpose years 2016 and 2022 are used - since not all modatlities are present models will ber evaluated on 2016 and 2022 separately
     # Training and validation covers the remainding period
 
-    # Sattekite images histgrams are taken to be the main modality
+    # Sattelite images histgrams are taken to be the main modality
+    normalizer = Normalization(axis=-1)
 
-    # hist_df = pl.DataFrame({
-    #     'histogram': histograms_dataset[:, :-2].tolist(),  # Store features as list
-    #     'year': histograms_dataset[:, -2].astype(int),
-    #     'fips': histograms_dataset[:, -1],
-    #     'source': 'histogram'
-    # })
+    hist_df = pd.DataFrame(np.load(histograms_dataset, allow_pickle=True))
 
-    # weather_df = pl.DataFrame({
-    #     'weather': weather_dataset[:, :-2].tolist(),  # Store features as list
-    #     'year': weather_dataset[:, -2].astype(int),
-    #     'fips': weather_dataset[:, -1],
-    #     'source': 'weather'
-    # })
+    weather_data = (
+        pd.read_csv(
+            weather_dataset,
+            dtype={
+                "fips": str,  # This ensures fips is treated as string
+            },
+        )
+        .drop(columns=["County"])
+        .dropna()
+    )
 
-    # # Join on fips and year
-    # joined_df = hist_df.join(
-    #     weather_df,
-    #     on=['fips', 'year'],
-    #     how='inner'  # or 'outer', 'left', 'right' depending on your needs
-    # )
+    joined_data = (
+        hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
+        if include_weather_data
+        else hist_df
+    )
 
-    # Convert to pandas for easier joining
+    # Split data by month into separate DataFrames
+    month5_data = joined_data[joined_data["month"] == 5]
+    month7_data = joined_data[joined_data["month"] == 7]
+    month9_data = joined_data[joined_data["month"] == 9]
 
-    hist_df = pd.DataFrame(np.load(histograms_dataset))
-    weather_data = pd.read_csv(weather_dataset)
+    # Add suffix to all columns except fips and year
+    for df, suffix in [
+        (month5_data, "_m5"),
+        (month7_data, "_m7"),
+        (month9_data, "_m9"),
+    ]:
+        df.columns = [
+            f"{col}{suffix}" if col not in ["fips", "year"] else col
+            for col in df.columns
+        ]
 
-    # Join using multiple keys
-    joined_data = hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
-    return train_dataset, val_dataset, test_dataset
+    # Join the DataFrames side by side
+    months_combined_df = month5_data.merge(
+        month7_data, on=["fips", "year"], how="inner"
+    ).merge(month9_data, on=["fips", "year"], how="inner")
+
+    labels = pd.DataFrame(
+        np.load(labels, allow_pickle=True), columns=["fips", "year", "yield"]
+    )
+
+    dataset = months_combined_df.merge(labels, on=["fips", "year"], how="left")
+
+    min_year = dataset["year"].min()
+    dataset["year"] = dataset["year"] - min_year
+
+    dataset = dataset.dropna().drop(columns=["fips"])
+
+    test_cutoff_bottom = training_range[0] - min_year - 1
+    test_cutoff_top = training_range[1] - min_year
+
+    test_dataset_wo_weather = dataset[dataset["year"] <= test_cutoff_bottom]
+    test_dataset_sat_weather = dataset[dataset["year"] >= test_cutoff_top]
+
+    training_dataset = dataset[
+        (dataset["year"] > test_cutoff_bottom) & (dataset["year"] < test_cutoff_top)
+    ]
+
+    training_labels = training_dataset.pop("yield")
+    test_labels_wo_weather = test_dataset_wo_weather.pop("yield")
+    test_labels_sat_weather = test_dataset_sat_weather.pop("yield")
+
+    print("training data shape:", training_dataset.shape)
+    print("test data wo weather shape:", test_dataset_wo_weather.shape)
+    print("test data shape:", test_dataset_sat_weather.shape)
+
+    tensor_dataset_train = tf.convert_to_tensor(training_dataset, dtype=tf.float32)
+    tensor_labels_train = tf.convert_to_tensor(training_labels, dtype=tf.float32)
+    tensor_dataset_wo_weather = tf.convert_to_tensor(
+        test_dataset_wo_weather, dtype=tf.float32
+    )
+    tensor_labels_wo_weather = tf.convert_to_tensor(
+        test_labels_wo_weather, dtype=tf.float32
+    )
+    tensor_dataset_sat_weather = tf.convert_to_tensor(
+        test_dataset_sat_weather, dtype=tf.float32
+    )
+    tensor_labels_sat_weather = tf.convert_to_tensor(
+        test_labels_sat_weather, dtype=tf.float32
+    )
+
+    tf_dataset_train = tf.data.Dataset.from_tensor_slices(
+        (tensor_dataset_train, tensor_labels_train)
+    )
+    tf_dataset_test_wo_weather = tf.data.Dataset.from_tensor_slices(
+        (tensor_dataset_wo_weather, tensor_labels_wo_weather)
+    )
+    tf_dataset_test_weather = tf.data.Dataset.from_tensor_slices(
+        (tensor_dataset_sat_weather, tensor_labels_sat_weather)
+    )
+
+    tf_dataset_train = tf_dataset_train.batch(
+        batch_size, drop_remainder=True
+    )  # .shuffle(buffer_size=10000)
+    tf_dataset_test_wo_weather = tf_dataset_test_wo_weather.batch(
+        batch_size, drop_remainder=True
+    )  # .shuffle(buffer_size=10000)
+    tf_dataset_test_weather = tf_dataset_test_weather.batch(
+        batch_size, drop_remainder=True
+    )  # .shuffle(buffer_size=10000)
+
+    normalizer.adapt(tf_dataset_train.map(lambda x, y: x))
+
+    train_dataset = tf_dataset_train.map(lambda x, y: (normalizer(x), y)).prefetch(
+        tf.data.AUTOTUNE
+    )
+
+    test_dataset_wo_weather = tf_dataset_test_wo_weather.map(
+        lambda x, y: (normalizer(x), y)
+    ).prefetch(tf.data.AUTOTUNE)
+
+    test_dataset_weather = tf_dataset_test_weather.map(
+        lambda x, y: (normalizer(x), y)
+    ).prefetch(tf.data.AUTOTUNE)
+
+    return train_dataset, test_dataset_wo_weather, test_dataset_weather
+
+
+if __name__ == "__main__":
+    from tensorflow.keras.utils import split_dataset
+
+    weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
+    histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
+    labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
+
+    datasets = test_train_split_multi_modal(weather_dataset, histograms_dataset, labels)
+
+
+# BUG:
+# 1. weather data is not workign correctly, at least aggregate file

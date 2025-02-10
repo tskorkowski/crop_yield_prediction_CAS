@@ -76,12 +76,6 @@ state_to_fips = {
 
 fips_to_state = {fips: state for state, fips in state_to_fips.items()}
 
-histogram_path = (
-    r"C:\Users\tskor\Documents\data\histograms\60_buckets_9_bands_60_res\60"
-)
-
-test_path = r"C:\Users\tskor\Documents\data\histograms\60_buckets_9_bands_60_res\test"
-
 
 def iterate_histogram_folders(base_path) -> dict:
     # Go through all collected histograms to pick only the weather data that is needed
@@ -132,7 +126,7 @@ def try_convert_to_int(value):
 
 
 def preproc_weather_aggregation(
-    df_to_combine: [pl.DataFrame], key: str, key_id: str = "Month"
+    df_to_combine: [pl.DataFrame], key: str, key_id: str = "month"
 ) -> pl.DataFrame:
 
     combined_weather_data = pl.concat(df_to_combine)
@@ -175,7 +169,7 @@ def preproc_weather_aggregation(
     aggregated_weather_data = aggregated_weather_data.with_columns(
         pl.col("FIPS Code").cast(pl.Utf8).str.zfill(5)
     )
-
+    aggregated_weather_data = aggregated_weather_data.rename({"FIPS Code": "fips"})
     return aggregated_weather_data
 
 
@@ -203,7 +197,7 @@ def save_groups_to_csv(
     for group in unique_groups:
         # Filter for this group
         group_df = df.filter(pl.col(group_column) == group)
-        fips = group_df.get_column("FIPS Code").unique().to_list()[0]
+        fips = group_df.get_column("fips").unique().to_list()[0]
         # Create filename (clean group name if needed)
 
         filename = f"weather_data-{group}"
@@ -248,14 +242,6 @@ if __name__ == "__main__":
     weather_information = load_weather_information(json_file_path)
 
     weather_data_path = r"C:\Users\tskor\Documents\data\WRF-HRRR"
-
-    # collect information about which counties in which states are of interest
-    # weather_information = iterate_histogram_folders(histogram_path)
-    # with open(
-    #     r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\weather_req.json",
-    #     "w",
-    # ) as f:
-    #     json.dump(weather_information, f, indent=4, sort_keys=True)
 
     data_generator = (
         (year, state, counties)
@@ -303,7 +289,7 @@ if __name__ == "__main__":
             )
 
         aggregated_monthly_data = aggregated_monthly_data.with_columns(
-            pl.lit(year).alias("Year")
+            pl.lit(year).alias("year")
         )
 
         save_groups_to_csv(

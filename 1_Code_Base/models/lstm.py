@@ -6,6 +6,7 @@
 
 import os
 from datetime import datetime
+from typing import List
 
 import keras
 import numpy as np
@@ -16,7 +17,9 @@ from models.utils import model_save
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (
     LSTM,
+    Concatenate,
     Dense,
+    Dropout,
     GlobalAveragePooling1D,
     MultiHeadAttention,
 )
@@ -260,3 +263,90 @@ class LstmWithAttention(keras.Model):
     @classmethod
     def from_config(cls, config):
         return cls(**config)
+
+
+class Embeddings(tf.keras.Model):
+    """
+    Embeddings layer for weather and satellite data
+    """
+
+    def __init__(self, dense_layer_list: List[int]):
+        super(Embeddings, self).__init__()
+        self.dense_layers = [Dense(layer) for layer in dense_layer_list]
+
+        self.dropout_layers = [Dropout(0.2) for _ in dense_layer_list]
+
+    def call(self, inputs):
+        x = self.dense_layers[0](inputs)
+        x = self.dropout_layers[0](x)
+        for layer, dropout in zip(self.dense_layers[1:], self.dropout_layers[1:]):
+            x = layer(x)
+            x = dropout(x)
+        return x
+
+
+class LstmWeather(tf.keras.Model):
+    """
+    LSTM model for weather and satellite data
+
+    Creates separate embeddings for weather and satellite data. Both embeddings are concatenated and passed to the LSTM.
+    """
+
+    def __init__(
+        self,
+        units: int = 1,
+        embedings_spec_weather: List[int] = [128, 64, 32],
+        embedings_spec_satellite: List[int] = [128, 64, 32],
+        timepoints: int = 3,
+    ):
+
+        super(LstmWeather, self).__init__()
+
+        self.weather_embeddings = [
+            Embeddings(embedings_spec_weather) for _ in range(timepoints)
+        ]
+        self.satellite_embeddings = [
+            Embeddings(embedings_spec_satellite) for _ in range(timepoints)
+        ]
+
+        self.concatenate_weather_and_sat_embeddings = [
+            Concatenate(axis=1) for _ in range(timepoints)
+        ]
+
+        self.concatenate_for_lstm_input = Concatenate()
+
+        self.lstm = LSTM(units)
+
+        self.dense = Dense(1, activation="relu")
+
+        self.timepoints = timepoints
+
+    def call(self, inputs):
+        weather_data, satellite_data = inputs
+        weather_embeddings = [
+            embedding(data)
+            for embedding, data in zip(self.weather_embeddings, weather_data)
+        ]
+        satellite_embeddings = [
+            embedding(data)
+            for embedding, data in zip(self.satellite_embeddings, satellite_data)
+        ]
+
+        weather_and_satellite_embeddings = [
+            weather_and_sat_embedding([weather_embeddings[i], satellite_embeddings[i]])
+            for i, weather_and_sat_embedding in enumerate(
+                self.concatenate_weather_and_sat_embeddings
+            )
+        ]
+
+        lstm_input = self.concatenate_for_lstm_input(weather_and_satellite_embeddings)
+
+        lstm_output = self.lstm(lstm_input)
+
+        output = self.dense(lstm_output)
+
+        return output
+
+
+# try:
+# https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M#https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M
