@@ -104,7 +104,6 @@ def test_train_split_multi_modal(
     labels: str,
     training_range: tuple[int, int] = (2017, 2022),
     batch_size: int = 32,
-    include_weather_data: bool = True,
 ):
 
     # weather only cover 2017-2022 while sattelite images olso cover 2016
@@ -114,24 +113,34 @@ def test_train_split_multi_modal(
     # Sattelite images histgrams are taken to be the main modality
     normalizer = Normalization(axis=-1)
 
-    hist_df = pd.DataFrame(np.load(histograms_dataset, allow_pickle=True))
+    joined_data = pd.DataFrame()
 
-    weather_data = (
-        pd.read_csv(
-            weather_dataset,
-            dtype={
-                "fips": str,  # This ensures fips is treated as string
-            },
+    if histograms_dataset:
+        joined_data = pd.DataFrame(np.load(histograms_dataset, allow_pickle=True))
+
+    if weather_dataset:
+        weather_data = (
+            pd.read_csv(
+                weather_dataset,
+                dtype={
+                    "fips": str,  # This ensures fips is treated as string
+                },
+            )
+            .drop(columns=["County"])
+            .dropna()
         )
-        .drop(columns=["County"])
-        .dropna()
-    )
+        if histograms_dataset:
+            joined_data = joined_data.merge(
+                weather_data, on=["fips", "year", "month"], how="left"
+            )
+        else:
+            joined_data = weather_data
 
-    joined_data = (
-        hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
-        if include_weather_data
-        else hist_df
-    )
+    # joined_data = (
+    #     hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
+    #     if include_weather_data
+    #     else hist_df
+    # )
 
     # Split data by month into separate DataFrames
     month5_data = joined_data[joined_data["month"] == 5]
@@ -180,6 +189,7 @@ def test_train_split_multi_modal(
     test_labels_sat_weather = test_dataset_sat_weather.pop("yield")
 
     print("training data shape:", training_dataset.shape)
+    print("training data head:", training_dataset.head())
     print("test data wo weather shape:", test_dataset_wo_weather.shape)
     print("test data shape:", test_dataset_sat_weather.shape)
 
@@ -208,9 +218,9 @@ def test_train_split_multi_modal(
         (tensor_dataset_sat_weather, tensor_labels_sat_weather)
     )
 
-    tf_dataset_train = tf_dataset_train.batch(
-        batch_size, drop_remainder=True
-    )  # .shuffle(buffer_size=10000)
+    tf_dataset_train = tf_dataset_train.batch(batch_size, drop_remainder=True).shuffle(
+        buffer_size=10000, seed=42
+    )
     tf_dataset_test_wo_weather = tf_dataset_test_wo_weather.batch(
         batch_size, drop_remainder=True
     )  # .shuffle(buffer_size=10000)
@@ -239,11 +249,15 @@ if __name__ == "__main__":
     from tensorflow.keras.utils import split_dataset
 
     weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
-    histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
+    histograms_dataset = ""  # r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
     labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
 
     datasets = test_train_split_multi_modal(weather_dataset, histograms_dataset, labels)
+    for dataset in datasets:
+        for features, labels in dataset.take(1):
+            print("First batch features:", features.numpy()[:5])
+            print("First batch labels:", labels.numpy()[:5])
 
 
 # BUG:
-# 1. weather data is not workign correctly, at least aggregate file
+# 1. weather data is not workign correctly, at least aggregate file(?)
