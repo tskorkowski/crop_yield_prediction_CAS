@@ -1,4 +1,5 @@
-from typing import Tuple
+from functools import reduce
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -98,12 +99,20 @@ def convert_np_array_to_tf_dataset(np_dataset: Tuple[np.ndarray]) -> tf.data.Dat
     )
 
 
+def get_common_index(data_sets: List[pd.DataFrame]):
+    return reduce(
+        lambda x, y: x.intersection(y), [data_set.index for data_set in data_sets]
+    )
+
+
 def test_train_split_multi_modal(
     weather_dataset: str,
     histograms_dataset: str,
     labels: str,
+    index: List[str],
+    months: List[int],
     training_range: tuple[int, int] = (2017, 2022),
-    batch_size: int = 32,
+    batch_size: int = 64,
 ):
 
     # weather only cover 2017-2022 while sattelite images olso cover 2016
@@ -115,148 +124,192 @@ def test_train_split_multi_modal(
 
     joined_data = pd.DataFrame()
 
+    data_sets = []
     if histograms_dataset:
-        joined_data = pd.DataFrame(np.load(histograms_dataset, allow_pickle=True))
+        hist_data = (
+            pd.DataFrame(
+                np.load(histograms_dataset, allow_pickle=True),
+            )
+            .astype({"fips": str, "year": int})
+            .set_index(index)
+            .sort_index()
+        )
+        data_sets.append(hist_data)
+
+    print(
+        pd.DataFrame(
+            np.load(histograms_dataset, allow_pickle=True),
+        ).head()
+    )
+
+    print("", "histogram shape:", data_sets[0].shape, sep="\n")
 
     if weather_dataset:
         weather_data = (
             pd.read_csv(
                 weather_dataset,
                 dtype={
-                    "fips": str,  # This ensures fips is treated as string
+                    "fips": str,
+                    "year": int,
                 },
             )
             .drop(columns=["County"])
             .dropna()
+            .set_index(index)
+            .sort_index()
         )
-        if histograms_dataset:
-            joined_data = joined_data.merge(
-                weather_data, on=["fips", "year", "month"], how="left"
-            )
-        else:
-            joined_data = weather_data
+        data_sets.append(weather_data)
 
-    # joined_data = (
-    #     hist_df.merge(weather_data, on=["fips", "year", "month"], how="left")
-    #     if include_weather_data
-    #     else hist_df
-    # )
+    common_index = get_common_index(data_sets)
 
-    # Split data by month into separate DataFrames
-    month5_data = joined_data[joined_data["month"] == 5]
-    month7_data = joined_data[joined_data["month"] == 7]
-    month9_data = joined_data[joined_data["month"] == 9]
+    data_sets = [data_set.loc[common_index] for data_set in data_sets]
+
+    datasets_monthly_train = []
+    datasets_monthly_test = []
+    for data_set in data_sets:
+        # one_month_data = data_set[data_set["month"] == months[0]]
+        # print(one_month_data.loc[pd.IndexSlice["19043", 2017:], :].sort_index())
+        datasets_monthly_train.extend(
+            [
+                data_set[data_set["month"] == month].loc[
+                    pd.IndexSlice[:, training_range[0] : training_range[1]], :
+                ]
+                for month in months
+            ]
+        )
+        datasets_monthly_test.extend(
+            [
+                data_set[data_set["month"] == month].loc[
+                    pd.IndexSlice[:, training_range[1] :], :
+                ]
+                for month in months
+            ]
+        )
+    normalizers = {
+        f"norm_data_{i}": Normalization(axis=-1)
+        for i in range(len(datasets_monthly_train))
+    }
+    for i, dataset in enumerate(datasets_monthly_train):
+        print(dataset.head(6))
+    # # Split data by month into separate DataFrames
+    # month5_data = joined_data[joined_data["month"] == 5]
+    # month7_data = joined_data[joined_data["month"] == 7]
+    # month9_data = joined_data[joined_data["month"] == 9]
 
     # Add suffix to all columns except fips and year
-    for df, suffix in [
-        (month5_data, "_m5"),
-        (month7_data, "_m7"),
-        (month9_data, "_m9"),
-    ]:
-        df.columns = [
-            f"{col}{suffix}" if col not in ["fips", "year"] else col
-            for col in df.columns
-        ]
+    # for df, suffix in [
+    #     (month5_data, "_m5"),
+    #     (month7_data, "_m7"),
+    #     (month9_data, "_m9"),
+    # ]:
+    #     df.columns = [
+    #         f"{col}{suffix}" if col not in ["fips", "year"] else col
+    #         for col in df.columns
+    #     ]
 
-    # Join the DataFrames side by side
-    months_combined_df = month5_data.merge(
-        month7_data, on=["fips", "year"], how="inner"
-    ).merge(month9_data, on=["fips", "year"], how="inner")
+    # # Join the DataFrames side by side
+    # months_combined_df = month5_data.merge(
+    #     month7_data, on=["fips", "year"], how="inner"
+    # ).merge(month9_data, on=["fips", "year"], how="inner")
 
-    labels = pd.DataFrame(
-        np.load(labels, allow_pickle=True), columns=["fips", "year", "yield"]
-    )
+    # labels = pd.DataFrame(np.load(labels, allow_pickle=True), columns=index + ["yield"])
 
-    dataset = months_combined_df.merge(labels, on=["fips", "year"], how="left")
+    # dataset = months_combined_df.merge(labels, on=["fips", "year"], how="left")
 
-    min_year = dataset["year"].min()
-    dataset["year"] = dataset["year"] - min_year
+    # min_year = dataset["year"].min()
+    # dataset["year"] = dataset["year"] - min_year
 
-    dataset = dataset.dropna().drop(columns=["fips"])
+    # dataset = dataset.dropna().drop(columns=["fips"])
 
-    test_cutoff_bottom = training_range[0] - min_year - 1
-    test_cutoff_top = training_range[1] - min_year
+    # test_cutoff_bottom = training_range[0] - min_year - 1
+    # test_cutoff_top = training_range[1] - min_year
 
-    test_dataset_wo_weather = dataset[dataset["year"] <= test_cutoff_bottom]
-    test_dataset_sat_weather = dataset[dataset["year"] >= test_cutoff_top]
+    # test_dataset_wo_weather = dataset[dataset["year"] <= test_cutoff_bottom]
+    # test_dataset_sat_weather = dataset[dataset["year"] >= test_cutoff_top]
 
-    training_dataset = dataset[
-        (dataset["year"] > test_cutoff_bottom) & (dataset["year"] < test_cutoff_top)
-    ]
+    # training_dataset = dataset[
+    #     (dataset["year"] > test_cutoff_bottom) & (dataset["year"] < test_cutoff_top)
+    # ]
 
-    training_labels = training_dataset.pop("yield")
-    test_labels_wo_weather = test_dataset_wo_weather.pop("yield")
-    test_labels_sat_weather = test_dataset_sat_weather.pop("yield")
+    # training_labels = training_dataset.pop("yield")
+    # test_labels_wo_weather = test_dataset_wo_weather.pop("yield")
+    # test_labels_sat_weather = test_dataset_sat_weather.pop("yield")
 
-    print("training data shape:", training_dataset.shape)
-    print("training data head:", training_dataset.head())
-    print("test data wo weather shape:", test_dataset_wo_weather.shape)
-    print("test data shape:", test_dataset_sat_weather.shape)
+    # print("training data shape:", training_dataset.shape)
+    # # print("training data head:", training_dataset.head())
+    # print("test data wo weather shape:", test_dataset_wo_weather.shape)
+    # print("test data shape:", test_dataset_sat_weather.shape)
 
-    tensor_dataset_train = tf.convert_to_tensor(training_dataset, dtype=tf.float32)
-    tensor_labels_train = tf.convert_to_tensor(training_labels, dtype=tf.float32)
-    tensor_dataset_wo_weather = tf.convert_to_tensor(
-        test_dataset_wo_weather, dtype=tf.float32
-    )
-    tensor_labels_wo_weather = tf.convert_to_tensor(
-        test_labels_wo_weather, dtype=tf.float32
-    )
-    tensor_dataset_sat_weather = tf.convert_to_tensor(
-        test_dataset_sat_weather, dtype=tf.float32
-    )
-    tensor_labels_sat_weather = tf.convert_to_tensor(
-        test_labels_sat_weather, dtype=tf.float32
-    )
+    # tensor_dataset_train = tf.convert_to_tensor(training_dataset, dtype=tf.float32)
+    # tensor_labels_train = tf.convert_to_tensor(training_labels, dtype=tf.float32)
+    # tensor_dataset_wo_weather = tf.convert_to_tensor(
+    #     test_dataset_wo_weather, dtype=tf.float32
+    # )
+    # tensor_labels_wo_weather = tf.convert_to_tensor(
+    #     test_labels_wo_weather, dtype=tf.float32
+    # )
+    # tensor_dataset_sat_weather = tf.convert_to_tensor(
+    #     test_dataset_sat_weather, dtype=tf.float32
+    # )
+    # tensor_labels_sat_weather = tf.convert_to_tensor(
+    #     test_labels_sat_weather, dtype=tf.float32
+    # )
 
-    tf_dataset_train = tf.data.Dataset.from_tensor_slices(
-        (tensor_dataset_train, tensor_labels_train)
-    )
-    tf_dataset_test_wo_weather = tf.data.Dataset.from_tensor_slices(
-        (tensor_dataset_wo_weather, tensor_labels_wo_weather)
-    )
-    tf_dataset_test_weather = tf.data.Dataset.from_tensor_slices(
-        (tensor_dataset_sat_weather, tensor_labels_sat_weather)
-    )
+    # tf_dataset_train = tf.data.Dataset.from_tensor_slices(
+    #     (tensor_dataset_train, tensor_labels_train)
+    # )
+    # tf_dataset_test_wo_weather = tf.data.Dataset.from_tensor_slices(
+    #     (tensor_dataset_wo_weather, tensor_labels_wo_weather)
+    # )
+    # tf_dataset_test_weather = tf.data.Dataset.from_tensor_slices(
+    #     (tensor_dataset_sat_weather, tensor_labels_sat_weather)
+    # )
 
-    tf_dataset_train = tf_dataset_train.batch(batch_size, drop_remainder=True).shuffle(
-        buffer_size=10000, seed=42
-    )
-    tf_dataset_test_wo_weather = tf_dataset_test_wo_weather.batch(
-        batch_size, drop_remainder=True
-    )  # .shuffle(buffer_size=10000)
-    tf_dataset_test_weather = tf_dataset_test_weather.batch(
-        batch_size, drop_remainder=True
-    )  # .shuffle(buffer_size=10000)
+    # tf_dataset_train = tf_dataset_train.batch(batch_size, drop_remainder=True).shuffle(
+    #     buffer_size=10000, seed=42
+    # )
+    # tf_dataset_test_wo_weather = tf_dataset_test_wo_weather.batch(
+    #     batch_size, drop_remainder=True
+    # )  # .shuffle(buffer_size=10000)
+    # tf_dataset_test_weather = tf_dataset_test_weather.batch(
+    #     batch_size, drop_remainder=True
+    # )  # .shuffle(buffer_size=10000)
 
-    normalizer.adapt(tf_dataset_train.map(lambda x, y: x))
+    # normalizer.adapt(tf_dataset_train.map(lambda x, y: x))
 
-    train_dataset = tf_dataset_train.map(lambda x, y: (normalizer(x), y)).prefetch(
-        tf.data.AUTOTUNE
-    )
+    # train_dataset = tf_dataset_train.map(lambda x, y: (normalizer(x), y)).prefetch(
+    #     tf.data.AUTOTUNE
+    # )
 
-    test_dataset_wo_weather = tf_dataset_test_wo_weather.map(
-        lambda x, y: (normalizer(x), y)
-    ).prefetch(tf.data.AUTOTUNE)
+    # test_dataset_wo_weather = tf_dataset_test_wo_weather.map(
+    #     lambda x, y: (normalizer(x), y)
+    # ).prefetch(tf.data.AUTOTUNE)
 
-    test_dataset_weather = tf_dataset_test_weather.map(
-        lambda x, y: (normalizer(x), y)
-    ).prefetch(tf.data.AUTOTUNE)
+    # test_dataset_weather = tf_dataset_test_weather.map(
+    #     lambda x, y: (normalizer(x), y)
+    # ).prefetch(tf.data.AUTOTUNE)
 
-    return train_dataset, test_dataset_wo_weather, test_dataset_weather
+    # return train_dataset, test_dataset_wo_weather, test_dataset_weather
 
 
 if __name__ == "__main__":
     from tensorflow.keras.utils import split_dataset
 
     weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
-    histograms_dataset = ""  # r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
+    histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
     labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
 
-    datasets = test_train_split_multi_modal(weather_dataset, histograms_dataset, labels)
-    for dataset in datasets:
-        for features, labels in dataset.take(1):
-            print("First batch features:", features.numpy()[:5])
-            print("First batch labels:", labels.numpy()[:5])
+    datasets = test_train_split_multi_modal(
+        weather_dataset,
+        histograms_dataset,
+        labels,
+        index=["fips", "year"],
+        months=[5, 7, 9],
+    )
+    # for dataset in datasets:
+    #     for features, labels in dataset.take(1):
+    #         print("First batch features:", features.numpy()[:5])
+    #         print("First batch labels:", labels.numpy()[:5])
 
 
 # BUG:

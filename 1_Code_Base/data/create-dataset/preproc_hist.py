@@ -3208,40 +3208,51 @@ fips_county = {
     "56045": "Weston County",
 }
 
-test_name = "Uinta_56"
+TEST_NAME = "Uinta_56"
 
-name_pattern = r"(\w+)_(\d+)"
-compile_name = re.compile(name_pattern)
+NAME_PATTERN = r"(\w+)_(\d+)"
 
-match = compile_name.match(test_name)
+NO_CHANNELS = 9
+NO_BINS = 60
 
-test_path = r"C:\Users\tskor\Documents\data\histograms\60_buckets_9_bands_60_res\60"
-output_path = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year"
+compile_name = re.compile(NAME_PATTERN)
+
+match = compile_name.match(TEST_NAME)
+
+TEST_PATH = r"C:\Users\tskor\Documents\data\histograms\60_buckets_9_bands_60_res\60"
+OUTOUT_PATH = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year"
 
 
 def try_numpy_load(file_path, i):
     try:
         data = np.load(file_path)
         return np.concatenate([data, np.array([i])])
-    except Exception as e:
-        return np.concatenate([np.zeros(60 * 9), np.array([i])])
+    except Exception:
+        return np.concatenate([np.zeros(NO_CHANNELS * NO_BINS), np.array([i])])
 
 
 # Create a structured array with proper dtypes
 dtype = [
-    *[("histogram_" + str(i), np.uint32) for i in range(541)],  # 540 histogram columns
+    *[
+        ("histogram_" + str(i), np.uint32) for i in range(NO_CHANNELS * NO_BINS)
+    ],  # 540 histogram columns - each histogram has 60 bins and there are 9 channels
     ("year", np.int16),
     ("month", np.int8),
     ("fips", "U5"),
 ]
 
 histograms = np.empty(0, dtype=dtype)
-for file in os.listdir(test_path):
+for file in os.listdir(TEST_PATH):
     county, state = compile_name.match(file).groups()
+    county_fips = None
     for key, value in fips_county.items():
         if (key[0:2] == state) & (county in value):
             county_fips = key
-    yearly_data_dir = os.path.join(test_path, file)
+            break
+    if county_fips is None:
+        print(f"County {county} not found in fips_county dictionary")
+        continue
+    yearly_data_dir = os.path.join(TEST_PATH, file)
     for year in os.listdir(yearly_data_dir):
         monthly_data_dir = os.path.join(yearly_data_dir, year)
         combined_data = np.array([])
@@ -3273,18 +3284,15 @@ for file in os.listdir(test_path):
             # Concatenate horizontally
 
             np.save(
-                os.path.join(output_path, f"histogram-{county_fips}-{year}.npy"),
+                os.path.join(OUTOUT_PATH, f"histogram-{county_fips}-{year}.npy"),
                 output_array,
             )
             histograms = np.concatenate([histograms, output_array])
         else:
             print(f"Not enough histograms found for {county_fips} {year}")
 
-np.save(os.path.join(output_path, "histograms-combined.npy"), histograms)
+np.save(os.path.join(OUTOUT_PATH, "histograms-combined.npy"), histograms)
 
-# TODO: keep month even when there is no histofram information for a given month
 # TODO: chek if numbers are correct: here values look suspicious: histogram-31035-2016
 # TODO: prepare combined labels
-# TODO: combine histograms - weather  and labels for the dataset
-# TODO: do train test split
 # TODO: build NN and LSTM models for combined dataset
