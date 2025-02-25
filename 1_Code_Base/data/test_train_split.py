@@ -8,6 +8,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Normalization
 
+#TODO: make sure that fips column in the weather data is correctly formatted as string with leading 0s
 
 def test_train_split(
     dataset: np.ndarray,
@@ -159,11 +160,14 @@ def test_train_split_multi_modal(
             .sort_index()
         )
         data_sets.append(weather_data)
+        print(weather_data.head(6))
+    print('weather data shape:', weather_data.shape)
 
     common_index = get_common_index(data_sets)
 
     data_sets = [data_set.loc[common_index] for data_set in data_sets]
-
+    for data_set in data_sets:
+        print(data_set.head(6))
     datasets_monthly_train = []
     datasets_monthly_test = []
     for data_set in data_sets:
@@ -295,9 +299,16 @@ def test_train_split_multi_modal(
 if __name__ == "__main__":
     from tensorflow.keras.utils import split_dataset
 
-    weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
-    histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
-    labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
+    test_data = True
+    
+    if test_data:
+        weather_dataset = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\weather_data-adams-2017-CO-8001.csv"
+        histograms_dataset = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\histogram-08001-2017.npy"
+        labels = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\combined_labels_with_fips.npy"
+    else:    
+        weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
+        histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
+        labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
 
     datasets = test_train_split_multi_modal(
         weather_dataset,
