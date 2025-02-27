@@ -10,12 +10,14 @@ from typing import List
 
 import keras
 import numpy as np
+import pandas as pd
 import randomname
 import tensorflow as tf
 import wandb
 from models.utils import model_save
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (
+    Normalization,
     LSTM,
     Concatenate,
     Dense,
@@ -264,6 +266,80 @@ class LstmWithAttention(keras.Model):
     def from_config(cls, config):
         return cls(**config)
 
+class PreprocessingHead(tf.keras.Model):
+    """Preprocessing model for weather and satellite data
+       * Normalizes the data
+       * Encoding of categorical features
+    """
+    
+    def __init__(self, df: pd.DataFrame, cat_features: List[str]):
+        super(PreprocessingHead, self).__init__()
+        
+        self.normalizer = Normalization(axis=-1)
+        self.concat_num_features = Concatenate()
+        self.concat_all_features = Concatenate()
+        
+        self._cat_features = cat_features
+        self._numeric_features = []
+        self._numeric_features_dict = {}
+        
+                
+        self.inputs = {}
+        for name, _ in df.items():
+            if name in cat_features:
+                dtype = tf.string
+            else:
+                dtype = tf.float64
+                self._numeric_features.append(name)
+                self._numeric_features_dict[name] = _.to_numpy()
+
+            self.inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
+        
+        self.normalizer.adapt(np.concatenate([value for _, value in sorted(self._numeric_features_dict.items())]))
+        
+        
+        self.cat_encoders = {}
+        for feature in self.cat_features:
+            
+            unique_values = df[feature].unique()
+            one_hot_encoder = tf.keras.layers.StringLookup(
+                vocabulary=unique_values, 
+                output_mode='one_hot'
+            )
+            self.cat_encoders[feature] = one_hot_encoder
+    
+    def call(self, inputs):
+        """_summary_
+
+        Args:
+            inputs (dict): should be a dict of numpy arrays representing the input df
+
+        Returns:
+            _type_: _description_
+        """
+        # Process numeric features
+        numeric_features = []
+        for feature in self._numeric_features:
+            numeric_features.append(inputs[feature])
+        
+        numeric_tensor = self.concat_num_features(numeric_features)
+        normalized_features = self.normalizer(numeric_tensor)
+        
+        # Process categorical features
+        categorical_features = []
+        for feature in self._cat_features:
+            encoded = self.cat_encoders[feature](inputs[feature])
+            categorical_features.append(encoded)
+        
+        # If there are categorical features, concatenate them with normalized features
+        if categorical_features:
+            all_features = [normalized_features] + categorical_features
+            return self.concat_all_features(all_features)
+        else:
+            return normalized_features
+        
+
+        
 
 class Embeddings(tf.keras.Model):
     """
@@ -295,8 +371,8 @@ class LstmWeather(tf.keras.Model):
     def __init__(
         self,
         units: int = 1,
-        embedings_spec_weather: List[int] = [128, 64, 32],
-        embedings_spec_satellite: List[int] = [128, 64, 32],
+        embedings_spec_weather: List[int] = [256, 128, 64, 32],
+        embedings_spec_satellite: List[int] = [256, 128, 64, 32],
         timepoints: int = 3,
     ):
 
@@ -317,7 +393,7 @@ class LstmWeather(tf.keras.Model):
 
         self.lstm = LSTM(units)
 
-        self.dense = Dense(1, activation="relu")
+        self.dense = Dense(1, activation="exp")
 
         self.timepoints = timepoints
 

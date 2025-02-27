@@ -6,9 +6,13 @@ import pandas as pd
 import polars as pl
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Normalization
+from tensorflow.keras.layers import Normalization, Concatenate
 
 #TODO: make sure that fips column in the weather data is correctly formatted as string with leading 0s
+
+SEED = 42
+CHANNEL_NORMALIZATION = 1e4
+CAT_FEATURES = ['fips']
 
 def test_train_split(
     dataset: np.ndarray,
@@ -105,6 +109,43 @@ def get_common_index(data_sets: List[pd.DataFrame]):
         lambda x, y: x.intersection(y), [data_set.index for data_set in data_sets]
     )
 
+def create_preproc_head(df: pd.DataFrame, cat_columns: List[str]) -> Tuple[tf.keras.Model, pd.DataFrame]:
+    
+    normalizer = Normalization(axis=-1)
+    inputs = {}
+    numeric_features =  []
+    numeric_features_dict = {}
+    preprocessed = []
+    
+    for name, _ in df.items():
+        if name in cat_columns:
+            dtype = tf.string
+        else:
+            dtype = tf.float64
+            numeric_features.append(name)
+            numeric_features_dict[name] = _.to_numpy()
+        
+        inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
+    
+    # numeric_features_dict = {key: value.to_numpy() for key, value in dict(df[numeric_features]).items()}
+    normalizer.adapt(np.concatenate([value for key, value in sorted(numeric_features_dict.items())]))
+    
+    # I need a preproc head that will take an input, create on hot encoding for cat values and normalize the numeric values
+    # finally concatanate the two and return the tensor for the actual model
+    
+    # Q: How does normalization layer work with inputs split into single columns?
+    
+    numeric_inputs = [inputs[name] for name in numeric_features]
+    numeric_inputs = Concatenate(axis=-1)(numeric_inputs)
+    numeric_normalized = normalizer(numeric_inputs)
+    
+    
+    
+        
+    
+    
+    return inputs, 
+    
 
 def test_train_split_multi_modal(
     weather_dataset: str,
@@ -121,9 +162,6 @@ def test_train_split_multi_modal(
     # Training and validation covers the remainding period
 
     # Sattelite images histgrams are taken to be the main modality
-    normalizer = Normalization(axis=-1)
-
-    joined_data = pd.DataFrame()
 
     data_sets = []
     if histograms_dataset:
@@ -171,8 +209,6 @@ def test_train_split_multi_modal(
     datasets_monthly_train = []
     datasets_monthly_test = []
     for data_set in data_sets:
-        # one_month_data = data_set[data_set["month"] == months[0]]
-        # print(one_month_data.loc[pd.IndexSlice["19043", 2017:], :].sort_index())
         datasets_monthly_train.extend(
             [
                 data_set[data_set["month"] == month].loc[
@@ -181,6 +217,7 @@ def test_train_split_multi_modal(
                 for month in months
             ]
         )
+        
         datasets_monthly_test.extend(
             [
                 data_set[data_set["month"] == month].loc[
@@ -189,112 +226,8 @@ def test_train_split_multi_modal(
                 for month in months
             ]
         )
-    normalizers = {
-        f"norm_data_{i}": Normalization(axis=-1)
-        for i in range(len(datasets_monthly_train))
-    }
-    for i, dataset in enumerate(datasets_monthly_train):
-        print(dataset.head(6))
-    # # Split data by month into separate DataFrames
-    # month5_data = joined_data[joined_data["month"] == 5]
-    # month7_data = joined_data[joined_data["month"] == 7]
-    # month9_data = joined_data[joined_data["month"] == 9]
 
-    # Add suffix to all columns except fips and year
-    # for df, suffix in [
-    #     (month5_data, "_m5"),
-    #     (month7_data, "_m7"),
-    #     (month9_data, "_m9"),
-    # ]:
-    #     df.columns = [
-    #         f"{col}{suffix}" if col not in ["fips", "year"] else col
-    #         for col in df.columns
-    #     ]
-
-    # # Join the DataFrames side by side
-    # months_combined_df = month5_data.merge(
-    #     month7_data, on=["fips", "year"], how="inner"
-    # ).merge(month9_data, on=["fips", "year"], how="inner")
-
-    # labels = pd.DataFrame(np.load(labels, allow_pickle=True), columns=index + ["yield"])
-
-    # dataset = months_combined_df.merge(labels, on=["fips", "year"], how="left")
-
-    # min_year = dataset["year"].min()
-    # dataset["year"] = dataset["year"] - min_year
-
-    # dataset = dataset.dropna().drop(columns=["fips"])
-
-    # test_cutoff_bottom = training_range[0] - min_year - 1
-    # test_cutoff_top = training_range[1] - min_year
-
-    # test_dataset_wo_weather = dataset[dataset["year"] <= test_cutoff_bottom]
-    # test_dataset_sat_weather = dataset[dataset["year"] >= test_cutoff_top]
-
-    # training_dataset = dataset[
-    #     (dataset["year"] > test_cutoff_bottom) & (dataset["year"] < test_cutoff_top)
-    # ]
-
-    # training_labels = training_dataset.pop("yield")
-    # test_labels_wo_weather = test_dataset_wo_weather.pop("yield")
-    # test_labels_sat_weather = test_dataset_sat_weather.pop("yield")
-
-    # print("training data shape:", training_dataset.shape)
-    # # print("training data head:", training_dataset.head())
-    # print("test data wo weather shape:", test_dataset_wo_weather.shape)
-    # print("test data shape:", test_dataset_sat_weather.shape)
-
-    # tensor_dataset_train = tf.convert_to_tensor(training_dataset, dtype=tf.float32)
-    # tensor_labels_train = tf.convert_to_tensor(training_labels, dtype=tf.float32)
-    # tensor_dataset_wo_weather = tf.convert_to_tensor(
-    #     test_dataset_wo_weather, dtype=tf.float32
-    # )
-    # tensor_labels_wo_weather = tf.convert_to_tensor(
-    #     test_labels_wo_weather, dtype=tf.float32
-    # )
-    # tensor_dataset_sat_weather = tf.convert_to_tensor(
-    #     test_dataset_sat_weather, dtype=tf.float32
-    # )
-    # tensor_labels_sat_weather = tf.convert_to_tensor(
-    #     test_labels_sat_weather, dtype=tf.float32
-    # )
-
-    # tf_dataset_train = tf.data.Dataset.from_tensor_slices(
-    #     (tensor_dataset_train, tensor_labels_train)
-    # )
-    # tf_dataset_test_wo_weather = tf.data.Dataset.from_tensor_slices(
-    #     (tensor_dataset_wo_weather, tensor_labels_wo_weather)
-    # )
-    # tf_dataset_test_weather = tf.data.Dataset.from_tensor_slices(
-    #     (tensor_dataset_sat_weather, tensor_labels_sat_weather)
-    # )
-
-    # tf_dataset_train = tf_dataset_train.batch(batch_size, drop_remainder=True).shuffle(
-    #     buffer_size=10000, seed=42
-    # )
-    # tf_dataset_test_wo_weather = tf_dataset_test_wo_weather.batch(
-    #     batch_size, drop_remainder=True
-    # )  # .shuffle(buffer_size=10000)
-    # tf_dataset_test_weather = tf_dataset_test_weather.batch(
-    #     batch_size, drop_remainder=True
-    # )  # .shuffle(buffer_size=10000)
-
-    # normalizer.adapt(tf_dataset_train.map(lambda x, y: x))
-
-    # train_dataset = tf_dataset_train.map(lambda x, y: (normalizer(x), y)).prefetch(
-    #     tf.data.AUTOTUNE
-    # )
-
-    # test_dataset_wo_weather = tf_dataset_test_wo_weather.map(
-    #     lambda x, y: (normalizer(x), y)
-    # ).prefetch(tf.data.AUTOTUNE)
-
-    # test_dataset_weather = tf_dataset_test_weather.map(
-    #     lambda x, y: (normalizer(x), y)
-    # ).prefetch(tf.data.AUTOTUNE)
-
-    # return train_dataset, test_dataset_wo_weather, test_dataset_weather
-
+    return datasets_monthly_train, datasets_monthly_test
 
 if __name__ == "__main__":
     from tensorflow.keras.utils import split_dataset
@@ -310,13 +243,17 @@ if __name__ == "__main__":
         histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
         labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
 
-    datasets = test_train_split_multi_modal(
+    datasets_monthly_train, datasets_monthly_test = test_train_split_multi_modal(
         weather_dataset,
         histograms_dataset,
         labels,
         index=["fips", "year"],
         months=[5, 7, 9],
     )
+    
+    inputs = create_preproc_head(df=datasets_monthly_train[0].reset_index(), cat_columns=CAT_FEATURES)
+    print(inputs)
+    # print(len(inputs), '\n\n', inputs)
     # for dataset in datasets:
     #     for features, labels in dataset.take(1):
     #         print("First batch features:", features.numpy()[:5])
