@@ -6,7 +6,7 @@
 
 import os
 from datetime import datetime
-from typing import List
+from typing import List, Tuple
 
 import keras
 import numpy as np
@@ -370,13 +370,20 @@ class LstmWeather(tf.keras.Model):
 
     def __init__(
         self,
-        units: int = 1,
+        weather_datasets: List[pd.DataFrame],
+        sat_dataset: List[pd.DataFrame],
+        cat_features: List[str],
+        lstm_units: int = 1,
         embedings_spec_weather: List[int] = [256, 128, 64, 32],
         embedings_spec_satellite: List[int] = [256, 128, 64, 32],
         timepoints: int = 3,
     ):
 
         super(LstmWeather, self).__init__()
+        
+        
+        
+        prepocessing = PreprocessingHead(df, cat_features)
 
         self.weather_embeddings = [
             Embeddings(embedings_spec_weather) for _ in range(timepoints)
@@ -391,7 +398,7 @@ class LstmWeather(tf.keras.Model):
 
         self.concatenate_for_lstm_input = Concatenate()
 
-        self.lstm = LSTM(units)
+        self.lstm = LSTM(lstm_units)
 
         self.dense = Dense(1, activation="exp")
 
