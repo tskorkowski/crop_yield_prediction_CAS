@@ -17,13 +17,13 @@ import wandb
 from models.utils import model_save
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (
-    Normalization,
     LSTM,
     Concatenate,
     Dense,
     Dropout,
     GlobalAveragePooling1D,
     MultiHeadAttention,
+    Normalization,
 )
 from utils.plotting import plot_training_progress
 from wandb.integration.keras import WandbMetricsLogger
@@ -266,27 +266,27 @@ class LstmWithAttention(keras.Model):
     def from_config(cls, config):
         return cls(**config)
 
+
 class PreprocessingHead(tf.keras.Model):
     """Preprocessing model for weather and satellite data
-       * Normalizes the data
-       * Encoding of categorical features
+    * Normalizes the data
+    * Encoding of categorical features
     """
-    
+
     def __init__(self, df: pd.DataFrame, cat_features: List[str]):
-        super(PreprocessingHead, self).__init__()
-        
+        super().__init__()
+
         self.normalizer = Normalization(axis=-1)
         self.concat_num_features = Concatenate()
         self.concat_all_features = Concatenate()
-        
+
         self._cat_features = cat_features
         self._numeric_features = []
         self._numeric_features_dict = {}
-        
-                
+
         self.inputs = {}
         for name, _ in df.items():
-            if name in cat_features:
+            if name in self._cat_features:
                 dtype = tf.string
             else:
                 dtype = tf.float64
@@ -294,20 +294,22 @@ class PreprocessingHead(tf.keras.Model):
                 self._numeric_features_dict[name] = _.to_numpy()
 
             self.inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
-        
-        self.normalizer.adapt(np.concatenate([value for _, value in sorted(self._numeric_features_dict.items())]))
-        
-        
+
+        self.normalizer.adapt(
+            np.concatenate(
+                [value for _, value in sorted(self._numeric_features_dict.items())]
+            )
+        )
+
         self.cat_encoders = {}
-        for feature in self.cat_features:
-            
+        for feature in self._cat_features:
+
             unique_values = df[feature].unique()
             one_hot_encoder = tf.keras.layers.StringLookup(
-                vocabulary=unique_values, 
-                output_mode='one_hot'
+                vocabulary=unique_values, output_mode="one_hot"
             )
             self.cat_encoders[feature] = one_hot_encoder
-    
+
     def call(self, inputs):
         """_summary_
 
@@ -319,27 +321,28 @@ class PreprocessingHead(tf.keras.Model):
         """
         # Process numeric features
         numeric_features = []
-        for feature in self._numeric_features:
+        for feature in sorted(self._numeric_features):
             numeric_features.append(inputs[feature])
-        
+
         numeric_tensor = self.concat_num_features(numeric_features)
         normalized_features = self.normalizer(numeric_tensor)
-        
+
+        # Add batch dimension
+        normalized_features = tf.reshape(normalized_features, (1, -1))
+
         # Process categorical features
         categorical_features = []
         for feature in self._cat_features:
             encoded = self.cat_encoders[feature](inputs[feature])
             categorical_features.append(encoded)
-        
+
         # If there are categorical features, concatenate them with normalized features
         if categorical_features:
-            all_features = [normalized_features] + categorical_features
+            all_features = categorical_features + [normalized_features]
             return self.concat_all_features(all_features)
         else:
             return normalized_features
-        
 
-        
 
 class Embeddings(tf.keras.Model):
     """
@@ -371,7 +374,7 @@ class LstmWeather(tf.keras.Model):
     def __init__(
         self,
         weather_datasets: List[pd.DataFrame],
-        sat_dataset: List[pd.DataFrame],
+        sat_datasets: List[pd.DataFrame],
         cat_features: List[str],
         lstm_units: int = 1,
         embedings_spec_weather: List[int] = [256, 128, 64, 32],
@@ -380,10 +383,14 @@ class LstmWeather(tf.keras.Model):
     ):
 
         super(LstmWeather, self).__init__()
-        
-        
-        
-        prepocessing = PreprocessingHead(df, cat_features)
+
+        self.prepocessing_weather = [
+            PreprocessingHead(weather_dataset, cat_features)
+            for weather_dataset in weather_datasets
+        ]
+        self.prepocessing_satellite = [
+            PreprocessingHead(sat_dataset, cat_features) for sat_dataset in sat_datasets
+        ]
 
         self.weather_embeddings = [
             Embeddings(embedings_spec_weather) for _ in range(timepoints)
@@ -406,13 +413,25 @@ class LstmWeather(tf.keras.Model):
 
     def call(self, inputs):
         weather_data, satellite_data = inputs
+
+        processed_weather_data = [
+            self.prepocessing_weather[i](weather_data[i])
+            for i in range(self.timepoints)
+        ]
+        processed_satellite_data = [
+            self.prepocessing_satellite[i](satellite_data[i])
+            for i in range(self.timepoints)
+        ]
+
         weather_embeddings = [
             embedding(data)
-            for embedding, data in zip(self.weather_embeddings, weather_data)
+            for embedding, data in zip(self.weather_embeddings, processed_weather_data)
         ]
         satellite_embeddings = [
             embedding(data)
-            for embedding, data in zip(self.satellite_embeddings, satellite_data)
+            for embedding, data in zip(
+                self.satellite_embeddings, processed_satellite_data
+            )
         ]
 
         weather_and_satellite_embeddings = [
@@ -431,5 +450,5 @@ class LstmWeather(tf.keras.Model):
         return output
 
 
-# try:
-# https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M#https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M
+# TODO:
+# https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M

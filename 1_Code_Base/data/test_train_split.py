@@ -6,13 +6,14 @@ import pandas as pd
 import polars as pl
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Normalization, Concatenate
+from tensorflow.keras.layers import Concatenate, Normalization
 
-#TODO: make sure that fips column in the weather data is correctly formatted as string with leading 0s
+# TODO: make sure that fips column in the weather data is correctly formatted as string with leading 0s
 
 SEED = 42
 CHANNEL_NORMALIZATION = 1e4
-CAT_FEATURES = ['fips']
+CAT_FEATURES = ["fips"]
+
 
 def test_train_split(
     dataset: np.ndarray,
@@ -109,14 +110,17 @@ def get_common_index(data_sets: List[pd.DataFrame]):
         lambda x, y: x.intersection(y), [data_set.index for data_set in data_sets]
     )
 
-def create_preproc_head(df: pd.DataFrame, cat_columns: List[str]) -> Tuple[tf.keras.Model, pd.DataFrame]:
-    
+
+def create_preproc_head(
+    df: pd.DataFrame, cat_columns: List[str]
+) -> Tuple[tf.keras.Model, pd.DataFrame]:
+
     normalizer = Normalization(axis=-1)
     inputs = {}
-    numeric_features =  []
+    numeric_features = []
     numeric_features_dict = {}
     preprocessed = []
-    
+
     for name, _ in df.items():
         if name in cat_columns:
             dtype = tf.string
@@ -124,28 +128,31 @@ def create_preproc_head(df: pd.DataFrame, cat_columns: List[str]) -> Tuple[tf.ke
             dtype = tf.float64
             numeric_features.append(name)
             numeric_features_dict[name] = _.to_numpy()
-        
+
         inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
-    
+
     # numeric_features_dict = {key: value.to_numpy() for key, value in dict(df[numeric_features]).items()}
-    normalizer.adapt(np.concatenate([value for key, value in sorted(numeric_features_dict.items())]))
-    
+    normalizer.adapt(
+        np.concatenate([value for key, value in sorted(numeric_features_dict.items())])
+    )
+
     # I need a preproc head that will take an input, create on hot encoding for cat values and normalize the numeric values
     # finally concatanate the two and return the tensor for the actual model
-    
+
     # Q: How does normalization layer work with inputs split into single columns?
-    
+
     numeric_inputs = [inputs[name] for name in numeric_features]
     numeric_inputs = Concatenate(axis=-1)(numeric_inputs)
     numeric_normalized = normalizer(numeric_inputs)
-    
-    
-    
-        
-    
-    
-    return inputs, 
-    
+
+    return (inputs,)
+
+
+def split_data_by_month(
+    data_set: pd.DataFrame, months: List[int]
+) -> List[pd.DataFrame]:
+    return [data_set[data_set["month"] == month] for month in months]
+
 
 def test_train_split_multi_modal(
     weather_dataset: str,
@@ -163,25 +170,29 @@ def test_train_split_multi_modal(
 
     # Sattelite images histgrams are taken to be the main modality
 
-    data_sets = []
     if histograms_dataset:
-        hist_data = (
-            pd.DataFrame(
-                np.load(histograms_dataset, allow_pickle=True),
+        try:
+            hist_data = (
+                pd.DataFrame(
+                    np.load(histograms_dataset, allow_pickle=True),
+                )
+                .astype({"fips": str, "year": int})
+                .set_index(index)
+                .sort_index()
             )
-            .astype({"fips": str, "year": int})
-            .set_index(index)
-            .sort_index()
-        )
-        data_sets.append(hist_data)
-
-    print(
-        pd.DataFrame(
-            np.load(histograms_dataset, allow_pickle=True),
-        ).head()
-    )
-
-    print("", "histogram shape:", data_sets[0].shape, sep="\n")
+        except:
+            hist_data = (
+                pd.read_csv(
+                    histograms_dataset,
+                    dtype={
+                        "fips": str,
+                        "year": int,
+                    },
+                )
+                .set_index(index)
+                .sort_index()
+            )
+        print("histogram data shape:", hist_data.shape)
 
     if weather_dataset:
         weather_data = (
@@ -197,48 +208,47 @@ def test_train_split_multi_modal(
             .set_index(index)
             .sort_index()
         )
-        data_sets.append(weather_data)
-        print(weather_data.head(6))
-    print('weather data shape:', weather_data.shape)
+        print("weather data shape:", weather_data.shape)
 
-    common_index = get_common_index(data_sets)
+    common_index = get_common_index([hist_data, weather_data])
 
-    data_sets = [data_set.loc[common_index] for data_set in data_sets]
-    for data_set in data_sets:
-        print(data_set.head(6))
-    datasets_monthly_train = []
-    datasets_monthly_test = []
-    for data_set in data_sets:
-        datasets_monthly_train.extend(
-            [
-                data_set[data_set["month"] == month].loc[
-                    pd.IndexSlice[:, training_range[0] : training_range[1]], :
-                ]
-                for month in months
-            ]
-        )
-        
-        datasets_monthly_test.extend(
-            [
-                data_set[data_set["month"] == month].loc[
-                    pd.IndexSlice[:, training_range[1] :], :
-                ]
-                for month in months
-            ]
-        )
+    hist_data = hist_data.loc[common_index]
+    weather_data = weather_data.loc[common_index]
 
-    return datasets_monthly_train, datasets_monthly_test
+    hist_train = hist_data.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].reset_index()
+    hist_test = hist_data.loc[pd.IndexSlice[:, training_range[1] :], :].reset_index()
+
+    weather_train = weather_data.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].reset_index()
+    weather_test = weather_data.loc[
+        pd.IndexSlice[:, training_range[1] :], :
+    ].reset_index()
+
+    hist_train_monthly = split_data_by_month(hist_train, months)
+    hist_test_monthly = split_data_by_month(hist_test, months)
+
+    weather_train_monthly = split_data_by_month(weather_train, months)
+    weather_test_monthly = split_data_by_month(weather_test, months)
+
+    return (hist_train_monthly, weather_train_monthly), (
+        hist_test_monthly,
+        weather_test_monthly,
+    )
+
 
 if __name__ == "__main__":
     from tensorflow.keras.utils import split_dataset
 
     test_data = True
-    
+
     if test_data:
-        weather_dataset = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\weather_data-adams-2017-CO-8001.csv"
-        histograms_dataset = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\histogram-08001-2017.npy"
-        labels = r"C:\Github\crop_yield_prediction_CAS\4_Data_Sample\combined_labels_with_fips.npy"
-    else:    
+        weather_dataset = r"4_Data_Sample\weather_data-adams-2017-CO-8001.csv"
+        histograms_dataset = r"4_Data_Sample\histogram-08001-2017_reduced.csv"
+        labels = r"4_Data_Sample\combined_labels_with_fips.npy"
+    else:
         weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
         histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
         labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
@@ -250,8 +260,9 @@ if __name__ == "__main__":
         index=["fips", "year"],
         months=[5, 7, 9],
     )
-    
-    inputs = create_preproc_head(df=datasets_monthly_train[0].reset_index(), cat_columns=CAT_FEATURES)
+
+    histograms_train, weather_train = datasets_monthly_train
+    inputs = create_preproc_head(df=histograms_train[0], cat_columns=CAT_FEATURES)
     print(inputs)
     # print(len(inputs), '\n\n', inputs)
     # for dataset in datasets:
