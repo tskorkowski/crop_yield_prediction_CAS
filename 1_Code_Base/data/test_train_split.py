@@ -1,5 +1,5 @@
 from functools import reduce
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -111,47 +111,14 @@ def get_common_index(data_sets: List[pd.DataFrame]):
     )
 
 
-def create_preproc_head(
-    df: pd.DataFrame, cat_columns: List[str]
-) -> Tuple[tf.keras.Model, pd.DataFrame]:
-
-    normalizer = Normalization(axis=-1)
-    inputs = {}
-    numeric_features = []
-    numeric_features_dict = {}
-    preprocessed = []
-
-    for name, _ in df.items():
-        if name in cat_columns:
-            dtype = tf.string
-        else:
-            dtype = tf.float64
-            numeric_features.append(name)
-            numeric_features_dict[name] = _.to_numpy()
-
-        inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
-
-    # numeric_features_dict = {key: value.to_numpy() for key, value in dict(df[numeric_features]).items()}
-    normalizer.adapt(
-        np.concatenate([value for key, value in sorted(numeric_features_dict.items())])
-    )
-
-    # I need a preproc head that will take an input, create on hot encoding for cat values and normalize the numeric values
-    # finally concatanate the two and return the tensor for the actual model
-
-    # Q: How does normalization layer work with inputs split into single columns?
-
-    numeric_inputs = [inputs[name] for name in numeric_features]
-    numeric_inputs = Concatenate(axis=-1)(numeric_inputs)
-    numeric_normalized = normalizer(numeric_inputs)
-
-    return (inputs,)
-
-
 def split_data_by_month(
     data_set: pd.DataFrame, months: List[int]
 ) -> List[pd.DataFrame]:
     return [data_set[data_set["month"] == month] for month in months]
+
+
+def convert_df_to_np_dict(df: pd.DataFrame) -> Dict[str, np.ndarray]:
+    return {col: df[col].to_numpy() for col in df.columns}
 
 
 def test_train_split_multi_modal(
@@ -210,10 +177,23 @@ def test_train_split_multi_modal(
         )
         print("weather data shape:", weather_data.shape)
 
+    if labels:
+        labels = (
+            pd.DataFrame(
+                np.load(labels, allow_pickle=True),
+                columns=["fips", "year", "label"],
+            )
+            .astype({"fips": str, "year": int})
+            .set_index(index)
+            .sort_index()
+        )
+
     common_index = get_common_index([hist_data, weather_data])
+    print("common_index: ", common_index)
 
     hist_data = hist_data.loc[common_index]
     weather_data = weather_data.loc[common_index]
+    labels = labels.loc[common_index]
 
     hist_train = hist_data.loc[
         pd.IndexSlice[:, training_range[0] : training_range[1]], :
@@ -227,15 +207,34 @@ def test_train_split_multi_modal(
         pd.IndexSlice[:, training_range[1] :], :
     ].reset_index()
 
-    hist_train_monthly = split_data_by_month(hist_train, months)
-    hist_test_monthly = split_data_by_month(hist_test, months)
+    labels_train = labels.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].to_numpy(dtype=np.float32)
 
-    weather_train_monthly = split_data_by_month(weather_train, months)
-    weather_test_monthly = split_data_by_month(weather_test, months)
+    labels_test = labels.loc[pd.IndexSlice[:, training_range[1] :], :].to_numpy(
+        dtype=np.float32
+    )
 
-    return (hist_train_monthly, weather_train_monthly), (
+    hist_train_monthly = [
+        convert_df_to_np_dict(data) for data in split_data_by_month(hist_train, months)
+    ]
+    hist_test_monthly = [
+        convert_df_to_np_dict(data) for data in split_data_by_month(hist_test, months)
+    ]
+
+    weather_train_monthly = [
+        convert_df_to_np_dict(data)
+        for data in split_data_by_month(weather_train, months)
+    ]
+    weather_test_monthly = [
+        convert_df_to_np_dict(data)
+        for data in split_data_by_month(weather_test, months)
+    ]
+
+    return (hist_train_monthly, weather_train_monthly, labels_train), (
         hist_test_monthly,
         weather_test_monthly,
+        labels_test,
     )
 
 
@@ -261,9 +260,9 @@ if __name__ == "__main__":
         months=[5, 7, 9],
     )
 
-    histograms_train, weather_train = datasets_monthly_train
-    inputs = create_preproc_head(df=histograms_train[0], cat_columns=CAT_FEATURES)
-    print(inputs)
+    histograms_train, weather_train, labels = datasets_monthly_train
+
+    print(datasets_monthly_train)
     # print(len(inputs), '\n\n', inputs)
     # for dataset in datasets:
     #     for features, labels in dataset.take(1):

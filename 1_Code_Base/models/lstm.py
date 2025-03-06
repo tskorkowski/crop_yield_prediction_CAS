@@ -1,12 +1,12 @@
-""" Implemenataion of MLP for crop yield prediction
+"""Implemenataion of MLP for crop yield prediction
 
-    Idea:
-    Prediction will be made based on the concatenated histograms from all 3 timepoints
+Idea:
+Prediction will be made based on the concatenated histograms from all 3 timepoints
 """
 
 import os
 from datetime import datetime
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import keras
 import numpy as np
@@ -273,7 +273,7 @@ class PreprocessingHead(tf.keras.Model):
     * Encoding of categorical features
     """
 
-    def __init__(self, df: pd.DataFrame, cat_features: List[str]):
+    def __init__(self, input_dict: Dict[str, np.ndarray], cat_features: List[str]):
         super().__init__()
 
         self.normalizer = Normalization(axis=-1)
@@ -281,30 +281,35 @@ class PreprocessingHead(tf.keras.Model):
         self.concat_all_features = Concatenate()
 
         self._cat_features = cat_features
+        self.inputs = {}
+
         self._numeric_features = []
         self._numeric_features_dict = {}
 
-        self.inputs = {}
-        for name, _ in df.items():
+        for name, values in input_dict.items():
             if name in self._cat_features:
                 dtype = tf.string
             else:
                 dtype = tf.float64
                 self._numeric_features.append(name)
-                self._numeric_features_dict[name] = _.to_numpy()
+                self._numeric_features_dict[name] = values
 
             self.inputs[name] = tf.keras.Input(shape=(1,), name=name, dtype=dtype)
 
         self.normalizer.adapt(
             np.concatenate(
-                [value for _, value in sorted(self._numeric_features_dict.items())]
+                [
+                    np.expand_dims(value, axis=1)
+                    for _, value in sorted(self._numeric_features_dict.items())
+                ],
+                axis=1,
             )
         )
 
         self.cat_encoders = {}
         for feature in self._cat_features:
 
-            unique_values = df[feature].unique()
+            unique_values = np.unique(input_dict[feature])
             one_hot_encoder = tf.keras.layers.StringLookup(
                 vocabulary=unique_values, output_mode="one_hot"
             )
@@ -322,13 +327,11 @@ class PreprocessingHead(tf.keras.Model):
         # Process numeric features
         numeric_features = []
         for feature in sorted(self._numeric_features):
-            numeric_features.append(inputs[feature])
+            numeric_features.append(tf.expand_dims(inputs[feature], axis=1))
 
         numeric_tensor = self.concat_num_features(numeric_features)
-        normalized_features = self.normalizer(numeric_tensor)
 
-        # Add batch dimension
-        normalized_features = tf.reshape(normalized_features, (1, -1))
+        normalized_features = self.normalizer(numeric_tensor)
 
         # Process categorical features
         categorical_features = []
@@ -373,8 +376,8 @@ class LstmWeather(tf.keras.Model):
 
     def __init__(
         self,
-        weather_datasets: List[pd.DataFrame],
-        sat_datasets: List[pd.DataFrame],
+        weather_datasets: List[Dict[str, np.ndarray]],
+        sat_datasets: List[Dict[str, np.ndarray]],
         cat_features: List[str],
         lstm_units: int = 1,
         embedings_spec_weather: List[int] = [256, 128, 64, 32],
@@ -382,7 +385,7 @@ class LstmWeather(tf.keras.Model):
         timepoints: int = 3,
     ):
 
-        super(LstmWeather, self).__init__()
+        super().__init__()
 
         self.prepocessing_weather = [
             PreprocessingHead(weather_dataset, cat_features)
@@ -403,11 +406,9 @@ class LstmWeather(tf.keras.Model):
             Concatenate(axis=1) for _ in range(timepoints)
         ]
 
-        self.concatenate_for_lstm_input = Concatenate()
+        self.lstm = LSTM(lstm_units, return_sequences=False)
 
-        self.lstm = LSTM(lstm_units)
-
-        self.dense = Dense(1, activation="exp")
+        self.dense = Dense(1, activation="exponential")
 
         self.timepoints = timepoints
 
@@ -423,29 +424,40 @@ class LstmWeather(tf.keras.Model):
             for i in range(self.timepoints)
         ]
 
+        print("shapes")
+        print("processed_weather_data: ", processed_weather_data[0].shape)
+        print("processed_satellite_data: ", processed_satellite_data[0].shape)
         weather_embeddings = [
             embedding(data)
             for embedding, data in zip(self.weather_embeddings, processed_weather_data)
         ]
+        print("weather embeddings: ", weather_embeddings[0].shape)
         satellite_embeddings = [
             embedding(data)
             for embedding, data in zip(
                 self.satellite_embeddings, processed_satellite_data
             )
         ]
-
+        print("satellite embeddings: ", satellite_embeddings[0].shape)
         weather_and_satellite_embeddings = [
             weather_and_sat_embedding([weather_embeddings[i], satellite_embeddings[i]])
             for i, weather_and_sat_embedding in enumerate(
                 self.concatenate_weather_and_sat_embeddings
             )
         ]
+        print("weather sat length: ", len(weather_and_satellite_embeddings))
+        print("weather sat shape: ", weather_and_satellite_embeddings[0].shape)
 
-        lstm_input = self.concatenate_for_lstm_input(weather_and_satellite_embeddings)
+        lstm_input = tf.stack(weather_and_satellite_embeddings, axis=0)
+        lstm_input = tf.transpose(lstm_input, perm=[1, 0, 2])
+
+        print("lstm input shape: ", lstm_input.shape)
 
         lstm_output = self.lstm(lstm_input)
+        print("lstm_output shape: ", lstm_output.shape)
 
         output = self.dense(lstm_output)
+        print("output shape: ", output.shape)
 
         return output
 
