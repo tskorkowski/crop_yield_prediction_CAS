@@ -380,8 +380,8 @@ class LstmWeather(tf.keras.Model):
         sat_datasets: List[Dict[str, np.ndarray]],
         cat_features: List[str],
         lstm_units: int = 1,
-        embedings_spec_weather: List[int] = [256, 128, 64, 32],
-        embedings_spec_satellite: List[int] = [256, 128, 64, 32],
+        embedings_spec_weather: List[int] = [256, 128, 64, 32, 16],
+        embedings_spec_satellite: List[int] = [256, 128, 64, 32, 16],
         timepoints: int = 3,
     ):
 
@@ -424,40 +424,30 @@ class LstmWeather(tf.keras.Model):
             for i in range(self.timepoints)
         ]
 
-        print("shapes")
-        print("processed_weather_data: ", processed_weather_data[0].shape)
-        print("processed_satellite_data: ", processed_satellite_data[0].shape)
         weather_embeddings = [
             embedding(data)
             for embedding, data in zip(self.weather_embeddings, processed_weather_data)
         ]
-        print("weather embeddings: ", weather_embeddings[0].shape)
+
         satellite_embeddings = [
             embedding(data)
             for embedding, data in zip(
                 self.satellite_embeddings, processed_satellite_data
             )
         ]
-        print("satellite embeddings: ", satellite_embeddings[0].shape)
         weather_and_satellite_embeddings = [
             weather_and_sat_embedding([weather_embeddings[i], satellite_embeddings[i]])
             for i, weather_and_sat_embedding in enumerate(
                 self.concatenate_weather_and_sat_embeddings
             )
         ]
-        print("weather sat length: ", len(weather_and_satellite_embeddings))
-        print("weather sat shape: ", weather_and_satellite_embeddings[0].shape)
 
         lstm_input = tf.stack(weather_and_satellite_embeddings, axis=0)
         lstm_input = tf.transpose(lstm_input, perm=[1, 0, 2])
 
-        print("lstm input shape: ", lstm_input.shape)
-
         lstm_output = self.lstm(lstm_input)
-        print("lstm_output shape: ", lstm_output.shape)
 
         output = self.dense(lstm_output)
-        print("output shape: ", output.shape)
 
         return output
 

@@ -131,8 +131,8 @@ def test_train_split_multi_modal(
     batch_size: int = 64,
 ):
 
-    # weather only cover 2017-2022 while sattelite images olso cover 2016
-    # For test purpose years 2016 and 2022 are used - since not all modatlities are present models will ber evaluated on 2016 and 2022 separately
+    # weather only cover 2017-2022 while sattelite images also cover 2016
+    # For test purpose years 2016 and 2022 are used - since not all modatlities are present models will ber evaluated on 2022
     # Training and validation covers the remainding period
 
     # Sattelite images histgrams are taken to be the main modality
@@ -188,7 +188,7 @@ def test_train_split_multi_modal(
             .sort_index()
         )
 
-    common_index = get_common_index([hist_data, weather_data])
+    common_index = get_common_index([hist_data, weather_data, labels])
     print("common_index: ", common_index)
 
     hist_data = hist_data.loc[common_index]
