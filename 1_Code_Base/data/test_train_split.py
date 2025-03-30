@@ -1,7 +1,18 @@
+from functools import reduce
+from typing import Dict, List, Tuple
+
 import numpy as np
+import pandas as pd
+import polars as pl
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Normalization
+from tensorflow.keras.layers import Concatenate, Normalization
+
+# TODO: make sure that fips column in the weather data is correctly formatted as string with leading 0s
+
+SEED = 42
+CHANNEL_NORMALIZATION = 1e4
+CAT_FEATURES = ["fips"]
 
 
 def test_train_split(
@@ -83,19 +94,181 @@ def test_train_split(
     return train_dataset, val_dataset, test_dataset
 
 
+def convert_np_array_to_tf_dataset(np_dataset: Tuple[np.ndarray]) -> tf.data.Dataset:
+    """Convert a list of numpy arrays to a list of tf.data.Dataset objects"""
+
+    return tf.data.Dataset.from_tensor_slices(
+        (
+            tf.convert_to_tensor(np_dataset[0], dtype=tf.float32),
+            tf.convert_to_tensor(np_dataset[1], dtype=tf.float32),
+        )
+    )
+
+
+def get_common_index(data_sets: List[pd.DataFrame]):
+    return reduce(
+        lambda x, y: x.intersection(y), [data_set.index for data_set in data_sets]
+    )
+
+
+def split_data_by_month(
+    data_set: pd.DataFrame, months: List[int]
+) -> List[pd.DataFrame]:
+    return [data_set[data_set["month"] == month] for month in months]
+
+
+def convert_df_to_np_dict(df: pd.DataFrame) -> Dict[str, np.ndarray]:
+    return {col: df[col].to_numpy() for col in df.columns}
+
+
+def test_train_split_multi_modal(
+    weather_dataset: str,
+    histograms_dataset: str,
+    labels: str,
+    index: List[str],
+    months: List[int],
+    training_range: tuple[int, int] = (2017, 2022),
+    batch_size: int = 64,
+):
+
+    # weather only cover 2017-2022 while sattelite images also cover 2016
+    # For test purpose years 2016 and 2022 are used - since not all modatlities are present models will ber evaluated on 2022
+    # Training and validation covers the remainding period
+
+    # Sattelite images histgrams are taken to be the main modality
+
+    if histograms_dataset:
+        try:
+            hist_data = (
+                pd.DataFrame(
+                    np.load(histograms_dataset, allow_pickle=True),
+                )
+                .astype({"fips": str, "year": int})
+                .set_index(index)
+                .sort_index()
+            )
+        except:
+            hist_data = (
+                pd.read_csv(
+                    histograms_dataset,
+                    dtype={
+                        "fips": str,
+                        "year": int,
+                    },
+                )
+                .set_index(index)
+                .sort_index()
+            )
+        print("histogram data shape:", hist_data.shape)
+
+    if weather_dataset:
+        weather_data = (
+            pd.read_csv(
+                weather_dataset,
+                dtype={
+                    "fips": str,
+                    "year": int,
+                },
+            )
+            .drop(columns=["County"])
+            .dropna()
+            .set_index(index)
+            .sort_index()
+        )
+        print("weather data shape:", weather_data.shape)
+
+    if labels:
+        labels = (
+            pd.DataFrame(
+                np.load(labels, allow_pickle=True),
+                columns=["fips", "year", "label"],
+            )
+            .astype({"fips": str, "year": int})
+            .set_index(index)
+            .sort_index()
+        )
+
+    common_index = get_common_index([hist_data, weather_data, labels])
+    print("common_index: ", common_index)
+
+    hist_data = hist_data.loc[common_index]
+    weather_data = weather_data.loc[common_index]
+    labels = labels.loc[common_index]
+
+    hist_train = hist_data.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].reset_index()
+    hist_test = hist_data.loc[pd.IndexSlice[:, training_range[1] :], :].reset_index()
+
+    weather_train = weather_data.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].reset_index()
+    weather_test = weather_data.loc[
+        pd.IndexSlice[:, training_range[1] :], :
+    ].reset_index()
+
+    labels_train = labels.loc[
+        pd.IndexSlice[:, training_range[0] : training_range[1]], :
+    ].to_numpy(dtype=np.float32)
+
+    labels_test = labels.loc[pd.IndexSlice[:, training_range[1] :], :].to_numpy(
+        dtype=np.float32
+    )
+
+    hist_train_monthly = [
+        convert_df_to_np_dict(data) for data in split_data_by_month(hist_train, months)
+    ]
+    hist_test_monthly = [
+        convert_df_to_np_dict(data) for data in split_data_by_month(hist_test, months)
+    ]
+
+    weather_train_monthly = [
+        convert_df_to_np_dict(data)
+        for data in split_data_by_month(weather_train, months)
+    ]
+    weather_test_monthly = [
+        convert_df_to_np_dict(data)
+        for data in split_data_by_month(weather_test, months)
+    ]
+
+    return (hist_train_monthly, weather_train_monthly, labels_train), (
+        hist_test_monthly,
+        weather_test_monthly,
+        labels_test,
+    )
+
+
 if __name__ == "__main__":
-    dataset_path = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\test_data\dataset_nan_map_True_norm_True_60_buckets_12_bands_60_dataset.npy"
-    labels_path = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_gc-pipeline\test_data\dataset_nan_map_True_norm_True_60_buckets_12_bands_60_labels.npy"
-    dataset = np.load(dataset_path)
-    labels = np.load(labels_path)
-    config = {
-        "months": 3,
-        "num_bands": 12,
-        "num_buckets": 60,
-    }
-    dataset = np.concatenate(
-        [dataset[:, 0, :], dataset[:, 1, :], dataset[:, 2, :]], axis=-1
+    from tensorflow.keras.utils import split_dataset
+
+    test_data = True
+
+    if test_data:
+        weather_dataset = r"4_Data_Sample\weather_data-adams-2017-CO-8001.csv"
+        histograms_dataset = r"4_Data_Sample\histogram-08001-2017_reduced.csv"
+        labels = r"4_Data_Sample\combined_labels_with_fips.npy"
+    else:
+        weather_dataset = r"C:\Users\tskor\Documents\data\WRF-HRRR\split_by_county_and_year\weather-combined.csv"
+        histograms_dataset = r"C:\Users\tskor\Documents\data\histograms\histograms_county_year\histograms-combined.npy"
+        labels = r"C:\Users\tskor\Documents\GitHub\inovation_project\2_Data\combined_labels_with_fips.npy"
+
+    datasets_monthly_train, datasets_monthly_test = test_train_split_multi_modal(
+        weather_dataset,
+        histograms_dataset,
+        labels,
+        index=["fips", "year"],
+        months=[5, 7, 9],
     )
-    train_dataset, val_dataset, test_dataset = test_train_split(
-        dataset, labels, **config
-    )
+
+    histograms_train, weather_train, labels = datasets_monthly_train
+
+    print(datasets_monthly_train)
+    # print(len(inputs), '\n\n', inputs)
+    # for dataset in datasets:
+    #     for features, labels in dataset.take(1):
+    #         print("First batch features:", features.numpy()[:5])
+    #         print("First batch labels:", labels.numpy()[:5])
+
+
+# BUG:
+# 1. weather data is not workign correctly, at least aggregate file(?)

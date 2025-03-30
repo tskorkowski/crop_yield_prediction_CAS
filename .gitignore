@@ -10,3 +10,5 @@ temp.py
 1_Code_Base/models/saved/*
 3_Report/images/*
 2_Data/*
+tokens.py
+.cursorignore
